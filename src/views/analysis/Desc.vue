@@ -94,6 +94,7 @@ export default {
       margin-left: px2rem(5rem);
       position: relative;
       background:rgba(10,17,43,1);
+      cursor: pointer;
       &:nth-child(n + 3) {
         margin-top: px2rem(5rem);
       }

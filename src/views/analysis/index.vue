@@ -7,19 +7,23 @@
     <a-event></a-event>
     <a-repair></a-repair>
     <a-travel></a-travel>
+    <a-map></a-map>
+    <!-- <a-swiper></a-swiper> -->
     <div class="box div-left"></div>
     <div class="box div-right"></div>
   </div>
 </template>
 
 <script>
-import AHeader from './Header'
+import AHeader from '@/components/Header'
+// import ASwiper from '@/components/Swiper'
 import ANatural from './Natural'
 import ACar from './Car'
 import ADesc from './Desc'
 import AEvent from './Event'
 import ARepair from './Repair'
 import ATravel from './Travel'
+import AMap from './Map'
 export default {
   name: 'home',
   data() {
@@ -36,7 +40,9 @@ export default {
     ADesc,
     AEvent,
     ARepair,
-    ATravel
+    ATravel,
+    AMap
+    // ASwiper
   }
 }
 </script>
@@ -58,16 +64,15 @@ export default {
     position: absolute;
     width: px2rem(624rem);
     height:px2rem(24rem);
+    top: px2rem(1030rem);
   }
   .div-left {
-    bottom: px2rem(28rem);
     left:0;
     z-index: 1050;
     background: url('~@/assets/analysis/左下角点缀@2x.png');
     background-size: 100% 100%;
   }
   .div-right {
-    bottom: px2rem(28rem);
     right: 0;
     z-index: 1050;
     background: url('~@/assets/analysis/右下角点缀@2x.png');

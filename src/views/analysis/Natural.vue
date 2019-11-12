@@ -93,6 +93,7 @@ export default {
       float: left;
       margin-left: px2rem(5rem);
       position: relative;
+      cursor: pointer;
       &:nth-child(n + 5) {
         margin-top: px2rem(5rem);
       }
