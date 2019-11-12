@@ -1,0 +1,131 @@
+<template>
+  <div class="event">
+    <module-box title="村情简介">
+      <template slot="content">
+        <ul class="ul">
+          <li class="li" v-for="(item, index) of list" :key="index">
+            <img :src="item.imgUrl" alt="" />
+            <dl :style="{ color: item.color }">
+              <dt>
+                {{ item.name }}
+              </dt>
+              <dd>{{ item.value }} {{ item.unit }}</dd>
+            </dl>
+          </li>
+        </ul>
+      </template>
+    </module-box>
+  </div>
+</template>
+
+<script>
+import ModuleBox from '@/components/analys-box'
+export default {
+  name: 'event',
+  data() {
+    return {
+      list: [
+        {
+          imgUrl: require('@/assets/analysis/hushu@2x.png'),
+          name: '总户数',
+          value: '200',
+          unit: '户',
+          color: 'rgba(131,178,255,1)'
+        },
+        {
+          imgUrl: require('@/assets/analysis/hushu-2@2x.png'),
+          name: '总人数',
+          value: '1937',
+          unit: '人',
+          color: 'rgba(250,174,27,1)'
+        },
+        {
+          imgUrl: require('@/assets/analysis/renjunshouru@2x.png'),
+          name: '人均收入',
+          value: '29187',
+          unit: '元',
+          color: 'rgba(24,186,197,1)'
+        },
+        {
+          imgUrl: require('@/assets/analysis/zichan@2x.png'),
+          name: '总收入',
+          value: '2839',
+          unit: '万元',
+          color: 'rgba(168,83,233,1)'
+        },
+        {
+          imgUrl: require('@/assets/analysis/dangyuan@2x.png'),
+          name: '党员人数',
+          value: '928',
+          unit: '人',
+          color: 'rgba(232,56,107,1)'
+        },
+        {
+          imgUrl: require('@/assets/analysis/wuxing@2x.png'),
+          name: '5星之家',
+          value: '827',
+          unit: '家',
+          color: 'rgba(61,144,246,1)'
+        }
+      ]
+    }
+  },
+  computed: {},
+  watch: {},
+  methods: {},
+  mounted() {},
+  components: {
+    ModuleBox
+  }
+}
+</script>
+
+<style scoped lang="scss">
+.event {
+  position: absolute;
+  top: px2rem(140rem);
+  left: px2rem(20rem);
+  .ul {
+    display: flow-root;
+    .li {
+      width: px2rem(225rem);
+      height: px2rem(70rem);
+      float: left;
+      margin-left: px2rem(5rem);
+      position: relative;
+      background:rgba(10,17,43,1);
+      &:nth-child(n + 3) {
+        margin-top: px2rem(5rem);
+      }
+      img {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: px2rem(62rem);
+        height: px2rem(54rem);
+        z-index: 1;
+      }
+      dl {
+        font-family: PingFangSC;
+        dt {
+          position: absolute;
+          top: px2rem(20rem);
+          left: px2rem(13rem);
+          font-size: px2rem(16rem);
+          margin-bottom: px2rem(19rem);
+        }
+        dd {
+          position: absolute;
+          top: px2rem(40rem);
+          right: px2rem(13rem);
+          font-family: RTWS ShangYa Demo;
+          font-size: 22px;
+          margin-left: px2rem(160rem);
+          width: 100%;
+          text-align: right;
+        }
+      }
+    }
+  }
+}
+</style>
