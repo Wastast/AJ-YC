@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <a-header></a-header>
+    <a-header title="数字乡村信息化管理平台"></a-header>
     <a-natural></a-natural>
     <a-car></a-car>
     <a-desc></a-desc>
@@ -8,7 +8,8 @@
     <a-repair></a-repair>
     <a-travel></a-travel>
     <a-map></a-map>
-    <!-- <a-swiper></a-swiper> -->
+    <a-swiper></a-swiper>
+    <a-video></a-video>
     <div class="box div-left"></div>
     <div class="box div-right"></div>
   </div>
@@ -16,7 +17,7 @@
 
 <script>
 import AHeader from '@/components/Header'
-// import ASwiper from '@/components/Swiper'
+import ASwiper from '@/components/Swiper'
 import ANatural from './Natural'
 import ACar from './Car'
 import ADesc from './Desc'
@@ -24,6 +25,8 @@ import AEvent from './Event'
 import ARepair from './Repair'
 import ATravel from './Travel'
 import AMap from './Map'
+import AVideo from './video'
+import { resize } from '@/mixin'
 export default {
   name: 'home',
   data() {
@@ -41,9 +44,11 @@ export default {
     AEvent,
     ARepair,
     ATravel,
-    AMap
-    // ASwiper
-  }
+    AMap,
+    ASwiper,
+    AVideo
+  },
+  mixins: [resize]
 }
 </script>
 
@@ -63,11 +68,11 @@ export default {
   .box {
     position: absolute;
     width: px2rem(624rem);
-    height:px2rem(24rem);
+    height: px2rem(24rem);
     top: px2rem(1030rem);
   }
   .div-left {
-    left:0;
+    left: 0;
     z-index: 1050;
     background: url('~@/assets/analysis/左下角点缀@2x.png');
     background-size: 100% 100%;

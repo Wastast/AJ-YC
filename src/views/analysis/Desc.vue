@@ -20,6 +20,7 @@
 
 <script>
 import ModuleBox from '@/components/analys-box'
+import { getDesc } from '@/api/analysis'
 export default {
   name: 'event',
   data() {
@@ -28,42 +29,42 @@ export default {
         {
           imgUrl: require('@/assets/analysis/hushu@2x.png'),
           name: '总户数',
-          value: '200',
+          value: '0',
           unit: '户',
           color: 'rgba(131,178,255,1)'
         },
         {
           imgUrl: require('@/assets/analysis/hushu-2@2x.png'),
           name: '总人数',
-          value: '1937',
+          value: '0',
           unit: '人',
           color: 'rgba(250,174,27,1)'
         },
         {
           imgUrl: require('@/assets/analysis/renjunshouru@2x.png'),
           name: '人均收入',
-          value: '29187',
+          value: '0',
           unit: '元',
           color: 'rgba(24,186,197,1)'
         },
         {
           imgUrl: require('@/assets/analysis/zichan@2x.png'),
           name: '总收入',
-          value: '2839',
+          value: '0',
           unit: '万元',
           color: 'rgba(168,83,233,1)'
         },
         {
           imgUrl: require('@/assets/analysis/dangyuan@2x.png'),
           name: '党员人数',
-          value: '928',
+          value: '0',
           unit: '人',
           color: 'rgba(232,56,107,1)'
         },
         {
           imgUrl: require('@/assets/analysis/wuxing@2x.png'),
           name: '5星之家',
-          value: '827',
+          value: '0',
           unit: '家',
           color: 'rgba(61,144,246,1)'
         }
@@ -73,7 +74,20 @@ export default {
   computed: {},
   watch: {},
   methods: {},
-  mounted() {},
+  mounted() {
+    getDesc().then(data => {
+      if (data.code === 200) {
+        this.list.forEach((item, index) => {
+          let name = item.name
+          data.data.map(e => {
+            if (e.name === name) {
+              item.value = e.value
+            }
+          })
+        })
+      }
+    })
+  },
   components: {
     ModuleBox
   }
@@ -93,7 +107,7 @@ export default {
       float: left;
       margin-left: px2rem(5rem);
       position: relative;
-      background:rgba(10,17,43,1);
+      background: rgba(10, 17, 43, 1);
       cursor: pointer;
       &:nth-child(n + 3) {
         margin-top: px2rem(5rem);

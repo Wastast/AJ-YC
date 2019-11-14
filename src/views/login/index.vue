@@ -80,7 +80,7 @@ export default {
 .index {
   width: 100vw;
   height: 100vh;
-  background: url('~@/assets/img/489F6A708413CF346F2BF557DCC079DD@2x.png');
+  background: url('~@/assets/img/489F6A708413CF346F2BF557DCC079DD@2x.jpg');
   background-size: 100% 100%;
   .login {
     position: absolute;

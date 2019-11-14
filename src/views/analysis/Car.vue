@@ -1,15 +1,19 @@
 <template>
   <div class="Car">
-    <module-box title="车辆卡口数据">
+    <module-box :title="typeValue[moduleType]">
       <template slot="content">
         <div id="kakou"></div>
-        <div class="div-btn">
-          来源地分析
+        <div class="div-btn" @click="checkModule()">
+          {{ moduleType == 'car' ? '来源地分析' : '车辆卡口数据' }}
         </div>
-        <div class="div-test">
-          <p class="p" v-for="item of carValue" :key="item.value">
-            <span class="span">{{ item.type }}</span>
-            {{ item.value }}
+        <div class="div-test" v-if="moduleType === 'car'">
+          <p class="p">
+            <span class="span">进</span>
+            {{ Enter }}
+          </p>
+          <p class="p">
+            <span class="span">进</span>
+            {{ out }}
           </p>
         </div>
       </template>
@@ -20,27 +24,35 @@
 <script>
 import ModuleBox from '@/components/analys-box'
 import { EleResize } from '@/utils/esresize'
+import { getBayonet, getOrign } from '@/api/analysis'
 export default {
   name: 'Car',
   data() {
     return {
-      carValue: [
-        {
-          type: '进',
-          value: '10683'
-        },
-        {
-          type: '出',
-          value: '7938'
-        }
-      ]
+      Enter: '0',
+      out: '0',
+      moduleType: '',
+      typeValue: {
+        origin: '来源地分析',
+        car: '车辆卡口数据'
+      }
     }
   },
   computed: {},
-  watch: {},
+  watch: {
+    moduleType(newValue, oldValue) {
+      if (this.moduleType === 'car') {
+        // 车辆卡口
+        this.getCar()
+      } else {
+        // 来源地分析
+        this.getorigin()
+      }
+    }
+  },
   methods: {
     // 车辆卡口数据
-    echarts_car() {
+    echarts_car(province, city) {
       let myChart = this.$echarts.init(document.getElementById('kakou'))
       let resizeDiv = document.getElementById('kakou')
       let listener = () => {
@@ -76,7 +88,8 @@ export default {
             type: 'pie',
             radius: ['70%', '85%'],
             // center: ['30%', '50%'],
-            data: [{ value: 310, name: '省外' }, { value: 335, name: '省内' }],
+            // data: [{ value: 310, name: '省外' }, { value: 335, name: '省内' }],
+            data: province,
             itemStyle: {
               shadowColor: 'rgba(255, 255, 255, .2)',
               shadowBlur: 10
@@ -92,7 +105,9 @@ export default {
             name: '高速卡口',
             type: 'pie',
             radius: ['50%', '70%'],
-            data: [{ value: 310, name: '不显示' }],
+            hoverAnimation: false,
+            legendHoverLink: false,
+            data: [{ value: 0, name: '不显示' }],
             itemStyle: {
               shadowColor: 'rgba(255, 255, 255, .2)',
               shadowBlur: 10
@@ -101,6 +116,9 @@ export default {
               normal: {
                 show: false
               }
+            },
+            tooltip: {
+              show: false
             }
           },
           {
@@ -124,15 +142,142 @@ export default {
                 show: false
               }
             },
-            data: [{ value: 679, name: '市内' }, { value: 1548, name: '市外' }]
+            // data: [{ value: 679, name: '市内' }, { value: 1548, name: '市外' }]
+            data: city
           }
         ]
       }
+      myChart.clear()
       myChart.setOption(option, true)
+    },
+    // 来源地分析
+    echarts_laiyuan(data) {
+      let myChart = this.$echarts.init(document.getElementById('kakou'))
+      let resizeDiv = document.getElementById('kakou')
+      let listener = () => {
+        myChart.resize()
+      }
+      EleResize.on(resizeDiv, listener)
+      let option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+          }
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: [
+          {
+            type: 'category',
+            // data: ['人社局', '医保局', '税务', '民政', '残联', '村自有事'],
+            data: data.cityname,
+            axisTick: {
+              show: true
+            },
+            axisLine: {
+              show: false
+            },
+            axisLabel: {
+              color: 'rgba(131,178,255,1)'
+            },
+            show: true
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            show: true,
+            nameTextStyle: {
+              color: '#fff'
+            },
+            axisTick: {
+              show: false
+            },
+            axisLine: {
+              show: false
+            },
+            axisLabel: {
+              color: 'rgba(131,178,255,1)'
+            },
+            splitLine: {
+              lineStyle: {
+                color: 'rgba(8,65,107,1)'
+              }
+            }
+          }
+        ],
+        series: [
+          {
+            name: '客流量',
+            type: 'bar',
+            barWidth: 20,
+            // data: [10, 52, 200, 334, 390, 300],
+            data: data.number,
+            label: {
+              normal: {
+                show: true,
+                position: 'top',
+                textStyle: {
+                  color: '#fff'
+                }
+              }
+            },
+            // background:linear-gradient(0 deg,rgba(100,211,243,1) 0%,rgba(54,132,247,1) 100%);
+            itemStyle: {
+              normal: {
+                color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  {
+                    offset: 0,
+                    color: 'rgba(100,211,243,1)'
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(54,132,247,1)'
+                  }
+                ])
+              }
+            }
+          }
+        ]
+      }
+      myChart.clear()
+      myChart.setOption(option, true)
+    },
+    // 切换显示数据模块
+    checkModule() {
+      if (this.moduleType === 'car') {
+        this.moduleType = 'origin'
+      } else {
+        this.moduleType = 'car'
+      }
+    },
+    // 获取车辆卡口数据
+    getCar() {
+      getBayonet().then(data => {
+        if (data.code === 200) {
+          this.Enter = data.Enter
+          this.out = data.Out
+          // 省数据
+          this.echarts_car(data.dataProvince, data.dataCity)
+        }
+      })
+    },
+    getorigin() {
+      getOrign().then(data => {
+        if (data.code === 200) {
+          this.echarts_laiyuan(data.data)
+        }
+      })
     }
   },
   mounted() {
-    this.echarts_car()
+    this.moduleType = 'car'
   },
   components: {
     ModuleBox
@@ -178,7 +323,7 @@ export default {
         margin-right: 5px;
         font-weight: 400;
       }
-      &:nth-child(n+2) {
+      &:nth-child(n + 2) {
         margin-top: px2rem(12rem);
       }
     }

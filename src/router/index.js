@@ -33,6 +33,30 @@ export const constantRoutes = [
     component: () => import('../views/analysis'),
     meta: { title: 'analysis' }
   },
+  {
+    path: '/party',
+    name: 'party',
+    component: () => import('../views/party'),
+    meta: { title: 'party' }
+  },
+  {
+    path: '/resourse',
+    name: 'resourse',
+    component: () => import('../views/resourse'),
+    meta: { title: 'resourse' }
+  },
+  {
+    path: '/law',
+    name: 'law',
+    component: () => import('../views/law'),
+    meta: { title: 'law' }
+  },
+  {
+    path: '/Incorruptible',
+    name: 'Incorruptible',
+    component: () => import('../views/Incorruptible'),
+    meta: { title: 'Incorruptible' }
+  },
   // 指向页面错误跳转到404
   { path: '*', redirect: '/404', hidden: true }
 ]

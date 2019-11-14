@@ -20,7 +20,8 @@ axios.interceptors.request.use(
     // 在每次请求的时候拦截请求的头部,在此时可以添加token以及一些后台所需要的令牌
     let token = getToken()
     if (token) {
-      config.headers.common['token'] = token
+      config.url += '?access_token=' + token
+      // config.headers.common['token'] = token
     }
     return config
   },
@@ -72,6 +73,16 @@ axios.interceptors.response.use(
   }
 )
 
+function fifiter(code) {
+  if (code === 401) {
+    TipsPop({
+      message: '未登录或登录过期,请重新登录',
+      type: 'error'
+    })
+    removeToken()
+  }
+}
+
 /**
  * get方法，对应get请求
  * @param {String} url [请求的url地址]
@@ -85,6 +96,7 @@ export function get(url, params) {
         params: params
       })
       .then(res => {
+        fifiter(res.data.code)
         resolve(res.data)
       })
       .catch(err => {
@@ -103,6 +115,7 @@ export function post(url, params) {
     axios
       .post(url, qs.stringify(params))
       .then(res => {
+        fifiter(res.data.code)
         resolve(res.data)
       })
       .catch(err => {

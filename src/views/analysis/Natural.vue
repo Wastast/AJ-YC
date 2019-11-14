@@ -3,17 +3,73 @@
     <module-box title="乡村环境">
       <template slot="content">
         <ul class="ul">
-          <li class="li" v-for="(item, index) of list" :key="index">
+          <li class="li">
+            <img src="@/assets/analysis/圆角矩形 6@2x.png" alt="" />
+            <dl>
+              <dt>PM值</dt>
+              <dd>{{ pm }}</dd>
+            </dl>
+          </li>
+          <li class="li">
+            <img src="@/assets/analysis/圆角矩形 6 拷贝 3@2x.png" alt="" />
+            <dl>
+              <dt>温度</dt>
+              <dd>{{ tmp }}C</dd>
+            </dl>
+          </li>
+          <li class="li">
+            <img src="@/assets/analysis/圆角矩形 6 拷贝@2x.png" alt="" />
+            <dl>
+              <dt>湿度</dt>
+              <dd>{{ hum }}%</dd>
+            </dl>
+          </li>
+          <li class="li">
+            <img src="@/assets/analysis/圆角矩形 6 拷贝 2@2x(1).png" alt="" />
+            <dl>
+              <dt>垃圾容量</dt>
+              <dd>48L</dd>
+            </dl>
+          </li>
+          <li class="li">
+            <img src="@/assets/analysis/圆角矩形 6 拷贝 3@2x.png" alt="" />
+            <dl>
+              <dt>水质</dt>
+              <dd>2ppm</dd>
+            </dl>
+          </li>
+          <li class="li">
+            <img src="@/assets/analysis/圆角矩形 6 拷贝 3@2x(1).png" alt="" />
+            <dl>
+              <dt>PH值检测</dt>
+              <dd>5.6</dd>
+            </dl>
+          </li>
+          <li class="li">
+            <img src="@/assets/analysis/圆角矩形 6 拷贝 3@2x(2).png" alt="" />
+            <dl>
+              <dt>溶解氧</dt>
+              <dd>9.3</dd>
+            </dl>
+          </li>
+          <li class="li">
+            <img src="@/assets/analysis/圆角矩形 6 拷贝 3@2x(3).png" alt="" />
+            <dl>
+              <dt>垃圾桶告警</dt>
+              <dd>3</dd>
+            </dl>
+          </li>
+          <!-- <li class="li" v-for="(item, index) of list" :key="index">
             <img :src="item.imgUrl" alt="" />
             <dl>
               <dt>
-                {{item.name}}
+                {{ item.name }}
               </dt>
               <dd>
-                {{item.value}}
+                {{ item.value }}
               </dd>
             </dl>
-          </li>
+          </li> -->
         </ul>
       </template>
     </module-box>
@@ -22,58 +78,71 @@
 
 <script>
 import ModuleBox from '@/components/analys-box'
+import { weather } from '@/api/login'
+
 export default {
   name: 'Natural',
   data() {
     return {
-      list: [
-        {
-          imgUrl: require('@/assets/analysis/圆角矩形 6@2x.png'),
-          name: 'PM值',
-          value: '32'
-        },
-        {
-          imgUrl: require('@/assets/analysis/圆角矩形 6 拷贝 3@2x.png'),
-          name: '温度',
-          value: '26C'
-        },
-        {
-          imgUrl: require('@/assets/analysis/圆角矩形 6 拷贝@2x.png'),
-          name: '湿度',
-          value: '56%'
-        },
-        {
-          imgUrl: require('@/assets/analysis/圆角矩形 6 拷贝 2@2x(1).png'),
-          name: '垃圾容量',
-          value: '48L'
-        },
-        {
-          imgUrl: require('@/assets/analysis/圆角矩形 6 拷贝 3@2x.png'),
-          name: '水质',
-          value: '2ppm'
-        },
-        {
-          imgUrl: require('@/assets/analysis/圆角矩形 6 拷贝 3@2x(1).png'),
-          name: 'PH值检测',
-          value: '5.6'
-        },
-        {
-          imgUrl: require('@/assets/analysis/圆角矩形 6 拷贝 3@2x(2).png'),
-          name: '溶解氧',
-          value: '9.3'
-        },
-        {
-          imgUrl: require('@/assets/analysis/圆角矩形 6 拷贝 3@2x(3).png'),
-          name: '垃圾桶告警',
-          value: '3'
-        }
-      ]
+      pm: '32',
+      tmp: '0',
+      hum: '0'
+      // list: [
+      //   {
+      //     imgUrl: require('@/assets/analysis/圆角矩形 6@2x.png'),
+      //     name: 'PM值',
+      //     value: '32'
+      //   },
+      //   {
+      //     imgUrl: require('@/assets/analysis/圆角矩形 6 拷贝 3@2x.png'),
+      //     name: '温度',
+      //     value: '26C'
+      //   },
+      //   {
+      //     imgUrl: require('@/assets/analysis/圆角矩形 6 拷贝@2x.png'),
+      //     name: '湿度',
+      //     value: '56%'
+      //   },
+      //   {
+      //     imgUrl: require('@/assets/analysis/圆角矩形 6 拷贝 2@2x(1).png'),
+      //     name: '垃圾容量',
+      //     value: '48L'
+      //   },
+      //   {
+      //     imgUrl: require('@/assets/analysis/圆角矩形 6 拷贝 3@2x.png'),
+      //     name: '水质',
+      //     value: '2ppm'
+      //   },
+      //   {
+      //     imgUrl: require('@/assets/analysis/圆角矩形 6 拷贝 3@2x(1).png'),
+      //     name: 'PH值检测',
+      //     value: '5.6'
+      //   },
+      //   {
+      //     imgUrl: require('@/assets/analysis/圆角矩形 6 拷贝 3@2x(2).png'),
+      //     name: '溶解氧',
+      //     value: '9.3'
+      //   },
+      //   {
+      //     imgUrl: require('@/assets/analysis/圆角矩形 6 拷贝 3@2x(3).png'),
+      //     name: '垃圾桶告警',
+      //     value: '3'
+      //   }
+      // ]
     }
   },
   computed: {},
   watch: {},
   methods: {},
-  mounted() {},
+  mounted() {
+    weather()
+      .then(data => {
+        let obj = data.HeWeather6[0].now
+        this.hum = obj.hum
+        this.tmp = obj.tmp
+      })
+      .catch(() => {})
+  },
   components: {
     ModuleBox
   }

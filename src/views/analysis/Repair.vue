@@ -11,17 +11,19 @@
 <script>
 import ModuleBox from '@/components/analys-box'
 import { EleResize } from '@/utils/esresize'
-
+import { getRepair } from '@/api/analysis'
 export default {
   name: 'Repair',
   data() {
-    return {}
+    return {
+      timer: null
+    }
   },
   computed: {},
   watch: {},
   methods: {
     // 事件柱状图
-    echarts_evnet() {
+    echarts_evnet(data) {
       let myChart = this.$echarts.init(document.getElementById('repair-time'))
       let resizeDiv = document.getElementById('repair-time')
       let listener = () => {
@@ -45,7 +47,8 @@ export default {
         xAxis: [
           {
             type: 'category',
-            data: ['人社局', '医保局', '税务', '民政', '残联', '村自有事'],
+            // data: ['人社局', '医保局', '税务', '民政', '残联', '村自有事'],
+            data: data.hours,
             axisTick: {
               show: true
             },
@@ -62,8 +65,13 @@ export default {
           {
             type: 'value',
             show: true,
+            name: '实时游客数量',
             nameTextStyle: {
-              color: '#fff'
+              color: 'rgba(161,207,255,.7)',
+              backgroundColor: 'rgba(2,8,28,.5)',
+              padding: [0, 13, 0, 11],
+              lineHeight: '31',
+              borderRadius: 5
             },
             axisTick: {
               show: false
@@ -83,45 +91,80 @@ export default {
         ],
         series: [
           {
-            name: '客流量',
-            type: 'bar',
-            barWidth: 20,
-            data: [10, 52, 200, 334, 390, 300],
-            label: {
-              normal: {
-                show: true,
-                position: 'top',
-                textStyle: {
-                  color: '#fff'
-                }
-              }
-            },
-            // background:linear-gradient(0 deg,rgba(100,211,243,1) 0%,rgba(54,132,247,1) 100%);
+            name: '游客小时数据',
+            type: 'line',
+            smooth: true,
+            //  symbol: "none", //去掉折线点
+            stack: 100,
             itemStyle: {
               normal: {
                 color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
                   {
                     offset: 0,
-                    color: 'rgba(100,211,243,1)'
+                    color: 'rgba(59,108,246,1)'
+                  },
+                  {
+                    offset: 0.5,
+                    color: 'rgba(113,243,252,1)'
                   },
                   {
                     offset: 1,
-                    color: 'rgba(54,132,247,1)'
+                    color: 'rgba(80,175,248,1)'
                   }
-                ])
+                ]),
+                lineStyle: {
+                  // 系列级个性化折线样式
+                  width: 0.5,
+                  type: 'solid',
+                  color: '#CC56CB'
+                }
+              },
+              emphasis: {
+                color: '#02675f',
+                lineStyle: {
+                  // 系列级个性化折线样式
+                  width: 0.5,
+                  type: 'dotted',
+                  color: '#02675f'
+                }
               }
-            }
+            },
+            symbolSize: 5,
+            areaStyle: {
+              normal: {}
+            },
+            data: data.number
           }
         ]
       }
-      myChart.setOption(option)
+      myChart.clear()
+      myChart.setOption(option, true)
+    },
+    // 定时请求数据
+    STI_getValue() {
+      // 请求小时旅游数据
+      getRepair().then(data => {
+        if (data.code === 200) {
+          this.echarts_evnet(data)
+        }
+      })
+      this.timer = setInterval(() => {
+        getRepair().then(data => {
+          if (data.code === 200) {
+            this.echarts_evnet(data)
+          }
+        })
+      }, 1000 * 30)
     }
   },
   mounted() {
-    this.echarts_evnet()
+    this.STI_getValue()
   },
   components: {
     ModuleBox
+  },
+  beforeDestroy() {
+    clearInterval(this.timer)
   }
 }
 </script>

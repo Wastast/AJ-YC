@@ -3,20 +3,18 @@
     <module-box title="报事报修">
       <template slot="content">
         <ul class="ul">
-          <li class="li" v-for="(item,index) of [1,2,3,4,5]" :key="index">
-            <span class="span span-block">
-
-            </span>
+          <li class="li" v-for="item of list" :key="item.id">
+            <span class="span span-block"> </span>
             <span class="span span-text">
-              垃圾桶
+              {{ item.title }}
             </span>
             <span class="span span-event">
-              村委垃圾桶丢失
+              {{ item.content }}
             </span>
             <span class="span span-time">
-              2019-11-05
+              {{ item.create_date.slice(0, 10) }}
             </span>
-            <img class="img" src="@/assets/analysis/background.png" alt="">
+            <img class="img" src="@/assets/analysis/background.png" alt="" />
           </li>
         </ul>
       </template>
@@ -26,15 +24,25 @@
 
 <script>
 import ModuleBox from '@/components/analys-box'
+import { getEvent } from '@/api/analysis'
 export default {
   name: 'Travel',
   data() {
-    return {}
+    return {
+      list: []
+    }
   },
   computed: {},
   watch: {},
   methods: {},
-  mounted() {},
+  mounted() {
+    getEvent().then(data => {
+      if (data.code === 200) {
+        let list = data.data.repairList
+        this.list = list.slice(0, 5)
+      }
+    })
+  },
   components: {
     ModuleBox
   }
@@ -42,7 +50,7 @@ export default {
 </script>
 
 <style scoped>
-.Travel >>> .index{
+.Travel >>> .index {
   padding: 0.7rem 0.39rem 0.3rem 0.15rem;
 }
 </style>
@@ -57,22 +65,26 @@ export default {
       height: px2rem(47rem);
       line-height: px2rem(47rem);
       position: relative;
+      cursor: pointer;
       &:nth-child(even) {
-        background: #7B6E93FF;
+        background: rgba(123, 110, 147, 0.2);
+      }
+      &:hover {
+        background: rgba(123, 110, 147, 0.5);
       }
       .span {
         display: inline-block;
         color: #fff;
-        font-family:PingFangSC;
+        font-family: PingFangSC;
         position: absolute;
       }
       .span-block {
         left: px2rem(22rem);
         top: 50%;
         transform: translateY(-50%);
-        width:5px;
-        height:5px;
-        background:rgba(83,212,255,1);
+        width: 5px;
+        height: 5px;
+        background: rgba(83, 212, 255, 1);
       }
       .span-text {
         left: px2rem(40rem);
