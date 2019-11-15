@@ -1,21 +1,47 @@
 <template>
   <div class="map">
-    <div id="map"></div>
+    <div id="maps"></div>
   </div>
 </template>
 
 <script>
+import { getFire } from '@/api/mapapi'
 export default {
-  name: 'map',
+  name: 'maps',
   data() {
-    return {}
+    return {
+      imgRep: req.slice(0, -3)
+    }
   },
   computed: {},
   watch: {},
-  methods: {},
+  methods: {
+    addPoint(item) {
+      let iconValue = item
+      let sLonLat = new SLonLat(iconValue.lon, iconValue.lat)
+      let iconPath = this.imgRep + '/upload/icon/' + iconValue.img
+      // 在地图内添加图标
+      let sIcon = new SIcon(
+        iconPath,
+        new SSize(iconValue.width, iconValue.height),
+        new SPixel(-iconValue.width / 2, -iconValue.height)
+      )
+      let sMarker = new SMarker(sLonLat, sIcon, iconValue.typeId)
+      TMapAPI.markerLayer.AddMarker(sMarker)
+      sMarker.AddEventListener('click', iconValue, () => {
+      })
+    }
+  },
   mounted() {
-    TMapAPI.InitMap('map')
+    TMapAPI.InitMap('maps')
     TMapAPI.map.SetCenter(new SLonLat(1450, 1010), 1)
+    getFire().then(data => {
+      if (data.code === 200) {
+        data.data.forEach(item => {
+          this.addPoint(item)
+        })
+      }
+    })
   }
 }
 </script>
@@ -44,7 +70,7 @@ export default {
     left: 50%;
     transform: translateX(-50%);
   }
-  #map {
+  #maps {
     width: 100%;
     height: 100%;
   }

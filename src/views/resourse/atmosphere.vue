@@ -1,6 +1,6 @@
 <template>
   <div class="atmosphere">
-    <party-box title="空气质量数据" width="592" height="392">
+    <party-box title="空气监测" width="592" height="392">
       <template slot="content">
         <div class="div-top">
           <el-select v-model="value" placeholder="请选择空气检测位置">
@@ -133,7 +133,7 @@ export default {
 }
 .div-top >>> .el-input__inner {
   border: 1px solid rgba(220, 223, 230, 0);
-  background-color: #fff0;
+  background-color: rgba(0,0,0,0);
   color: #fff;
 }
 </style>

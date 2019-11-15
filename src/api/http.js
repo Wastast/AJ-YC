@@ -6,7 +6,6 @@ import { TipsPop } from '@/utils/el_ui.js'
 let baseUrl = process.env.VUE_APP_BASE_API
 // 将导出为全局
 window.req = baseUrl
-
 // 添加axios 根据环境进行判断添加请求端口  process.env.NODE_ENV === 'production' 判断请求环境是否在生产环境
 axios.defaults.baseURL = baseUrl
 // 添加axios在请求时默认的配置

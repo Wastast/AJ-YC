@@ -1,23 +1,62 @@
 <template>
   <div class="map">
-    <div id="map"></div>
-    <!-- <div class="img-box">
-
-    </div> -->
+    <div id="maps"></div>
   </div>
 </template>
 
 <script>
+import { getVideoSmoke } from '@/api/mapapi'
 export default {
-  name: 'map',
+  name: 'maps',
   data() {
-    return {}
+    return {
+      pointList: ['001001001', '001001005', '001001006'],
+      imgRep: req.slice(0, -3)
+    }
   },
   computed: {},
   watch: {},
-  methods: {},
+  methods: {
+    // 添加点位
+    addPoint(item) {
+      console.log(item)
+      let iconValue = item
+      let sLonLat = new SLonLat(iconValue.lon, iconValue.lat)
+      let iconPath = this.imgRep + '/upload/icon/' + iconValue.img
+      // 在地图内添加图标
+      let sIcon = new SIcon(
+        iconPath,
+        new SSize(iconValue.width, iconValue.height),
+        new SPixel(-iconValue.width / 2, -iconValue.height)
+      )
+      let sMarker = new SMarker(sLonLat, sIcon, iconValue.typeId)
+      TMapAPI.markerLayer.AddMarker(sMarker)
+
+      sMarker.AddEventListener('click', iconValue, () => {
+        console.log(iconValue)
+      })
+    }
+  },
   mounted() {
-    TMapAPI.InitMap('map')
+    getVideoSmoke().then(data => {
+      if (data.code === 0) {
+        data.data.forEach(item => {
+          this.addPoint(item)
+        })
+      }
+    })
+    // for (let item of this.pointList) {
+    //   getResourseType({
+    //     typeid: item
+    //   }).then(data => {
+    //     if (data.code === 200) {
+    //       data.data.forEach(item => {
+    //         this.addPoint(item)
+    //       })
+    //     }
+    //   })
+    // }
+    TMapAPI.InitMap('maps')
     TMapAPI.map.SetCenter(new SLonLat(1500, 1010), 1)
   }
 }
@@ -46,7 +85,7 @@ export default {
     left: 50%;
     transform: translateX(-50%);
   }
-  #map {
+  #maps {
     width: 100%;
     height: 100%;
   }

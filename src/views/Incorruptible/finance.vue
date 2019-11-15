@@ -37,7 +37,7 @@
 
 <script>
 import PartyBox from '@/components/party-box'
-import { getEconomics, getBaobiao } from '@/api/incorruptible'
+import { getEconomics, getOpenValue } from '@/api/incorruptible'
 import vuescroll from 'vuescroll'
 export default {
   name: 'finance',
@@ -58,7 +58,7 @@ export default {
   mounted() {
     getEconomics().then(data => {
       let id = data.data[4].node[1].node_code
-      getBaobiao({
+      getOpenValue({
         region_code: '330523108204',
         node_id: id
       }).then(data => {

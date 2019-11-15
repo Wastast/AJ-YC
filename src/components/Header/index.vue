@@ -9,8 +9,9 @@
       {{ title }}
     </div>
     <div class="div-wether">
+      <img :src="`http://172.26.16.29:8088/HeWeather/${cond_code}.png`" alt="" />
       <span class="span-date">{{ cond_txt }}</span>
-      <span class="span-week">{{ tmp }}C</span>
+      <span class="span-week">{{ tmp }}℃</span>
     </div>
     <div v-if="router !== '/'" class="div-home" @click="jumpHome()"></div>
   </div>
@@ -31,7 +32,8 @@ export default {
       nowWeek: '',
       nowDate: '',
       cond_txt: '',
-      tmp: ''
+      tmp: '',
+      cond_code: '100'
     }
   },
   computed: {
@@ -72,6 +74,7 @@ export default {
         let obj = data.HeWeather6[0].now
         this.cond_txt = obj.cond_txt
         this.tmp = obj.tmp
+        this.cond_code = obj.cond_code
       })
     }
   },
@@ -99,19 +102,19 @@ export default {
   .div-title {
     position: absolute;
     left: px2rem(690rem);
-    width: px2rem(520rem);
+    width: px2rem(540rem);
     font-family: 'Top_title';
     text-align: center;
     letter-spacing: px2rem(10rem);
-    font-size: px2rem(34rem);
-    top: px2rem(16rem);
-    color: #0AC8FF;
+    font-size: px2rem(38rem);
+    top: px2rem(10rem);
+    color: #0ac8ff;
   }
   .div-time {
     color: #83b2ff;
     margin-top: px2rem(16rem);
     margin-left: px2rem(19rem);
-    font-size: px2rem(16rem);
+    font-size: px2rem(18rem);
     .span-date {
       margin-left: px2rem(15rem);
     }
@@ -131,12 +134,20 @@ export default {
   }
   .div-wether {
     position: absolute;
-    top: px2rem(18rem);
-    right: px2rem(175rem);
+    top: px2rem(15rem);
+    right: px2rem(140rem);
     color: #83b2ff;
-    font-size: px2rem(16rem);
+    font-size: px2rem(18rem);
     .span-week {
       margin-left: px2rem(15rem);
+    }
+    img {
+      width: px2rem(30rem);
+      height: px2rem(30rem);
+      margin-right: px2rem(10rem);
+      position: absolute;
+      top: px2rem(-7rem);
+      left: px2rem(-41rem);
     }
   }
 }

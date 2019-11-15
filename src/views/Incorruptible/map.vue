@@ -1,6 +1,6 @@
 <template>
   <div class="map">
-    <div id="map"></div>
+    <div id="maps"></div>
     <!-- <div class="img-box">
 
     </div> -->
@@ -17,7 +17,7 @@ export default {
   watch: {},
   methods: {},
   mounted() {
-    TMapAPI.InitMap('map')
+    TMapAPI.InitMap('maps')
     TMapAPI.map.SetCenter(new SLonLat(1500, 1010), 1)
   }
 }
@@ -46,7 +46,7 @@ export default {
     left: 50%;
     transform: translateX(-50%);
   }
-  #map {
+  #maps {
     width: 100%;
     height: 100%;
   }

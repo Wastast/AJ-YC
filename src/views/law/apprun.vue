@@ -53,6 +53,7 @@
 <script>
 import PartyBox from '@/components/party-box'
 import { EleResize } from '@/utils/esresize'
+import { getonWeek, getSatisfied, getGovernment, getFrequency } from '@/api/law'
 export default {
   name: 'apprun',
   data() {
@@ -79,14 +80,18 @@ export default {
           imgUrl: require('@/assets/law/down.png'),
           color: '#C33700'
         }
-      ]
+      ],
+      manyiTimer: null,
+      zhengfuTimer: null,
+      meizhouTimer: null,
+      gaopinTimer: null
     }
   },
   computed: {},
   watch: {},
   methods: {
     // 满意度echarts
-    echarts_satisfied() {
+    echarts_satisfied(typeArr, data) {
       let myChart = this.$echarts.init(document.getElementById('satisfied'))
       let resizeDiv = document.getElementById('satisfied')
       let listener = () => {
@@ -103,7 +108,8 @@ export default {
           orient: 'vertical',
           right: '10%',
           y: 'center',
-          data: ['非常满意', '满意', '不满意'],
+          // data: ['非常满意', '满意', '不满意'],
+          data: typeArr,
           textStyle: {
             color: '#fff'
           },
@@ -135,18 +141,37 @@ export default {
                 show: false
               }
             },
-            data: [
-              { value: 99.08, name: '非常满意' },
-              { value: 0.9, name: '满意' },
-              { value: 0.02, name: '不满意' }
-            ]
+            data: data
           }
         ]
       }
+      let index = 0
+      this.manyiTimer = setInterval(() => {
+        var dataLen = option.series[0].data.length
+        // 取消之前高亮的图形
+        myChart.dispatchAction({
+          type: 'downplay',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+        index = (index + 1) % dataLen
+        // 高亮当前图形
+        myChart.dispatchAction({
+          type: 'highlight',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+        // 显示 tooltip
+        myChart.dispatchAction({
+          type: 'showTip',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+      }, 1000)
       myChart.setOption(option)
     },
-    // 收入柱状图
-    echarts_statistics() {
+    // 政府办事事项
+    echarts_statistics(typeArr, data) {
       let myChart = this.$echarts.init(document.getElementById('statistics'))
       let resizeDiv = document.getElementById('statistics')
       let listener = () => {
@@ -171,7 +196,8 @@ export default {
         xAxis: [
           {
             type: 'category',
-            data: ['人社局', '医保局', '税务', '民政', '残联', '村自有事'],
+            // data: ['人社局', '医保局', '税务', '民政', '残联', '村自有事'],
+            data: typeArr,
             axisTick: {
               show: false
             },
@@ -209,7 +235,7 @@ export default {
             name: '客流量',
             type: 'bar',
             barWidth: 20,
-            data: [7, 1, 1, 4, 10, 21],
+            data: data,
             label: {
               normal: {
                 show: true,
@@ -236,10 +262,33 @@ export default {
           }
         ]
       }
+      let index = 0
+      this.zhengfuTimer = setInterval(() => {
+        var dataLen = option.series[0].data.length
+        // 取消之前高亮的图形
+        myChart.dispatchAction({
+          type: 'downplay',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+        index = (index + 1) % dataLen
+        // 高亮当前图形
+        myChart.dispatchAction({
+          type: 'highlight',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+        // 显示 tooltip
+        myChart.dispatchAction({
+          type: 'showTip',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+      }, 1000)
       myChart.setOption(option)
     },
     // 每周办件量情况
-    echart_onweek() {
+    echart_onweek(nowWeek, lastWeek) {
       let myChart = this.$echarts.init(document.getElementById('onweek'))
       let resizeDiv = document.getElementById('onweek')
       let listener = () => {
@@ -247,6 +296,7 @@ export default {
       }
       EleResize.on(resizeDiv, listener)
       let option = {
+        color: ['#4FA6F2', '#ECB32B'],
         tooltip: {
           trigger: 'axis'
         },
@@ -297,10 +347,12 @@ export default {
             name: '本周',
             type: 'line',
             stack: '总量',
-            data: [6, 12, 25, 3, 6],
+            // data: [6, 12, 25, 3, 6],
+            data: nowWeek,
             lineStyle: {
               color: '#4FA6F2'
-            }
+            },
+            symbol: 'circle'
           },
           {
             name: '上周',
@@ -309,14 +361,39 @@ export default {
             lineStyle: {
               color: '#ECB32B'
             },
-            data: [2, 20, 16, 1, 18]
+            // data: [2, 20, 16, 1, 18],
+            data: lastWeek,
+            symbol: 'circle'
           }
         ]
       }
+      let index = 0
+      this.meizhouTimer = setInterval(() => {
+        var dataLen = option.series[0].data.length
+        // 取消之前高亮的图形
+        myChart.dispatchAction({
+          type: 'downplay',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+        index = (index + 1) % dataLen
+        // 高亮当前图形
+        myChart.dispatchAction({
+          type: 'highlight',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+        // 显示 tooltip
+        myChart.dispatchAction({
+          type: 'showTip',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+      }, 1000)
       myChart.setOption(option)
     },
     // 高频事项echarts
-    echart_frequency() {
+    echart_frequency(typeArr, data) {
       let myChart = this.$echarts.init(document.getElementById('frequency'))
       let resizeDiv = document.getElementById('frequency')
       let listener = () => {
@@ -333,14 +410,7 @@ export default {
           orient: 'vertical',
           right: '20%',
           y: 'center',
-          data: [
-            '养老保险登记',
-            '医疗保险登记',
-            '生育登记',
-            '再生育审批',
-            '法律援助申报',
-            '其他事项'
-          ],
+          data: typeArr,
           textStyle: {
             color: '#fff'
           },
@@ -373,27 +443,76 @@ export default {
                 show: false
               }
             },
-            data: [
-              { value: 300, name: '养老保险登记' },
-              { value: 400, name: '医疗保险登记' },
-              { value: 100, name: '生育登记' },
-              { value: 100, name: '再生育审批' },
-              { value: 50, name: '法律援助申报' },
-              { value: 50, name: '其他事项' }
-            ]
+            data: data
           }
         ]
       }
+      let index = 0
+      this.gaopinTimer = setInterval(() => {
+        var dataLen = option.series[0].data.length
+        // 取消之前高亮的图形
+        myChart.dispatchAction({
+          type: 'downplay',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+        index = (index + 1) % dataLen
+        // 高亮当前图形
+        myChart.dispatchAction({
+          type: 'highlight',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+        // 显示 tooltip
+        myChart.dispatchAction({
+          type: 'showTip',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+      }, 1000)
       myChart.setOption(option)
     }
   },
   mounted() {
-    this.echarts_satisfied()
-    this.echarts_statistics()
-    this.echart_onweek()
-    this.echart_frequency()
+    // 每周办件量
+    getonWeek().then(data => {
+      if (data.code === 200) {
+        this.echart_onweek(data.thisWeek, data.lastWeek)
+      }
+    })
+    // 请求满意度调查数据
+    getSatisfied().then(data => {
+      if (data.code === 200) {
+        let typeArr = data.data.map(item => {
+          return item.name
+        })
+        this.echarts_satisfied(typeArr, data.data)
+      }
+    })
+    // 政府办事事项
+    getGovernment().then(data => {
+      if (data.code === 200) {
+        let typeArr = data.type
+        this.echarts_statistics(typeArr, data.data)
+      }
+    })
+    // 高频事项代办数量
+    getFrequency().then(data => {
+      if (data.code === 200) {
+        let typeArr = data.data.map(item => {
+          return item.name
+        })
+        this.echart_frequency(typeArr, data.data)
+      }
+    })
   },
-  components: { PartyBox }
+  components: { PartyBox },
+  beforeDestroy() {
+    clearInterval(this.manyiTimer)
+    clearInterval(this.zhengfuTimer)
+    clearInterval(this.meizhouTimer)
+    clearInterval(this.gaopinTimer)
+  }
 }
 </script>
 
@@ -413,6 +532,7 @@ export default {
   z-index: 100;
   .div-top {
     display: flow-root;
+    overflow: hidden;
     > div {
       float: left;
     }
@@ -453,7 +573,7 @@ export default {
             float: left;
           }
           &:nth-child(n + 2) {
-            margin-top: px2rem(5rem);
+            margin-top: px2rem(15rem);
           }
           .li-left {
             dt {

@@ -76,10 +76,12 @@ export default {
   left: px2rem(663rem);
   z-index: 100;
   .div-top {
-    margin-bottom: px2rem(28rem);
-    margin-top: px2rem(20rem);
+    // margin-bottom: px2rem(28rem);
+    // margin-top: px2rem(20rem);
     position: relative;
     display: flow-root;
+    height: .96rem;
+    line-height: .96rem;
     .span {
       color: rgba(44, 137, 232, 1);
     }

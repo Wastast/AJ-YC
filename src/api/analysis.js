@@ -17,6 +17,3 @@ export const getVideoData = data => post('/hikocx', data)
 
 // 来源地数据
 export const getOrign = data => get('/dwsTourSelfDriveTouristsFromCityD/getCityData', data)
-
-// 请求绘制房屋
-export const getHouse = data => post('/dimTourBasBuildInfo/findByListWithHost', data)

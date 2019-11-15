@@ -1,6 +1,6 @@
 <template>
   <div class="Framework">
-    <party-box title="领导架构" width="517" height="546">
+    <party-box title="组织架构" width="517" height="546">
       <template slot="content">
         <div class="box">
           <div class="div-top">
@@ -60,8 +60,8 @@ export default {
         branch: [
           [
             {
-              imgUrl: require('@/assets/party/图层 752@2x.png'),
-              name: '潘文革'
+              imgUrl: require('@/assets/party/abc.jpg'),
+              name: '汪玉成'
             }
           ],
           [
@@ -120,8 +120,8 @@ export default {
         economics: [
           [
             {
-              imgUrl: require('@/assets/party/图层 752@2x.png'),
-              name: '潘文革'
+              imgUrl: require('@/assets/party/abc.jpg'),
+              name: '汪玉成'
             }
           ],
           [

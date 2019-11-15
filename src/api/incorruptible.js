@@ -3,11 +3,17 @@ import { get, post } from './http'
 // 查询文明实践信息
 export const getPracticeInfo = data => get('/dwdTourCivilizedPracticeInfo', data)
 
-// 查询志愿活动信息
+// 查询志愿活动
 export const getActivity = data => get('/dwdTourVolunteerActivityInfo', data)
 
-// 财务公开
+// 请求三务公开id
 export const getEconomics = data => post('/threeServices/getNode', data)
 
-// 请求财务报表
-export const getBaobiao = data => post('/threeServices/getNodeContents', data)
+// 获取三务公开公开数据
+export const getOpenValue = data => post('/threeServices/getNodeContents', data)
+
+// 查询乡贤调解
+export const getMediate = data => get('/dwdTourVillagersMediationInfo', data)
+
+// 查询志愿信息
+export const getVolunteer = data => get('/dwdTourVolunteerOrganizationInfo', data)

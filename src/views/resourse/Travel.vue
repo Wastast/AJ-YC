@@ -1,34 +1,38 @@
 <template>
   <div class="Travel">
-    <party-box title="旅游数据" width="592" height="392">
+    <party-box title="旅游监测" width="592" height="392">
       <template slot="content">
         <div class="div-top">
           <div class="div-in">
             <p class="p-title">
-              游客总数
+              本日游客总数
             </p>
             <span class="span-value">
-              29102
+              <countTo :startVal="parseInt(0)" :endVal="nowSum" :duration="3000"></countTo>
             </span>
           </div>
           <div class="div-out">
             <p class="p-title">
-              实时游客总数
+              实时游客数
             </p>
             <span class="span-value">
-              29102
+              <countTo :startVal="parseInt(0)" :endVal="TourData" :duration="3000"></countTo>
             </span>
           </div>
         </div>
         <div class="div-center">
           <div class="echarts">
             <p>
-              游客来源地分析
+              人群画像
             </p>
             <div class="type">
-              <span>消费水平</span>
-              <span class="checked">年龄</span>
-              <span>性别</span>
+              <span
+                v-for="item of typeList"
+                :key="item.type"
+                :class="item.type === type ? 'checked' : ''"
+                @click="checkType(item.type)"
+                >{{ item.name }}</span
+              >
             </div>
             <div id="renqun"></div>
           </div>
@@ -41,10 +45,10 @@
                 <p class="top">Top{{ index + 1 }}</p>
                 <div class="div-text">
                   <p class="p-city">
-                    {{ item.city }}
+                    {{ item.province }}
                   </p>
                   <p class="span-value">
-                    {{ item.number }}
+                    {{ ((item.num / AllSum) * 100).toFixed(2)}}%
                   </p>
                 </div>
               </li>
@@ -58,19 +62,75 @@
 
 <script>
 import PartyBox from '@/components/party-box'
-import { getOrign } from '@/api/analysis'
+import { getConsumption, getSex, getAge, getTouristOrign, getTourData } from '@/api/resourse'
 import { EleResize } from '@/utils/esresize'
+import countTo from 'vue-count-to'
+import { getRepair } from '@/api/analysis'
 export default {
   name: 'Travel',
   data() {
     return {
-      list: []
+      nowSum: 0,
+      type: '',
+      list: [],
+      typeList: [
+        {
+          type: 'consumption',
+          name: '消费'
+        },
+        {
+          type: 'age',
+          name: '年龄'
+        },
+        {
+          type: 'sex',
+          name: '性别'
+        }
+      ],
+      typeFn: {
+        consumption: () => {
+          return new Promise((resolve, reject) => {
+            getConsumption().then(data => {
+              resolve(data)
+            })
+          })
+        },
+        age: () => {
+          return new Promise((resolve, reject) => {
+            getAge().then(data => {
+              resolve(data)
+            })
+          })
+        },
+        sex: () => {
+          return new Promise((resolve, reject) => {
+            getSex().then(data => {
+              resolve(data)
+            })
+          })
+        }
+      },
+      TourData: 0,
+      qiyeTimer: null,
+      AllSum: 0
     }
   },
   computed: {},
-  watch: {},
+  watch: {
+    type(newValue, oldValue) {
+      this.getValue(newValue)
+    }
+  },
   methods: {
-    echarts_kakou() {
+    // 切换type
+    checkType(type) {
+      if (this.type === type) {
+        return
+      }
+      this.type = type
+    },
+    // 查询人群画像数据
+    echarts_kakou(type, data) {
       let myChart = this.$echarts.init(document.getElementById('renqun'))
       let resizeDiv = document.getElementById('renqun')
       let listener = () => {
@@ -78,16 +138,7 @@ export default {
       }
       EleResize.on(resizeDiv, listener)
       let option = {
-        color: [
-          '#00E5A2',
-          '#044B9C',
-          '#0039AD',
-          '#00A1D6',
-          '#C56721',
-          '#E94700',
-          '#AD0041',
-          '#9E00BB'
-        ],
+        color: ['#00E5A2', '#00A1D6', '#C56721', '#E94700', '#AD0041', '#9E00BB'],
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b}: {c} ({d}%)'
@@ -96,7 +147,8 @@ export default {
           orient: 'vertical',
           right: '10%',
           y: 'center',
-          data: ['0~18岁', '19~24岁', '25~35岁', '36~45岁'],
+          // data: ['0~18岁', '19~24岁', '25~35岁', '36~45岁'],
+          data: type,
           textStyle: {
             color: '#fff'
           },
@@ -105,7 +157,7 @@ export default {
         backgroundColor: 'rgba(0,0,0,.3)',
         series: [
           {
-            name: '省内外车辆',
+            name: '',
             type: 'pie',
             radius: ['30%', '50%'],
             center: ['30%', '60%'],
@@ -128,39 +180,96 @@ export default {
                 show: false
               }
             },
-            data: [
-              {
-                name: '0~18岁',
-                value: '14'
-              },
-              {
-                name: '19~24岁',
-                value: '14'
-              },
-              {
-                name: '25~35岁',
-                value: '14'
-              },
-              {
-                name: '36~45岁',
-                value: '14'
-              }
-            ]
+            data: data
           }
         ]
       }
-      myChart.setOption(option)
+      let index = 0
+      this.qiyeTimer = setInterval(() => {
+        var dataLen = option.series[0].data.length
+        // 取消之前高亮的图形
+        myChart.dispatchAction({
+          type: 'downplay',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+        index = (index + 1) % dataLen
+        // 高亮当前图形
+        myChart.dispatchAction({
+          type: 'highlight',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+        // 显示 tooltip
+        myChart.dispatchAction({
+          type: 'showTip',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+      }, 1000)
+      myChart.clear()
+      myChart.setOption(option, true)
+    },
+    // 获取人群画像数据
+    async getValue(type) {
+      let data = await this.typeFn[type]()
+      let typeArr = data.data.map(item => {
+        return item.name
+      })
+      if (this.qiyeTimer) {
+        clearInterval(this.qiyeTimer)
+      }
+      this.echarts_kakou(typeArr, data.data)
+    },
+    // 获取游客来源地分析
+    Orign() {
+      getTouristOrign()
+        .then(data => {
+          if (data.code === 200) {
+            // 总数
+            let AllSum = data.data.map(item => {
+              return item.num
+            })
+            this.AllSum = AllSum.reduce((a, b) => a + b)
+            let arr = data.data.slice(5)
+            let sum = 0
+            arr.forEach(item => {
+              sum += item.num
+            })
+            let obj = {
+              province: '其他',
+              num: sum
+            }
+            this.list = data.data.slice(0, 5)
+            this.list.push(obj)
+          }
+        })
+        .catch(() => {})
+    },
+    // 获取游客实时数据
+    realTime() {
+      getTourData().then(data => {
+        if (data.code) {
+          this.TourData = data.number
+        }
+      })
     }
   },
+  beforeDestroy() {
+    clearInterval(this.qiyeTimer)
+  },
   mounted() {
-    this.echarts_kakou()
-    getOrign().then(data => {
+    this.type = 'consumption'
+    this.Orign()
+    this.realTime()
+    getRepair().then(data => {
       if (data.code === 200) {
-        this.list = data.day.slice(0, 6)
+        let sum = data.number.reduce((a, b) => a + b)
+        this.nowSum = sum
       }
     })
   },
-  components: { PartyBox }
+  components: { PartyBox, countTo }
 }
 </script>
 
@@ -282,6 +391,7 @@ export default {
           border-radius: 5px;
           float: left;
           position: relative;
+          cursor: pointer;
           &:nth-child(even) {
             margin-left: px2rem(5rem);
           }

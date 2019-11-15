@@ -64,7 +64,7 @@ export default {
     .li {
       float: left;
       cursor: pointer;
-      margin-left: 1rem;
+      margin-left: .6rem;
       dl {
         dt {
           width: px2rem(113rem);
@@ -73,6 +73,7 @@ export default {
           background-size: 100% 100%;
           position: relative;
           display: flex;
+          margin: 0 auto;
           img {
             width: px2rem(70rem);
             height: px2rem(70rem);
@@ -82,6 +83,7 @@ export default {
         dd {
           margin-top: px2rem(10rem);
           color: rgba(131, 178, 255, 1);
+          font-size: px2rem(16rem);
         }
       }
       &:hover {

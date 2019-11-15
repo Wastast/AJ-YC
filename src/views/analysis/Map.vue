@@ -5,29 +5,58 @@
 </template>
 
 <script>
-import { getHouse } from '@/api/analysis'
+import { getHouse, getShouye, getFire } from '@/api/mapapi'
 export default {
   name: 'Map',
   data() {
     return {
       list: [],
-      timer: null
+      timer: null,
+      imgRep: req.slice(0, -3)
     }
   },
   methods: {
-    // 节流
+    addPoint(item) {
+      let iconValue = item
+      let sLonLat = new SLonLat(iconValue.lon, iconValue.lat)
+      let iconPath = this.imgRep + '/upload/icon/' + iconValue.img
+      // 在地图内添加图标
+      let sIcon = new SIcon(
+        iconPath,
+        new SSize(iconValue.width, iconValue.height),
+        new SPixel(-iconValue.width / 2, -iconValue.height)
+      )
+      let sMarker = new SMarker(sLonLat, sIcon, iconValue.typeId)
+      TMapAPI.markerLayer.AddMarker(sMarker)
+      sMarker.AddEventListener('click', iconValue, () => {
+      })
+    },
+    // 绘制房屋
+    drawHouse() {
+      getHouse().then(data => {
+        if (data.code === 200) {
+          this.list = data.data
+          this.list.forEach(e => {
+            TMapAPI.drawRange(e, '#B56FE2')
+          })
+        }
+      })
+    }
   },
   mounted() {
-    getHouse().then(data => {
+    this.drawHouse()
+    getShouye().then(data => {
       if (data.code === 200) {
-        this.list = data.data
-        this.list.forEach(e => {
-          let obj = {}
-          let { id, range } = e
-          obj = { mapid: id, range }
-          TMapAPI.drawRange(obj, '#B56FE2')
+        data.data.forEach(item => {
+          this.addPoint(item)
         })
-        this.timer = setInterval(() => {}, 1000)
+      }
+    })
+    getFire().then(data => {
+      if (data.code === 200) {
+        data.data.forEach(item => {
+          this.addPoint(item)
+        })
       }
     })
     TMapAPI.InitMap('map')

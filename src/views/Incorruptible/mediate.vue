@@ -7,9 +7,9 @@
             乡贤展示
           </p>
           <ul class="ul">
-            <li class="li" v-for="(item, index) of [1, 2, 3, 4, 5, 6]" :key="index">
-              张三
-              <span>17681909801</span>
+            <li class="li" v-for="(item, index) of peopleList" :key="index">
+              {{ item.name }}
+              <span>{{ item.number }}</span>
             </li>
           </ul>
         </div>
@@ -19,13 +19,13 @@
           </p>
           <ul class="ul">
             <li class="li">
-
+              <img src="@/assets/img/图层 683@2x.png" alt="">
             </li>
             <li class="li">
-
+              <img src="@/assets/img/图层 684@2x.png" alt="">
             </li>
             <li class="li">
-
+              <img src="@/assets/img/图层 685@2x.png" alt="">
             </li>
           </ul>
         </div>
@@ -36,15 +36,51 @@
 
 <script>
 import PartyBox from '@/components/party-box'
+import { getMediate } from '@/api/incorruptible'
 export default {
   name: 'mediate',
   data() {
-    return {}
+    return {
+      list: [],
+      peopleList: [
+        {
+          name: '俞春华',
+          number: '13567278553'
+        },
+        {
+          name: '刘备军',
+          number: '13868283334'
+        },
+        {
+          name: '宋瑶',
+          number: '15157255909'
+        },
+        {
+          name: '赵水根',
+          number: '13657221980'
+        },
+        {
+          name: '俞金宝',
+          number: '13567970055'
+        },
+        {
+          name: '赵必成',
+          number: '15157241398'
+        }
+      ]
+    }
   },
   computed: {},
   watch: {},
   methods: {},
-  mounted() {},
+  mounted() {
+    getMediate().then(data => {
+      // console.log(data)
+      // if (data.code === 0) {
+      //   this.list = data.data.slice
+      // }
+    })
+  },
   components: {
     PartyBox
   }
@@ -122,7 +158,7 @@ export default {
         height: px2rem(110rem);
         float: left;
         background: #000;
-        &:nth-child(n+2) {
+        &:nth-child(n + 2) {
           margin-left: px2rem(16rem);
         }
         img {

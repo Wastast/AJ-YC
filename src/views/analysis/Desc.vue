@@ -9,7 +9,10 @@
               <dt>
                 {{ item.name }}
               </dt>
-              <dd>{{ item.value }} {{ item.unit }}</dd>
+              <dd>
+                <countTo :startVal="parseInt(0)" :endVal="parseFloat(item.value)" :duration="4000"></countTo>
+                {{ item.unit }}
+              </dd>
             </dl>
           </li>
         </ul>
@@ -21,6 +24,7 @@
 <script>
 import ModuleBox from '@/components/analys-box'
 import { getDesc } from '@/api/analysis'
+import countTo from 'vue-count-to'
 export default {
   name: 'event',
   data() {
@@ -68,28 +72,41 @@ export default {
           unit: '家',
           color: 'rgba(61,144,246,1)'
         }
-      ]
+      ],
+      timer: null
     }
   },
   computed: {},
   watch: {},
-  methods: {},
-  mounted() {
-    getDesc().then(data => {
-      if (data.code === 200) {
-        this.list.forEach((item, index) => {
-          let name = item.name
-          data.data.map(e => {
-            if (e.name === name) {
-              item.value = e.value
-            }
+  methods: {
+    // 获取村情数据
+    getValue() {
+      getDesc().then(data => {
+        if (data.code === 200) {
+          this.list.forEach((item, index) => {
+            let name = item.name
+            data.data.map(e => {
+              if (e.name === name) {
+                item.value = e.value
+              }
+            })
           })
-        })
-      }
-    })
+        }
+      })
+    }
+  },
+  mounted() {
+    this.getValue()
+    this.timer = setInterval(() => {
+      this.getValue()
+    }, 1000 * 60 * 5)
+  },
+  beforeDestroy() {
+    clearInterval(this.timer)
   },
   components: {
-    ModuleBox
+    ModuleBox,
+    countTo
   }
 }
 </script>
@@ -126,15 +143,15 @@ export default {
           position: absolute;
           top: px2rem(20rem);
           left: px2rem(13rem);
-          font-size: px2rem(16rem);
+          font-size: px2rem(18rem);
           margin-bottom: px2rem(19rem);
         }
         dd {
           position: absolute;
-          top: px2rem(40rem);
+          top: px2rem(35rem);
           right: px2rem(13rem);
           font-family: RTWS ShangYa Demo;
-          font-size: 22px;
+          font-size: px2rem(26rem);
           margin-left: px2rem(160rem);
           width: 100%;
           text-align: right;

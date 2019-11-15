@@ -1,6 +1,6 @@
 <template>
   <div class="quality">
-    <party-box title="水质数据" width="592" height="198">
+    <party-box title="物联监测" width="592" height="198">
       <template slot="content">
         <div class="box">
           <div class="list">

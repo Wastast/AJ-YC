@@ -1,6 +1,6 @@
 <template>
   <div class="Trash">
-    <party-box title="垃圾桶数据" width="592" height="392">
+    <party-box title="垃圾桶监测" width="592" height="392">
       <template slot="content">
         <ul class="ul">
           <li class="li" v-for="(item,index) of list" :key="index">
@@ -15,14 +15,14 @@
                     36%
                   </p>
                 </div>
-                <div class="righ">
+                <!-- <div class="righ">
                   <p class="p-type">
                     湿度监测
                   </p>
                   <p class="p-value">
                     36%
                   </p>
-                </div>
+                </div> -->
               </dd>
             </dl>
           </li>
@@ -145,12 +145,14 @@ export default {
         margin-top: px2rem(9rem);
         overflow: hidden;
         color: rgba(255, 255, 255, 1);
+        display: flex;
         > div {
           float: left;
           height: 100%;
           box-sizing: border-box;
           padding-left: px2rem(13rem);
           padding-top: px2rem(15rem);
+          margin: auto;
           .p-type {
             font-size: px2rem(12rem);
           }
@@ -162,7 +164,7 @@ export default {
         }
         .left {
           width: px2rem(88rem);
-          background: rgba(2, 8, 28, 0.8);
+          // background: rgba(2, 8, 28, 0.8);
         }
       }
     }

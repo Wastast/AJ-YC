@@ -3,15 +3,16 @@
     <party-box title="志愿信息" width="532" height="392">
       <template slot="content">
         <ul class="ul">
-          <li class="li" v-for="(item, index) of [1, 2]" :key="index">
-            <div class="div-imgbox"></div>
+          <li class="li" v-for="(item, index) of list" :key="index">
+            <div class="div-imgbox">
+              <img src="@/assets/img/fengchebuluo.jpg" alt="">
+            </div>
             <div class="div-text">
-              <p class="p-titles">
-                青年志愿者队伍名称
+              <p class="p-titles ellipsis">
+                {{ item.title }}
               </p>
-              <div class="text-box">
-                由余村年轻人自愿组成的队伍，在不 为任何物质报酬的情况下，参与志愿
-                工作，既是帮助他人、服务社会，同 时也是传递爱心和传播文明。
+              <div class="text-box" :title="item.message">
+                {{ (item.message+'').slice(0, 80) }}
               </div>
             </div>
           </li>
@@ -23,15 +24,26 @@
 
 <script>
 import PartyBox from '@/components/party-box'
+import { getVolunteer, getMediate } from '@/api/incorruptible'
 export default {
   name: 'volunteer',
   data() {
-    return {}
+    return {
+      list: []
+    }
   },
   computed: {},
   watch: {},
   methods: {},
-  mounted() {},
+  mounted() {
+    getVolunteer().then(data => {
+    })
+    getMediate().then(data => {
+      if (data.code === 0) {
+        this.list = data.data.slice(0, 2)
+      }
+    })
+  },
   components: {
     PartyBox
   }
@@ -62,7 +74,7 @@ export default {
       > div {
         float: left;
       }
-      &:nth-child(n+2) {
+      &:nth-child(n + 2) {
         margin-top: px2rem(10rem);
       }
       .div-imgbox {
@@ -71,6 +83,10 @@ export default {
         background: #000;
         border-radius: 6px;
         overflow: hidden;
+        img {
+          width: 100%;
+          height: 100%;
+        }
       }
       .div-text {
         display: flow-root;
@@ -81,6 +97,7 @@ export default {
           color: rgba(255, 255, 255, 1);
           margin-bottom: px2rem(20rem);
           display: inline-block;
+          width: px2rem(225rem);
         }
         .text-box {
           font-size: px2rem(14rem);

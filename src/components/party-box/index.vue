@@ -3,8 +3,6 @@
     <div class="div-title">
       <div class="div-text">
         {{ title }}
-        <!-- <span class="span span-qian">{{ title.slice(0, slice) }}</span>
-        <span class="span span-hou">{{ title.slice(slice) }}</span> -->
       </div>
     </div>
     <div class="div-content" :style="{ width: width / 50 + 'rem', height: height / 50 + 'rem' }">
@@ -56,13 +54,14 @@ export default {
     background-size: 100% 100%;
     box-sizing: border-box;
     display: inline-block;
+    font-size: px2rem(20rem);
     .div-text {
       padding: px2rem(8rem) px2rem(20rem) px2rem(7rem) px2rem(22rem);
       background: rgba(26, 82, 144, 0.2);
       box-sizing: border-box;
       color: #fff;
       .span {
-        font-size: 20px;
+        font-size: px2rem(20px);
       }
       .span-qian {
         color: #85caff;

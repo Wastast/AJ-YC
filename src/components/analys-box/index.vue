@@ -47,7 +47,7 @@ export default {
     text-align: center;
     line-height: px2rem(36rem);
     color: #fff;
-    font-size: px2rem(14rem);
+    font-size: px2rem(20rem);
     position: absolute;
     left: 50%;
     top: px2rem(-5rem);

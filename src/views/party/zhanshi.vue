@@ -2,8 +2,18 @@
   <div class="zhanshi">
     <party-box title="村情展示" width="517" height="851">
       <template slot="content">
-        <div class="div" id="shouru"></div>
-        <div class="div" id="tongji"></div>
+        <div class="div">
+          <p class="p-title">
+            村集体经济总收入: 万元
+          </p>
+          <div id="shouru"></div>
+        </div>
+        <div class="div">
+          <p class="p-title">
+            村集体经济总收入: 万元
+          </p>
+          <div id="tongji"></div>
+        </div>
         <ul class="ul">
           <li class="li" v-for="(item, index) of list" :key="index">
             <p class="p-title">
@@ -14,7 +24,7 @@
             </div>
             <div class="div-text">
               <p class="p-value">
-                {{ item.value }}
+                <countTo :startVal="parseInt(0)" :endVal="parseFloat(item.value)" :duration="4000"></countTo>
               </p>
               <p class="p-unit">单位: {{ item.unit }}</p>
             </div>
@@ -29,6 +39,8 @@
 import PartyBox from '@/components/party-box'
 import { EleResize } from '@/utils/esresize'
 import { getCollective, getAverage } from '@/api/party'
+import { getDesc } from '@/api/analysis'
+import countTo from 'vue-count-to'
 export default {
   name: 'zhanshi',
   data() {
@@ -36,7 +48,7 @@ export default {
       list: [
         {
           imgUrl: require('@/assets/party/renkoujiankangxinxipingtaix@2x.png'),
-          title: '总人口数',
+          title: '总人数',
           unit: '人',
           value: '1060'
         },
@@ -54,11 +66,13 @@ export default {
         },
         {
           imgUrl: require('@/assets/party/wuxingkehu@2x.png'),
-          title: '五星之家',
+          title: '5星之家',
           unit: '户',
           value: 37
         }
-      ]
+      ],
+      jitiTimer: null,
+      gerenTimer: null
     }
   },
   computed: {},
@@ -107,14 +121,6 @@ export default {
           {
             type: 'value',
             show: true,
-            name: '村集体经济总收入: 万元',
-            nameTextStyle: {
-              color: 'rgba(161,207,255,.7)',
-              backgroundColor: 'rgba(2,8,28,.5)',
-              padding: [0, 13, 0, 11],
-              lineHeight: '31',
-              borderRadius: 5
-            },
             axisTick: {
               show: false
             },
@@ -133,7 +139,7 @@ export default {
         ],
         series: [
           {
-            name: '客流量',
+            name: '集体收入',
             type: 'bar',
             barWidth: 20,
             data: value.data,
@@ -164,9 +170,32 @@ export default {
           }
         ]
       }
+      let index = 0
+      this.jitiTimer = setInterval(() => {
+        var dataLen = option.series[0].data.length
+        // 取消之前高亮的图形
+        myChart.dispatchAction({
+          type: 'downplay',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+        // 高亮当前图形
+        myChart.dispatchAction({
+          type: 'highlight',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+        // 显示 tooltip
+        myChart.dispatchAction({
+          type: 'showTip',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+        index = (index + 1) % dataLen
+      }, 1000)
       myChart.setOption(option)
     },
-    // 统计柱状图
+    // 人均收入柱状图
     echarts_tongji(value) {
       let myChart = this.$echarts.init(document.getElementById('tongji'))
       let resizeDiv = document.getElementById('tongji')
@@ -209,14 +238,6 @@ export default {
           {
             type: 'value',
             show: true,
-            name: '村人均收入统计: 万元',
-            nameTextStyle: {
-              color: 'rgba(161,207,255,.7)',
-              backgroundColor: 'rgba(2,8,28,.8)',
-              padding: [0, 13, 0, 11],
-              lineHeight: '31',
-              borderRadius: 5
-            },
             axisTick: {
               show: false
             },
@@ -235,7 +256,7 @@ export default {
         ],
         series: [
           {
-            name: '客流量',
+            name: '人均收入',
             type: 'bar',
             barWidth: 20,
             data: value.data,
@@ -265,6 +286,29 @@ export default {
           }
         ]
       }
+      let index = 0
+      this.gerenTimer = setInterval(() => {
+        var dataLen = option.series[0].data.length
+        // 取消之前高亮的图形
+        myChart.dispatchAction({
+          type: 'downplay',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+        // 高亮当前图形
+        myChart.dispatchAction({
+          type: 'highlight',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+        // 显示 tooltip
+        myChart.dispatchAction({
+          type: 'showTip',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+        index = (index + 1) % dataLen
+      }, 1000)
       myChart.setOption(option)
     }
   },
@@ -281,9 +325,26 @@ export default {
         this.echarts_tongji(data)
       }
     })
+    getDesc().then(data => {
+      if (data.code === 200) {
+        this.list.forEach((item, index) => {
+          let name = item.title
+          data.data.map(e => {
+            if (e.name === name) {
+              item.value = e.value
+            }
+          })
+        })
+      }
+    })
+  },
+  beforeDestroy() {
+    clearInterval(this.jitiTimer)
+    clearInterval(this.gerenTimer)
   },
   components: {
-    PartyBox
+    PartyBox,
+    countTo
   }
 }
 </script>
@@ -300,6 +361,24 @@ export default {
     height: px2rem(286rem);
     margin-top: px2rem(9rem);
     margin-left: px2rem(14rem);
+    overflow: hidden;
+    position: relative;
+    .p-title {
+      position: absolute;
+      top: px2rem(10rem);
+      left: px2rem(10rem);
+      z-index: 1050;
+      height: 0.66rem;
+      line-height: 0.66rem;
+      background: rgba(2, 7, 26, 0.68);
+      border-radius: 0.08rem;
+      padding: 0 0.32rem;
+      color: #80a5ce;
+    }
+    div {
+      width: 100%;
+      height: 100%;
+    }
   }
   .ul {
     display: flow-root;

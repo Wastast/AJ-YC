@@ -1,6 +1,6 @@
 <template>
   <div class="bayonet">
-    <party-box title="卡口数据" width="592" height="323">
+    <party-box title="车辆监测" width="592" height="323">
       <template slot="content">
         <div class="div-top">
           <el-select v-model="value" placeholder="请选择卡口位置">
@@ -19,7 +19,11 @@
               省内车辆
             </p>
             <span class="span-value">
-              29102
+              <countTo
+                :startVal="parseInt(0)"
+                :endVal="parseFloat(provinceIn.value)"
+                :duration="4000"
+              ></countTo>
             </span>
           </div>
           <div class="div-out">
@@ -27,7 +31,11 @@
               省外车辆
             </p>
             <span class="span-value">
-              29102
+              <countTo
+                :startVal="parseInt(0)"
+                :endVal="parseFloat(provinceOut.value)"
+                :duration="4000"
+              ></countTo>
             </span>
           </div>
         </div>
@@ -40,16 +48,14 @@
               省内车辆来源地分析
             </p>
             <ul class="ul">
-              <li class="li" v-for="(item,index) of [1,2,3,4]" :key="index">
-                <p class="top">
-                  Top{{index+1}}
-                </p>
+              <li class="li" v-for="(item, index) of list" :key="index">
+                <p class="top">Top{{ index + 1 }}</p>
                 <div class="div-text">
                   <p class="p-city">
-                    杭州
+                    {{ item.city }}
                   </p>
                   <p class="span-value">
-                    40910
+                    {{ item.number }}
                   </p>
                 </div>
               </li>
@@ -64,6 +70,8 @@
 <script>
 import PartyBox from '@/components/party-box'
 import { EleResize } from '@/utils/esresize'
+import { getBayonet, getOrign } from '@/api/analysis'
+import countTo from 'vue-count-to'
 export default {
   name: 'bayonet',
   data() {
@@ -90,14 +98,24 @@ export default {
           label: '北京烤鸭'
         }
       ],
-      value: ''
+      value: '',
+      qiyeTimer: null,
+      list: [],
+      provinceIn: {
+        name: '省内',
+        value: 0
+      },
+      provinceOut: {
+        name: '省外',
+        value: 0
+      }
     }
   },
   computed: {},
   watch: {},
   methods: {
     // 卡口数据
-    echarts_kakou() {
+    echarts_kakou(data) {
       let myChart = this.$echarts.init(document.getElementById('kakou'))
       let resizeDiv = document.getElementById('kakou')
       let listener = () => {
@@ -136,17 +154,62 @@ export default {
                 show: false
               }
             },
-            data: [{ value: 50, name: '省内' }, { value: 50, name: '省外' }]
+            data: data
           }
         ]
       }
+      let index = 0
+      this.qiyeTimer = setInterval(() => {
+        var dataLen = option.series[0].data.length
+        // 取消之前高亮的图形
+        myChart.dispatchAction({
+          type: 'downplay',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+        index = (index + 1) % dataLen
+        // 高亮当前图形
+        myChart.dispatchAction({
+          type: 'highlight',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+        // 显示 tooltip
+        myChart.dispatchAction({
+          type: 'showTip',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+      }, 1000)
       myChart.setOption(option)
     }
   },
   mounted() {
-    this.echarts_kakou()
+    // 获取车辆卡口数据
+    getBayonet().then(data => {
+      if (data.code === 200) {
+        data.dataProvince.map(item => {
+          if (item.name === '省内') {
+            this.provinceIn = item
+          }
+          if (item.name === '省外') {
+            this.provinceOut = item
+          }
+        })
+        this.echarts_kakou(data.dataProvince)
+      }
+    })
+    // 获取来源地数据
+    getOrign().then(data => {
+      if (data.code === 200) {
+        this.list = data.day.slice(0, 4)
+      }
+    })
   },
-  components: { PartyBox }
+  beforeDestroy() {
+    clearInterval(this.qiyeTimer)
+  },
+  components: { PartyBox, countTo }
 }
 </script>
 
@@ -160,7 +223,7 @@ export default {
 }
 .div-top >>> .el-input__inner {
   border: 1px solid rgba(220, 223, 230, 0);
-  background-color: #fff0;
+  background-color: rgba(0, 0, 0, 0);
 }
 </style>
 
@@ -182,6 +245,7 @@ export default {
     margin-top: px2rem(9rem);
     margin-bottom: px2rem(7rem);
     display: flow-root;
+    overflow: hidden;
     > div {
       float: left;
       background: rgba(2, 7, 26, 0.6);

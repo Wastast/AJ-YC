@@ -1,6 +1,6 @@
 <template>
   <div class="Travel">
-    <module-box title="报事报修">
+    <module-box title="村情直通车">
       <template slot="content">
         <ul class="ul">
           <li class="li" v-for="item of list" :key="item.id">
@@ -8,13 +8,13 @@
             <span class="span span-text">
               {{ item.title }}
             </span>
-            <span class="span span-event">
+            <span class="span span-event ellipsis" :title="item.content">
               {{ item.content }}
             </span>
             <span class="span span-time">
               {{ item.create_date.slice(0, 10) }}
             </span>
-            <img class="img" src="@/assets/analysis/background.png" alt="" />
+            <img class="img" :src="item.pic_url[0]" alt="" />
           </li>
         </ul>
       </template>
@@ -66,6 +66,7 @@ export default {
       line-height: px2rem(47rem);
       position: relative;
       cursor: pointer;
+      font-size: px2rem(15rem);
       &:nth-child(even) {
         background: rgba(123, 110, 147, 0.2);
       }
@@ -91,6 +92,7 @@ export default {
       }
       .span-event {
         left: px2rem(143rem);
+        width: px2rem(145rem);
       }
       .span-time {
         left: px2rem(302rem);

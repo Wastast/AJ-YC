@@ -16,7 +16,8 @@ export default {
   name: 'Repair',
   data() {
     return {
-      timer: null
+      timer: null,
+      qiyeTimer: null
     }
   },
   computed: {},
@@ -69,9 +70,10 @@ export default {
             nameTextStyle: {
               color: 'rgba(161,207,255,.7)',
               backgroundColor: 'rgba(2,8,28,.5)',
-              padding: [0, 13, 0, 11],
+              padding: [0, 13, 0, 30],
               lineHeight: '31',
-              borderRadius: 5
+              borderRadius: 5,
+              fontSize: 18
             },
             axisTick: {
               show: false
@@ -137,6 +139,29 @@ export default {
           }
         ]
       }
+      let index = 0
+      this.qiyeTimer = setInterval(() => {
+        var dataLen = option.series[0].data.length
+        // 取消之前高亮的图形
+        myChart.dispatchAction({
+          type: 'downplay',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+        index = (index + 1) % dataLen
+        // 高亮当前图形
+        myChart.dispatchAction({
+          type: 'highlight',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+        // 显示 tooltip
+        myChart.dispatchAction({
+          type: 'showTip',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+      }, 1000)
       myChart.clear()
       myChart.setOption(option, true)
     },
@@ -149,6 +174,7 @@ export default {
         }
       })
       this.timer = setInterval(() => {
+        clearInterval(this.qiyeTimer)
         getRepair().then(data => {
           if (data.code === 200) {
             this.echarts_evnet(data)
@@ -165,6 +191,7 @@ export default {
   },
   beforeDestroy() {
     clearInterval(this.timer)
+    clearInterval(this.qiyeTimer)
   }
 }
 </script>

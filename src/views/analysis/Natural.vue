@@ -6,15 +6,15 @@
           <li class="li">
             <img src="@/assets/analysis/圆角矩形 6@2x.png" alt="" />
             <dl>
-              <dt>PM值</dt>
+              <dt>PM2.5</dt>
               <dd>{{ pm }}</dd>
             </dl>
           </li>
           <li class="li">
             <img src="@/assets/analysis/圆角矩形 6 拷贝 3@2x.png" alt="" />
             <dl>
-              <dt>温度</dt>
-              <dd>{{ tmp }}C</dd>
+              <dt>气压</dt>
+              <dd>{{ tmp }}℃</dd>
             </dl>
           </li>
           <li class="li">
@@ -27,28 +27,28 @@
           <li class="li">
             <img src="@/assets/analysis/圆角矩形 6 拷贝 2@2x(1).png" alt="" />
             <dl>
-              <dt>垃圾容量</dt>
-              <dd>48L</dd>
+              <dt>负氧离子</dt>
+              <dd>5756</dd>
             </dl>
           </li>
           <li class="li">
             <img src="@/assets/analysis/圆角矩形 6 拷贝 3@2x.png" alt="" />
             <dl>
-              <dt>水质</dt>
+              <dt>风速</dt>
               <dd>2ppm</dd>
             </dl>
           </li>
           <li class="li">
             <img src="@/assets/analysis/圆角矩形 6 拷贝 3@2x(1).png" alt="" />
             <dl>
-              <dt>PH值检测</dt>
+              <dt>降雨量</dt>
               <dd>5.6</dd>
             </dl>
           </li>
           <li class="li">
             <img src="@/assets/analysis/圆角矩形 6 拷贝 3@2x(2).png" alt="" />
             <dl>
-              <dt>溶解氧</dt>
+              <dt>二氧化碳浓度</dt>
               <dd>9.3</dd>
             </dl>
           </li>
@@ -56,20 +56,9 @@
             <img src="@/assets/analysis/圆角矩形 6 拷贝 3@2x(3).png" alt="" />
             <dl>
               <dt>垃圾桶告警</dt>
-              <dd>3</dd>
+              <dd>0</dd>
             </dl>
           </li>
-          <!-- <li class="li" v-for="(item, index) of list" :key="index">
-            <img :src="item.imgUrl" alt="" />
-            <dl>
-              <dt>
-                {{ item.name }}
-              </dt>
-              <dd>
-                {{ item.value }}
-              </dd>
-            </dl>
-          </li> -->
         </ul>
       </template>
     </module-box>
@@ -87,48 +76,6 @@ export default {
       pm: '32',
       tmp: '0',
       hum: '0'
-      // list: [
-      //   {
-      //     imgUrl: require('@/assets/analysis/圆角矩形 6@2x.png'),
-      //     name: 'PM值',
-      //     value: '32'
-      //   },
-      //   {
-      //     imgUrl: require('@/assets/analysis/圆角矩形 6 拷贝 3@2x.png'),
-      //     name: '温度',
-      //     value: '26C'
-      //   },
-      //   {
-      //     imgUrl: require('@/assets/analysis/圆角矩形 6 拷贝@2x.png'),
-      //     name: '湿度',
-      //     value: '56%'
-      //   },
-      //   {
-      //     imgUrl: require('@/assets/analysis/圆角矩形 6 拷贝 2@2x(1).png'),
-      //     name: '垃圾容量',
-      //     value: '48L'
-      //   },
-      //   {
-      //     imgUrl: require('@/assets/analysis/圆角矩形 6 拷贝 3@2x.png'),
-      //     name: '水质',
-      //     value: '2ppm'
-      //   },
-      //   {
-      //     imgUrl: require('@/assets/analysis/圆角矩形 6 拷贝 3@2x(1).png'),
-      //     name: 'PH值检测',
-      //     value: '5.6'
-      //   },
-      //   {
-      //     imgUrl: require('@/assets/analysis/圆角矩形 6 拷贝 3@2x(2).png'),
-      //     name: '溶解氧',
-      //     value: '9.3'
-      //   },
-      //   {
-      //     imgUrl: require('@/assets/analysis/圆角矩形 6 拷贝 3@2x(3).png'),
-      //     name: '垃圾桶告警',
-      //     value: '3'
-      //   }
-      // ]
     }
   },
   computed: {},
@@ -164,7 +111,7 @@ export default {
       position: relative;
       cursor: pointer;
       &:nth-child(n + 5) {
-        margin-top: px2rem(5rem);
+        margin-top: px2rem(7rem);
       }
       img {
         width: 100%;
@@ -177,12 +124,12 @@ export default {
         left: px2rem(13rem);
         font-family: PingFangSC;
         dt {
-          font-size: 12px;
+          font-size: px2rem(16rem);
           color: rgba(131, 178, 255, 1);
           margin-bottom: px2rem(19rem);
         }
         dd {
-          font-size: 22px;
+          font-size: px2rem(28rem);
           font-style: italic;
           color: rgba(98, 208, 243, 1);
         }

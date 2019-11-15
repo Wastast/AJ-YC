@@ -1,6 +1,6 @@
 <template>
   <div class="level">
-    <party-box title="水位数据" width="592" height="392">
+    <party-box title="水位监测" width="592" height="392">
       <template slot="content">
         <div class="div-top">
           <div class="left">
@@ -26,15 +26,45 @@
 <script>
 import PartyBox from '@/components/party-box'
 import { EleResize } from '@/utils/esresize'
+import { getRepair } from '@/api/analysis'
 export default {
   name: 'level',
   data() {
-    return {}
+    return {
+      timer: null,
+      hours: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
+      value: [
+        10,
+        11,
+        12,
+        11,
+        12,
+        11,
+        10,
+        10,
+        11,
+        12,
+        11,
+        12,
+        11,
+        10,
+        10,
+        11,
+        12,
+        11,
+        12,
+        11,
+        10,
+        11,
+        11,
+        10
+      ]
+    }
   },
   computed: {},
   watch: {},
   methods: {
-    // 水位数据
+    // 事件柱状图
     echarts_evnet(data) {
       let myChart = this.$echarts.init(document.getElementById('water'))
       let resizeDiv = document.getElementById('water')
@@ -56,12 +86,12 @@ export default {
           bottom: '3%',
           containLabel: true
         },
-        backgroundColor: 'rgba(0,0,0,.3)',
         xAxis: [
           {
             type: 'category',
             // data: ['人社局', '医保局', '税务', '民政', '残联', '村自有事'],
-            data: [0, 3, 6, 9, 12, 15],
+            // data: data.hours,
+            data: this.hours.slice(0, new Date().getHours() + 1),
             axisTick: {
               show: true
             },
@@ -78,9 +108,6 @@ export default {
           {
             type: 'value',
             show: true,
-            nameTextStyle: {
-              color: '#fff'
-            },
             axisTick: {
               show: false
             },
@@ -99,7 +126,7 @@ export default {
         ],
         series: [
           {
-            name: '游客小时数据',
+            name: '水位监测',
             type: 'line',
             smooth: true,
             //  symbol: "none", //去掉折线点
@@ -141,57 +168,61 @@ export default {
             areaStyle: {
               normal: {}
             },
-            data: [3, 6, 5, 5, 6, 4]
-          },
-          {
-            name: '游客小时数据',
-            type: 'line',
-            smooth: true,
-            //  symbol: "none", //去掉折线点
-            stack: 100,
-            itemStyle: {
-              normal: {
-                color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                  {
-                    offset: 0,
-                    color: 'rgba(245,156,0,1)'
-                  },
-                  {
-                    offset: 1,
-                    color: 'rgba(225,95,0,1)'
-                  }
-                ]),
-                lineStyle: {
-                  // 系列级个性化折线样式
-                  width: 0.5,
-                  type: 'solid',
-                  color: '#CC56CB'
-                }
-              },
-              emphasis: {
-                color: '#02675f',
-                lineStyle: {
-                  // 系列级个性化折线样式
-                  width: 0.5,
-                  type: 'dotted',
-                  color: '#02675f'
-                }
-              }
-            },
-            symbolSize: 5,
-            areaStyle: {
-              normal: {}
-            },
-            data: [4, 6, 10, 5, 11, 7]
+            // data: data.number
+            data: this.value.slice(0, new Date().getHours() + 1)
           }
         ]
       }
+      let index = 0
+      this.qiyeTimer = setInterval(() => {
+        var dataLen = option.series[0].data.length
+        // 取消之前高亮的图形
+        myChart.dispatchAction({
+          type: 'downplay',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+        index = (index + 1) % dataLen
+        // 高亮当前图形
+        myChart.dispatchAction({
+          type: 'highlight',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+        // 显示 tooltip
+        myChart.dispatchAction({
+          type: 'showTip',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+      }, 1000)
       myChart.clear()
       myChart.setOption(option, true)
+    },
+    // 定时请求数据
+    STI_getValue() {
+      // 请求小时旅游数据
+      getRepair().then(data => {
+        if (data.code === 200) {
+          this.echarts_evnet(data)
+        }
+      })
+      this.timer = setInterval(() => {
+        clearInterval(this.qiyeTimer)
+        getRepair().then(data => {
+          if (data.code === 200) {
+            this.echarts_evnet(data)
+          }
+        })
+      }, 1000 * 30)
     }
   },
   mounted() {
-    this.echarts_evnet()
+    // this.echarts_evnet()
+    this.STI_getValue()
+  },
+  beforeDestroy() {
+    clearInterval(this.qiyeTimer)
   },
   components: { PartyBox }
 }
