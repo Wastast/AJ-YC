@@ -3,16 +3,23 @@
     <party-box title="垃圾桶监测" width="592" height="392">
       <template slot="content">
         <ul class="ul">
-          <li class="li" v-for="(item,index) of list" :key="index">
+          <li class="li" v-for="(item, index) of list" :key="index">
             <dl>
-              <dt>监测位置: <span>{{item.type}}</span></dt>
+              <dt>
+                监测位置: <span>{{ item.type }}</span>
+              </dt>
               <dd>
                 <div class="left">
                   <p class="p-type">
                     容量监测
                   </p>
                   <p class="p-value">
-                    36%
+                    <countTo
+                      :startVal="parseInt(0)"
+                      :endVal="parseFloat(item.rongliang)"
+                      :duration="4000"
+                    ></countTo>
+                    %
                   </p>
                 </div>
                 <!-- <div class="righ">
@@ -34,6 +41,7 @@
 
 <script>
 import PartyBox from '@/components/party-box'
+import countTo from 'vue-count-to'
 export default {
   name: 'Trash',
   data() {
@@ -41,47 +49,47 @@ export default {
       list: [
         {
           type: '村委',
-          rongliang: '30',
+          rongliang: '27',
           shidu: '20'
         },
         {
           type: '接待中心',
-          rongliang: '30',
+          rongliang: '28',
           shidu: '20'
         },
         {
           type: '电影院',
-          rongliang: '30',
+          rongliang: '42',
           shidu: '20'
         },
         {
           type: '文化礼堂',
-          rongliang: '30',
+          rongliang: '10',
           shidu: '20'
         },
         {
           type: '公交车站1',
-          rongliang: '30',
+          rongliang: '19',
           shidu: '20'
         },
         {
           type: '公交车站2',
-          rongliang: '30',
+          rongliang: '28',
           shidu: '20'
         },
         {
           type: '公交车站3',
-          rongliang: '30',
+          rongliang: '34',
           shidu: '20'
         },
         {
           type: '停车场1',
-          rongliang: '30',
+          rongliang: '52',
           shidu: '20'
         },
         {
           type: '停车场2',
-          rongliang: '30',
+          rongliang: '42',
           shidu: '20'
         }
       ]
@@ -91,7 +99,7 @@ export default {
   watch: {},
   methods: {},
   mounted() {},
-  components: { PartyBox }
+  components: { PartyBox, countTo }
 }
 </script>
 

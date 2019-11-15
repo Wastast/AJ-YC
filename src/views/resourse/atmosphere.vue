@@ -33,7 +33,7 @@
                 <p class="p-value">68%</p>
               </div>
               <div class="div-imgbox">
-                <img src="@/assets/resouse/pm@2x.png" alt="">
+                <img src="@/assets/resouse/qiya@2x.png" alt="">
               </div>
             </li>
             <li class="li">
@@ -42,7 +42,7 @@
                 <p class="p-value">67%</p>
               </div>
               <div class="div-imgbox">
-                <img src="@/assets/resouse/pm@2x.png" alt="">
+                <img src="@/assets/resouse/fengsu@2x.png" alt="">
               </div>
             </li>
           </ul>
@@ -52,29 +52,29 @@
             </p>
             <li class="li">
               <div class="div-text">
-                <p class="p-type">PM2.5</p>
+                <p class="p-type">降雨量</p>
                 <p class="p-value">32</p>
               </div>
               <div class="div-imgbox">
-                <img src="@/assets/resouse/pm@2x.png" alt="">
+                <img src="@/assets/resouse/Envirjiangyuliangchuanganqi@2x.png" alt="">
               </div>
             </li>
             <li class="li">
               <div class="div-text">
-                <p class="p-type">气压</p>
-                <p class="p-value">68%</p>
+                <p class="p-type">温度</p>
+                <p class="p-value">23℃</p>
               </div>
               <div class="div-imgbox">
-                <img src="@/assets/resouse/pm@2x.png" alt="">
+                <img src="@/assets/resouse/pmcopy@2x.png" alt="">
               </div>
             </li>
             <li class="li">
               <div class="div-text">
-                <p class="p-type">风速</p>
+                <p class="p-type">二氧化碳浓度</p>
                 <p class="p-value">67%</p>
               </div>
               <div class="div-imgbox">
-                <img src="@/assets/resouse/pm@2x.png" alt="">
+                <img src="@/assets/resouse/shidu@2x.png" alt="">
               </div>
             </li>
           </ul>

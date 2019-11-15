@@ -5,11 +5,11 @@
         <div class="div-top">
           <div class="left">
             <p class="top">实时水位监测</p>
-            <p class="value">29100.22</p>
+            <p class="value">{{ value[new Date().getHours()] }}</p>
           </div>
           <div class="right">
             <p class="top">本月水位峰值</p>
-            <p class="value">29100.22</p>
+            <p class="value">13.06</p>
           </div>
         </div>
         <div class="echarts">
@@ -26,7 +26,7 @@
 <script>
 import PartyBox from '@/components/party-box'
 import { EleResize } from '@/utils/esresize'
-import { getRepair } from '@/api/analysis'
+// import { getRepair } from '@/api/analysis'
 export default {
   name: 'level',
   data() {
@@ -34,30 +34,30 @@ export default {
       timer: null,
       hours: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
       value: [
-        10,
-        11,
-        12,
-        11,
-        12,
-        11,
-        10,
-        10,
-        11,
-        12,
-        11,
-        12,
-        11,
-        10,
-        10,
-        11,
-        12,
-        11,
-        12,
-        11,
-        10,
-        11,
-        11,
-        10
+        10.03,
+        11.04,
+        12.04,
+        11.3,
+        12.06,
+        11.1,
+        10.8,
+        10.04,
+        11.8,
+        12.4,
+        11.7,
+        12.05,
+        11.6,
+        10.08,
+        10.7,
+        11.1,
+        12.6,
+        11.08,
+        12.9,
+        11.04,
+        10.5,
+        11.4,
+        11.08,
+        10.09
       ]
     }
   },
@@ -202,23 +202,23 @@ export default {
     // 定时请求数据
     STI_getValue() {
       // 请求小时旅游数据
-      getRepair().then(data => {
-        if (data.code === 200) {
-          this.echarts_evnet(data)
-        }
-      })
-      this.timer = setInterval(() => {
-        clearInterval(this.qiyeTimer)
-        getRepair().then(data => {
-          if (data.code === 200) {
-            this.echarts_evnet(data)
-          }
-        })
-      }, 1000 * 30)
+      // getRepair().then(data => {
+      //   if (data.code === 200) {
+      //     this.echarts_evnet(data)
+      //   }
+      // })
+      // this.timer = setInterval(() => {
+      //   clearInterval(this.qiyeTimer)
+      //   getRepair().then(data => {
+      //     if (data.code === 200) {
+      //       this.echarts_evnet(data)
+      //     }
+      //   })
+      // }, 1000 * 30)
     }
   },
   mounted() {
-    // this.echarts_evnet()
+    this.echarts_evnet()
     this.STI_getValue()
   },
   beforeDestroy() {

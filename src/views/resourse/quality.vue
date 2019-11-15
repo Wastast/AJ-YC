@@ -8,7 +8,7 @@
               <li class="li" v-for="item of list" :key="item.color">
                 <span class="span span-block" :style="{ background: item.color }"></span>
                 <span class="span span-type">{{ item.type }}</span>
-                <span class="span span-value">{{ item.value }}</span>
+                <span class="span span-value">{{ (item.value / 53 * 100).toFixed(1)}}%</span>
               </li>
             </ul>
           </div>
@@ -18,7 +18,6 @@
     </party-box>
   </div>
 </template>
-
 <script>
 import PartyBox from '@/components/party-box'
 import { EleResize } from '@/utils/esresize'
@@ -28,24 +27,25 @@ export default {
     return {
       list: [
         {
-          color: '#00E5A2',
+          // color: '#00E5A2',
+          color: '#999',
           type: '烟感',
-          value: '14'
+          value: '0'
         },
         {
           color: '#044B9C',
-          type: '停车位',
-          value: '14'
+          type: '监控',
+          value: '12'
         },
         {
           color: '#0039AD',
           type: '消防水压',
-          value: '14'
+          value: '15'
         },
         {
           color: '#00A1D6',
           type: '环境监测',
-          value: '14'
+          value: '2'
         },
         {
           color: '#C56721',
@@ -53,21 +53,23 @@ export default {
           value: '14'
         },
         {
-          color: '#E94700',
+          // color: '#E94700',
+          color: '#999',
           type: '用电安全',
-          value: '14'
+          value: '0'
         },
         {
           color: '#AD0041',
           type: '垃圾桶',
-          value: '14'
+          value: '9'
         },
         {
           color: '#9E00BB',
-          type: '公共场所',
-          value: '14'
+          type: '空气质量',
+          value: '1'
         }
-      ]
+      ],
+      qiyeTimer: null
     }
   },
   computed: {},
@@ -98,7 +100,7 @@ export default {
         backgroundColor: 'rgba(0,0,0,.3)',
         series: [
           {
-            name: '省内外车辆',
+            name: '物联监测',
             type: 'pie',
             radius: ['40%', '60%'],
             center: ['20%', '50%'],
@@ -124,42 +126,68 @@ export default {
             data: [
               {
                 name: '烟感',
+                value: '0'
+              },
+              {
+                name: '监控',
+                value: '12'
+              },
+              {
+                name: '消防水压',
+                value: '15'
+              },
+              {
+                name: '环境监测',
+                value: '2'
+              },
+              {
+                name: '井盖',
                 value: '14'
               },
               {
-                type: '停车位',
-                value: '14'
+                name: '用电安全',
+                value: '0'
               },
               {
-                type: '消防水压',
-                value: '14'
+                name: '垃圾桶',
+                value: '9'
               },
               {
-                type: '环境监测',
-                value: '14'
-              },
-              {
-                type: '井盖',
-                value: '14'
-              },
-              {
-                type: '用电安全',
-                value: '14'
-              },
-              {
-                type: '垃圾桶',
-                value: '14'
-              },
-              {
-                type: '公共场所',
-                value: '14'
+                name: '空气质量',
+                value: '1'
               }
             ]
           }
         ]
       }
+      let index = 0
+      this.qiyeTimer = setInterval(() => {
+        var dataLen = option.series[0].data.length
+        // 取消之前高亮的图形
+        myChart.dispatchAction({
+          type: 'downplay',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+        index = (index + 1) % dataLen
+        // 高亮当前图形
+        myChart.dispatchAction({
+          type: 'highlight',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+        // 显示 tooltip
+        myChart.dispatchAction({
+          type: 'showTip',
+          seriesIndex: 0,
+          dataIndex: index
+        })
+      }, 1000)
       myChart.setOption(option)
     }
+  },
+  beforeDestroy() {
+    clearInterval(this.qiyeTimer)
   },
   mounted() {
     this.echarts_kakou()
