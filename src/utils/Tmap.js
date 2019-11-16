@@ -59,41 +59,55 @@ TTuJing.prototype.drawRange = function(item, color) {
 }
 // 绘制标签lable
 TTuJing.prototype.drawRangeLableDefault = function(item) {
-  var infoText =
-    `<div class="tmapWindowDefault">
-                    <p>` +
-    item.name +
-    `</p>
+  var infoText = `<div class="tmapWindowDefault">
+                    <p>${item.name}</p>
                   </div>`
   var sLonLat = new SLonLat(item.lon, item.lat)
   var lbl = new SLabel(null, sLonLat, null, infoText)
   lbl.SetTag('default' + item.id)
-  lbl.SetOpacity(0.8)
+  lbl.SetOpacity(1)
   lbl.SetOffset(new SSize(15, -40))
   lbl.SetAdaptive()
   TMapAPI.map.AddLabel(lbl)
+  lbl.GetDiv().style.zIndex = 9999
 }
 // 绘制标签lable
 TTuJing.prototype.drawRangeLableFire = function(item) {
-  var infoText =
-    `<div class="tmapWindowFire">
-                    <p>姓名：` +
-    item.name +
-    `</p>
-                    <p>地址：` +
-    item.address +
-    `</p>
-                    <p>电话：` +
-    item.tel +
-    `</p>
+  var infoText = `<div class="tmapWindowFire">
+                    <p>党员之家:</p>
+                    <p>姓名：${item.name}</p>
+                    <p>地址：${item.address}</p>
+                    <p>电话：${item.tel}</p>
                   </div>`
   var sLonLat = new SLonLat(item.lon, item.lat)
   var lbl = new SLabel(null, sLonLat, null, infoText)
   lbl.SetTag('fire' + item.id)
-  lbl.SetOpacity(0.8)
+  lbl.SetOpacity(1)
   lbl.SetOffset(new SSize(15, -60))
   lbl.SetAdaptive()
   TMapAPI.map.AddLabel(lbl)
+  lbl.GetDiv().style.zIndex = 9999
+}
+// 绘制标签lable
+TTuJing.prototype.drawRangeLableMs = function(item) {
+  // 地址，联系人，联系电话，订餐桌数，房间数
+  var infoText = `<div class="tmapWindowFire">
+                    <p>名宿</p>
+                    <p>名称：${item.name}</p>
+                    <p>地址：${item.address || ''}</p>
+                    <p>联系人：${item.person || ''}</p>
+                    <p>联系电话：${item.phone || ''}</p>
+                    <p>订餐桌数：${item.tableNum || ''}</p>
+                    <p>房间数：${item.roomNum || ''}</p>
+                  </div>`
+  var sLonLat = new SLonLat(item.lon, item.lat)
+  var lbl = new SLabel(null, sLonLat, null, infoText)
+  lbl.SetTag('default' + item.id)
+  lbl.SetOpacity(1)
+  lbl.SetOffset(new SSize(15, -60))
+  lbl.SetAdaptive()
+  TMapAPI.map.AddLabel(lbl)
+  lbl.GetDiv().style.zIndex = 9999
 }
 // 绘制标签lable
 TTuJing.prototype.drawRangeLable_house = function(item) {
@@ -110,8 +124,43 @@ TTuJing.prototype.drawRangeLable_house = function(item) {
                   </div>`
   var lbl = new SLabel(null, sLonLat, null, infoText)
   lbl.SetTag('house' + item.id)
-  lbl.SetOpacity(0.8)
+  lbl.SetOpacity(1)
   lbl.SetOffset(new SSize(0, 0))
   lbl.SetAdaptive()
   TMapAPI.map.AddLabel(lbl)
+  lbl.GetDiv().style.zIndex = 9999
+}
+// 绘制标签lable
+TTuJing.prototype.drawRangeLable_dyzj = function(item) {
+  var infoText = `<div class="tmapWindowFire">
+                    <p>党员之家</p>
+                    <p>姓名：${item.dimTourBasResidentInfo.name}</p>
+                    <p>地址：${item.address || ''}</p>
+                    <p>电话：${item.dimTourBasResidentInfo.tel || ''}</p>
+                  </div>`
+  var sLonLat = new SLonLat(item.centerX, item.centerY)
+  var lbl = new SLabel(null, sLonLat, null, infoText)
+  lbl.SetTag('dyzj' + item.id)
+  lbl.SetOpacity(1)
+  lbl.SetOffset(new SSize(15, -60))
+  lbl.SetAdaptive()
+  TMapAPI.map.AddLabel(lbl)
+  lbl.GetDiv().style.zIndex = 9999
+}
+// 绘制标签lable
+TTuJing.prototype.drawRangeLable_wxzj = function(item) {
+  var infoText = `<div class="tmapWindowFire">
+                    <p>五星之家</p>
+                    <p>姓名：${item.dimTourBasResidentInfo.name}</p>
+                    <p>地址：${item.address || ''}</p>
+                    <p>电话：${item.dimTourBasResidentInfo.tel || ''}</p>
+                  </div>`
+  var sLonLat = new SLonLat(item.centerX, item.centerY)
+  var lbl = new SLabel(null, sLonLat, null, infoText)
+  lbl.SetTag('wxzj' + item.id)
+  lbl.SetOpacity(1)
+  lbl.SetOffset(new SSize(15, -60))
+  lbl.SetAdaptive()
+  TMapAPI.map.AddLabel(lbl)
+  lbl.GetDiv().style.zIndex = 9999
 }

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { getHouse, getShouye, getFire } from '@/api/mapapi'
+import { getHouse, getShouye } from '@/api/mapapi'
 export default {
   name: 'Map',
   data() {
@@ -25,22 +25,51 @@ export default {
       let sIcon = new SIcon(
         iconPath,
         new SSize(iconValue.width, iconValue.height),
-        new SPixel(-iconValue.width / 2, -iconValue.height)
+        new SPixel(-iconValue.width / 2, -iconValue.height - 15)
       )
       let sMarker = new SMarker(sLonLat, sIcon, iconValue.typeId)
       TMapAPI.markerLayer.AddMarker(sMarker)
       sMarker.AddEventListener('mousemove', iconValue, () => {
-        if (item.typeId) {
-          TMapAPI.map.ShowLabelsByTag('default' + item.id)
-        } else {
-          TMapAPI.map.ShowLabelsByTag('fire' + item.id)
-        }
+        TMapAPI.map.ShowLabelsByTag('default' + item.id)
       })
       sMarker.AddEventListener('mouseout', iconValue, () => {
-        if (item.typeId) {
-          TMapAPI.map.HideLabelsByTag('default' + item.id)
+        TMapAPI.map.HideLabelsByTag('default' + item.id)
+      })
+    },
+    addPointWxzjDyzj(item, img, width, height, zIndex) {
+      let sLonLat = new SLonLat(item.centerX, item.centerY)
+      let iconPath = this.imgRep + '/upload/icon/' + img
+      // 在地图内添加图标
+      let sIcon
+      if (zIndex) {
+        sIcon = new SIcon(
+          iconPath,
+          new SSize(width, height),
+          new SPixel(-width / 2 - 9, -height - 9)
+        )
+        sIcon.GetDiv().style.zIndex = zIndex
+      } else {
+        sIcon = new SIcon(
+          iconPath,
+          new SSize(width, height),
+          new SPixel(-width / 2 + 9, -height + 9)
+        )
+        sIcon.GetDiv().style.zIndex = zIndex
+      }
+      let sMarker = new SMarker(sLonLat, sIcon)
+      TMapAPI.markerLayer.AddMarker(sMarker)
+      sMarker.AddEventListener('mousemove', item, () => {
+        if (zIndex) {
+          TMapAPI.map.ShowLabelsByTag('dyzj' + item.id)
         } else {
-          TMapAPI.map.HideLabelsByTag('fire' + item.id)
+          TMapAPI.map.ShowLabelsByTag('wxzj' + item.id)
+        }
+      })
+      sMarker.AddEventListener('mouseout', item, () => {
+        if (zIndex) {
+          TMapAPI.map.HideLabelsByTag('dyzj' + item.id)
+        } else {
+          TMapAPI.map.HideLabelsByTag('wxzj' + item.id)
         }
       })
     },
@@ -76,25 +105,43 @@ export default {
       if (data.code === 200) {
         data.data.forEach(item => {
           this.addPoint(item)
-          TMapAPI.drawRangeLableDefault(item)
+          if (item.typeId === '001003') {
+            TMapAPI.drawRangeLableMs(item)
+          } else {
+            TMapAPI.drawRangeLableDefault(item)
+          }
         })
         TMapAPI.map.HideLabels()
       }
     })
-    getFire().then(data => {
-      if (data.code === 200) {
-        data.data.forEach(item => {
-          this.addPoint(item)
-          TMapAPI.drawRangeLableFire(item)
-        })
-        TMapAPI.map.HideLabels()
-      }
-    })
+    // getFire().then(data => {
+    //   if (data.code === 200) {
+    //     data.data.forEach(item => {
+    //       if (item.img === '20191116dangjianguanli2x.png') {
+    //         this.addPoint(item, 999)
+    //       } else {
+    //         this.addPoint(item)
+    //       }
+    //       TMapAPI.drawRangeLableFire(item)
+    //     })
+    //     TMapAPI.map.HideLabels()
+    //   }
+    // })
     getHouse().then(data => {
       if (data.code === 200) {
         this.list = data.data
         this.list.forEach(e => {
           TMapAPI.drawRangeLable_house(e)
+          if (e.dimTourBasResidentInfo.partyMemberNum > 0) {
+            // 党员之家
+            this.addPointWxzjDyzj(e, e.img2, e.width2, e.height2, 999)
+            TMapAPI.drawRangeLable_dyzj(e)
+          }
+          if (e.dimTourBasResidentInfo.houseTip === 5) {
+            // 五星之家
+            this.addPointWxzjDyzj(e, e.img, e.width, e.height)
+            TMapAPI.drawRangeLable_wxzj(e)
+          }
         })
         TMapAPI.map.HideLabels()
       }
