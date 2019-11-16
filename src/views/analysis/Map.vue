@@ -17,16 +17,27 @@ export default {
     }
   },
   methods: {
-    addPoint(item) {
+    addPoint(item, zIndex) {
       let iconValue = item
       let sLonLat = new SLonLat(iconValue.lon, iconValue.lat)
       let iconPath = this.imgRep + '/upload/icon/' + iconValue.img
       // 在地图内添加图标
-      let sIcon = new SIcon(
-        iconPath,
-        new SSize(iconValue.width, iconValue.height),
-        new SPixel(-iconValue.width / 2, -iconValue.height)
-      )
+      let sIcon
+      if (zIndex) {
+        sIcon = new SIcon(
+          iconPath,
+          new SSize(iconValue.width, iconValue.height),
+          new SPixel(-iconValue.width / 2, -iconValue.height - 15)
+        )
+        sIcon.GetDiv().style.zIndex = zIndex
+      } else {
+        sIcon = new SIcon(
+          iconPath,
+          new SSize(iconValue.width, iconValue.height),
+          new SPixel(-iconValue.width / 2, -iconValue.height)
+        )
+        sIcon.GetDiv().style.zIndex = zIndex
+      }
       let sMarker = new SMarker(sLonLat, sIcon, iconValue.typeId)
       TMapAPI.markerLayer.AddMarker(sMarker)
       sMarker.AddEventListener('mousemove', iconValue, () => {
@@ -84,7 +95,11 @@ export default {
     getFire().then(data => {
       if (data.code === 200) {
         data.data.forEach(item => {
-          this.addPoint(item)
+          if (item.img === '20191116dangjianguanli2x.png') {
+            this.addPoint(item, 999)
+          } else {
+            this.addPoint(item)
+          }
           TMapAPI.drawRangeLableFire(item)
         })
         TMapAPI.map.HideLabels()

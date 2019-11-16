@@ -61,39 +61,34 @@ TTuJing.prototype.drawRange = function(item, color) {
 TTuJing.prototype.drawRangeLableDefault = function(item) {
   var infoText =
     `<div class="tmapWindowDefault">
-                    <p>` +
-    item.name +
-    `</p>
+                    <p>${item.name}</p>
                   </div>`
   var sLonLat = new SLonLat(item.lon, item.lat)
   var lbl = new SLabel(null, sLonLat, null, infoText)
   lbl.SetTag('default' + item.id)
-  lbl.SetOpacity(0.8)
+  lbl.SetOpacity(1)
   lbl.SetOffset(new SSize(15, -40))
   lbl.SetAdaptive()
   TMapAPI.map.AddLabel(lbl)
+  lbl.GetDiv().style.zIndex = 9999
 }
 // 绘制标签lable
 TTuJing.prototype.drawRangeLableFire = function(item) {
   var infoText =
     `<div class="tmapWindowFire">
-                    <p>姓名：` +
-    item.name +
-    `</p>
-                    <p>地址：` +
-    item.address +
-    `</p>
-                    <p>电话：` +
-    item.tel +
-    `</p>
+                    <p>党员之家:</p>
+                    <p>姓名：${item.name}</p>
+                    <p>地址：${item.address}</p>
+                    <p>电话：${item.tel}</p>
                   </div>`
   var sLonLat = new SLonLat(item.lon, item.lat)
   var lbl = new SLabel(null, sLonLat, null, infoText)
   lbl.SetTag('fire' + item.id)
-  lbl.SetOpacity(0.8)
+  lbl.SetOpacity(1)
   lbl.SetOffset(new SSize(15, -60))
   lbl.SetAdaptive()
   TMapAPI.map.AddLabel(lbl)
+  lbl.GetDiv().style.zIndex = 9999
 }
 // 绘制标签lable
 TTuJing.prototype.drawRangeLable_house = function(item) {
@@ -110,8 +105,9 @@ TTuJing.prototype.drawRangeLable_house = function(item) {
                   </div>`
   var lbl = new SLabel(null, sLonLat, null, infoText)
   lbl.SetTag('house' + item.id)
-  lbl.SetOpacity(0.8)
+  lbl.SetOpacity(1)
   lbl.SetOffset(new SSize(0, 0))
   lbl.SetAdaptive()
   TMapAPI.map.AddLabel(lbl)
+  lbl.GetDiv().style.zIndex = 9999
 }
