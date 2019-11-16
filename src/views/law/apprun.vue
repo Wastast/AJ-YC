@@ -412,7 +412,8 @@ export default {
           y: 'center',
           data: typeArr,
           textStyle: {
-            color: '#fff'
+            color: '#fff',
+            fontSize: 14
           },
           icon: 'circle'
         },
@@ -541,6 +542,7 @@ export default {
       height: px2rem(200rem);
       position: relative;
       .p {
+        font-size: px2rem(18rem);
         position: absolute;
         top: 0;
         left: 0;
@@ -603,6 +605,7 @@ export default {
   }
   .box {
     .p {
+      font-size: px2rem(18rem);
       position: absolute;
       top: 0;
       left: 0;

@@ -23,7 +23,7 @@
       </template> -->
       <template slot="content">
         <ul class="ul">
-          <vuescroll :ops="ops">
+          <vuescroll :ops="ops" ref="vs">
             <li class="li" v-for="(item, index) of list" :key="index" @click="getData(item)">
               <span class="span span-type" :title="item.title">{{ item.title }}</span>
               <span class="span span-title ellipsis">{{ item.release_time.slice(0, 10) }}</span>
@@ -40,7 +40,7 @@
       :modal="false"
     >
       <ul class="ul-imgs">
-        <vuescroll :ops="ops" ref="vs">
+        <vuescroll :ops="ops">
           <li class="li" v-for="(item, index) of imgList" :key="index">
             <img
               class="img"
@@ -81,14 +81,6 @@ export default {
   watch: {},
   methods: {
     getData(item) {
-      if (this.$refs['vs']) {
-        this.$refs['vs'].scrollTo(
-          {
-            y: 0
-          },
-          1
-        )
-      }
       this.imgList = item.imglists
       this.dialogVisible = true
     }

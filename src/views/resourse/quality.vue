@@ -7,8 +7,8 @@
             <ul class="ul">
               <li class="li" v-for="item of list" :key="item.color">
                 <span class="span span-block" :style="{ background: item.color }"></span>
-                <span class="span span-type">{{ item.type }}</span>
-                <span class="span span-value">{{ (item.value / 53 * 100).toFixed(1)}}%</span>
+                <span class="span span-type" :style="{ color: item.type === '用电安全' || '消防水压' ? item.color :''  }">{{ item.type }}</span>
+                <!-- <span class="span span-value">{{ (item.value / 53 * 100).toFixed(1)}}%</span> -->
               </li>
             </ul>
           </div>
@@ -27,20 +27,20 @@ export default {
     return {
       list: [
         {
-          // color: '#00E5A2',
-          color: '#999',
+          color: '#00E5A2',
+          // color: '#999',
           type: '烟感',
-          value: '0'
+          value: '50'
         },
         {
           color: '#044B9C',
           type: '监控',
-          value: '12'
+          value: '25'
         },
         {
-          color: '#0039AD',
-          type: '消防水压',
-          value: '15'
+          color: '#9E00BB',
+          type: '空气质量',
+          value: '1'
         },
         {
           color: '#00A1D6',
@@ -60,13 +60,13 @@ export default {
         },
         {
           color: '#AD0041',
-          type: '垃圾桶',
+          type: '果壳箱',
           value: '9'
         },
         {
-          color: '#9E00BB',
-          type: '空气质量',
-          value: '1'
+          color: '#999',
+          type: '消防水压',
+          value: '15'
         }
       ],
       qiyeTimer: null
@@ -126,15 +126,11 @@ export default {
             data: [
               {
                 name: '烟感',
-                value: '0'
+                value: '50'
               },
               {
                 name: '监控',
-                value: '12'
-              },
-              {
-                name: '消防水压',
-                value: '15'
+                value: '25'
               },
               {
                 name: '环境监测',
@@ -145,11 +141,7 @@ export default {
                 value: '14'
               },
               {
-                name: '用电安全',
-                value: '0'
-              },
-              {
-                name: '垃圾桶',
+                name: '果壳箱',
                 value: '9'
               },
               {

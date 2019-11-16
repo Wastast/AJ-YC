@@ -81,7 +81,7 @@ export default {
             name: '本周',
             type: 'line',
             stack: '总量',
-            data: [6, 12, 25, 3, 6],
+            data: [2, 6, 10, 5, 7],
             lineStyle: {
               color: '#4FA6F2'
             }

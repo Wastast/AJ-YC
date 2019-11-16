@@ -114,13 +114,18 @@ TTuJing.prototype.drawRangeLable_house = function(item) {
   if (!item.range) {
     return
   }
+  // <p>户主姓名: ${item.name}</p>
+  // <p>联系人电话: ${item.dimTourBasResidentInfo.phone}</p>
+  // <p>家庭地址: ${item.address}</p>
+  // <p>家庭人数: ${item.dimTourBasResidentInfo.memberNum}</p>
+  // <p>美丽家庭: ${item.dimTourBasResidentInfo.houseTipName}</p>
   var sLonLat = new SLonLat(item.centerX, item.centerY)
   var infoText = `<div class="tmapWindow">
                     <p>户主姓名: ${item.name}</p>
-                    <p>联系人电话: ${item.dimTourBasResidentInfo.phone}</p>
+                    <p>联系人电话: ${item.phone}</p>
                     <p>家庭地址: ${item.address}</p>
-                    <p>家庭人数: ${item.dimTourBasResidentInfo.memberNum}</p>
-                    <p>美丽家庭: ${item.dimTourBasResidentInfo.houseTipName}</p>
+                    <p>家庭人数: ${item.memberNum}</p>
+                    <p>美丽家庭: ${item.houseTipName}</p>
                   </div>`
   var lbl = new SLabel(null, sLonLat, null, infoText)
   lbl.SetTag('house' + item.id)
@@ -130,13 +135,16 @@ TTuJing.prototype.drawRangeLable_house = function(item) {
   TMapAPI.map.AddLabel(lbl)
   lbl.GetDiv().style.zIndex = 9999
 }
+/* <p>姓名：${item.dimTourBasResidentInfo.name}</p>
+                    <p>地址：${item.address || ''}</p>
+                    <p>电话：${item.dimTourBasResidentInfo.tel || ''}</p> */
 // 绘制标签lable
 TTuJing.prototype.drawRangeLable_dyzj = function(item) {
   var infoText = `<div class="tmapWindowFire">
                     <p>党员之家</p>
-                    <p>姓名：${item.dimTourBasResidentInfo.name}</p>
+                    <p>姓名：${item.name}</p>
                     <p>地址：${item.address || ''}</p>
-                    <p>电话：${item.dimTourBasResidentInfo.tel || ''}</p>
+                    <p>电话：${item.tel || ''}</p>
                   </div>`
   var sLonLat = new SLonLat(item.centerX, item.centerY)
   var lbl = new SLabel(null, sLonLat, null, infoText)
@@ -151,9 +159,9 @@ TTuJing.prototype.drawRangeLable_dyzj = function(item) {
 TTuJing.prototype.drawRangeLable_wxzj = function(item) {
   var infoText = `<div class="tmapWindowFire">
                     <p>五星之家</p>
-                    <p>姓名：${item.dimTourBasResidentInfo.name}</p>
+                    <p>姓名：${item.name}</p>
                     <p>地址：${item.address || ''}</p>
-                    <p>电话：${item.dimTourBasResidentInfo.tel || ''}</p>
+                    <p>电话：${item.tel || ''}</p>
                   </div>`
   var sLonLat = new SLonLat(item.centerX, item.centerY)
   var lbl = new SLabel(null, sLonLat, null, infoText)

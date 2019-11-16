@@ -1,6 +1,6 @@
 <template>
   <div class="event">
-    <party-box title="事件统计" width="652" height="242">
+    <party-box title="村情直通车" width="652" height="242">
       <template slot="content">
         <div class="div-top">
           <span class="span span-text">
@@ -52,6 +52,7 @@
       <div class="poptext">
         <p class="p">事件发生时间: {{ event.time }}</p>
         <p class="p">事件内容: {{ event.content }}</p>
+        <p class="p">事件来源: {{ textValue[event.user_type] }}</p>
         <div class="div-imgbox" v-if="event.imgurl">
           <img
             :src="`${req}/dwdTourEventInfo/getImg?access_token=${token}&imgUrl=${event.imgurl}`"
@@ -85,7 +86,12 @@ export default {
         time: '',
         content: '',
         imgurl: '',
-        title: ''
+        title: '',
+        user_type: ''
+      },
+      textValue: {
+        1: '村民上报信息',
+        0: '家园卫队成员上报信息'
       }
     }
   },
@@ -100,6 +106,7 @@ export default {
       this.event.content = obj.content
       this.event.imgurl = obj.pic_url[0]
       this.event.title = obj.title
+      this.event.user_type = obj.user_type
       this.dialogVisible = true
     }
   },
@@ -151,7 +158,7 @@ export default {
       width: px2rem(180rem);
     }
     .span-time {
-      left: px2rem(388rem);
+      left: px2rem(420rem);
     }
     .img {
       width: px2rem(50rem);
@@ -197,7 +204,7 @@ export default {
         width: px2rem(180rem);
       }
       .span-time {
-        left: px2rem(388rem);
+        left: px2rem(420rem);
         color: rgba(255, 255, 255, 0.6);
       }
       .img {
@@ -216,7 +223,7 @@ export default {
     }
     .div-imgbox {
       width: px2rem(500rem);
-      height: px2rem(500rem);
+      height: px2rem(400rem);
       border-radius: 5px;
       overflow: hidden;
       img {

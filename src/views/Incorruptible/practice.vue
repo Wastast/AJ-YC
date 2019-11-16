@@ -76,7 +76,7 @@ export default {
         {
           name: '年志愿活动次数',
           value: '187',
-          unit: '人'
+          unit: '次'
         }
       ]
     }
@@ -124,7 +124,8 @@ export default {
             '配送服务'
           ],
           textStyle: {
-            color: '#fff'
+            color: '#fff',
+            fontSize: 14
           },
           icon: 'circle'
         },

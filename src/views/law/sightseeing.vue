@@ -193,7 +193,7 @@ export default {
   position: absolute;
   top: px2rem(804rem);
   left: px2rem(41rem);
-  z-index: 100;
+  z-index: 1050;
   .ul {
     display: flow-root;
     .li {

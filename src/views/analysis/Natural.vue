@@ -7,7 +7,7 @@
             <img src="@/assets/analysis/圆角矩形 6@2x.png" alt="" />
             <dl>
               <dt>PM2.5</dt>
-              <dd>{{ pm }}</dd>
+              <dd>33 <span>ug/m³</span></dd>
             </dl>
           </li>
           <li class="li">
@@ -21,14 +21,14 @@
             <img src="@/assets/analysis/圆角矩形 6 拷贝@2x.png" alt="" />
             <dl>
               <dt>湿度</dt>
-              <dd>45.8 <span>%</span></dd>
+              <dd>55.6 <span>%</span></dd>
             </dl>
           </li>
           <li class="li">
             <img src="@/assets/analysis/圆角矩形 6 拷贝 2@2x(1).png" alt="" />
             <dl>
               <dt>负氧离子</dt>
-              <dd>5756</dd>
+              <dd>3700<span>/cm³</span></dd>
             </dl>
           </li>
           <li class="li">
@@ -55,7 +55,7 @@
           <li class="li">
             <img src="@/assets/analysis/圆角矩形 6 拷贝 3@2x(3).png" alt="" />
             <dl>
-              <dt>垃圾桶告警</dt>
+              <dt>果壳箱告警</dt>
               <dd>0</dd>
             </dl>
           </li>

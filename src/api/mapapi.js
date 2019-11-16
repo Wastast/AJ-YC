@@ -7,7 +7,7 @@ export const getAllPoint = data => get('/dimTourBasResource/findAll', data)
 export const getTypePoint = data => get('/dimTourBasResource/findByType', data)
 
 // 请求绘制房屋
-export const getHouse = data => post('/dimTourBasBuildInfo/findByListWithHost', data)
+export const getHouse = data => post('/dimTourBasBuildInfo/findByListWithHostYh', data)
 
 // 获取资源类型
 export const getResourseType = data => get('/dimTourBasResourceType/findAll', data)

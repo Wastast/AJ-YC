@@ -32,6 +32,17 @@
         </div>
       </template>
     </party-box>
+    <el-dialog
+      :title="gongkai.title"
+      :visible.sync="dialogVisible"
+      width="32%"
+      :modal="false"
+      :destroy-on-close="true"
+    >
+      <div class="popbox">
+        <p></p>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -48,7 +59,12 @@ export default {
       typeList: [],
       eventList: null,
       type: '',
-      loading: false
+      loading: false,
+      gongkai: {
+        title: '',
+        content: ''
+      },
+      dialogVisible: false
     }
   },
   computed: {},
@@ -76,6 +92,7 @@ export default {
     },
     // 展示详情数据
     showDesc(obj) {
+      console.log(obj)
     },
     // 请求并渲染数据
     async getData(obj) {

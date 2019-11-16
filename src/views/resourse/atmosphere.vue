@@ -21,7 +21,7 @@
             <li class="li">
               <div class="div-text">
                 <p class="p-type">PM2.5</p>
-                <p class="p-value">32</p>
+                <p class="p-value">33 <span>ug/m³</span></p>
               </div>
               <div class="div-imgbox">
                 <img src="@/assets/resouse/pm@2x.png" alt="">
@@ -30,7 +30,7 @@
             <li class="li">
               <div class="div-text">
                 <p class="p-type">气压</p>
-                <p class="p-value">68%</p>
+                <p class="p-value">996 <span>hPa</span></p>
               </div>
               <div class="div-imgbox">
                 <img src="@/assets/resouse/qiya@2x.png" alt="">
@@ -39,7 +39,7 @@
             <li class="li">
               <div class="div-text">
                 <p class="p-type">风速</p>
-                <p class="p-value">67%</p>
+                <p class="p-value">1.4 <span>m/s</span></p>
               </div>
               <div class="div-imgbox">
                 <img src="@/assets/resouse/fengsu@2x.png" alt="">
@@ -47,13 +47,13 @@
             </li>
           </ul>
           <ul class="ul">
-            <p class="p-title">
+            <!-- <p class="p-title">
               空气检测
-            </p>
+            </p> -->
             <li class="li">
               <div class="div-text">
                 <p class="p-type">降雨量</p>
-                <p class="p-value">32</p>
+                <p class="p-value">无降水</p>
               </div>
               <div class="div-imgbox">
                 <img src="@/assets/resouse/Envirjiangyuliangchuanganqi@2x.png" alt="">
@@ -61,8 +61,8 @@
             </li>
             <li class="li">
               <div class="div-text">
-                <p class="p-type">温度</p>
-                <p class="p-value">23℃</p>
+                <p class="p-type">云量</p>
+                <p class="p-value">12.5%</p>
               </div>
               <div class="div-imgbox">
                 <img src="@/assets/resouse/pmcopy@2x.png" alt="">
@@ -71,7 +71,7 @@
             <li class="li">
               <div class="div-text">
                 <p class="p-type">二氧化碳浓度</p>
-                <p class="p-value">67%</p>
+                <p class="p-value">546 <span>ppm</span></p>
               </div>
               <div class="div-imgbox">
                 <img src="@/assets/resouse/shidu@2x.png" alt="">
@@ -192,8 +192,12 @@ export default {
             font-size: px2rem(12rem);
           }
           .p-value {
-            font-size: px2rem(40rem);
+            font-size: px2rem(36rem);
             font-family: "DS-DIGII";
+            margin-top: px2rem(10rem);
+            span {
+              font-size: px2rem(18rem);
+            }
           }
         }
         .div-imgbox {

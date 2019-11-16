@@ -202,9 +202,10 @@ export default {
             nameTextStyle: {
               color: 'rgba(161,207,255,.7)',
               backgroundColor: 'rgba(2,8,28,.5)',
-              padding: [0, 13, 0, 11],
+              padding: [0, 13, 0, 100],
               lineHeight: '31',
-              borderRadius: 5
+              borderRadius: 5,
+              fontSize: 20
             },
             axisTick: {
               show: false

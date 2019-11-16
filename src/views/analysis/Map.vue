@@ -104,11 +104,13 @@ export default {
     getShouye().then(data => {
       if (data.code === 200) {
         data.data.forEach(item => {
-          this.addPoint(item)
-          if (item.typeId === '001003') {
-            TMapAPI.drawRangeLableMs(item)
-          } else {
-            TMapAPI.drawRangeLableDefault(item)
+          if (item.typeId !== '001111') {
+            this.addPoint(item)
+            if (item.typeId === '001003') {
+              TMapAPI.drawRangeLableMs(item)
+            } else {
+              TMapAPI.drawRangeLableDefault(item)
+            }
           }
         })
         TMapAPI.map.HideLabels()
@@ -132,12 +134,12 @@ export default {
         this.list = data.data
         this.list.forEach(e => {
           TMapAPI.drawRangeLable_house(e)
-          if (e.dimTourBasResidentInfo.partyMemberNum > 0) {
+          if (e.partyMemberNum > 0) {
             // 党员之家
             this.addPointWxzjDyzj(e, e.img2, e.width2, e.height2, 999)
             TMapAPI.drawRangeLable_dyzj(e)
           }
-          if (e.dimTourBasResidentInfo.houseTip === 5) {
+          if (e.houseTip === 5) {
             // 五星之家
             this.addPointWxzjDyzj(e, e.img, e.width, e.height)
             TMapAPI.drawRangeLable_wxzj(e)

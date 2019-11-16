@@ -5,11 +5,11 @@
         <div class="div-top">
           <div class="left">
             <p class="top">实时水位监测</p>
-            <p class="value">{{ value[new Date().getHours()] }}</p>
+            <p class="value">{{ value[new Date().getHours()] }} <span style="font-size: 20px;">米</span></p>
           </div>
           <div class="right">
             <p class="top">本月水位峰值</p>
-            <p class="value">11.75</p>
+            <p class="value">11.75 <span style="font-size: 20px;">米</span></p>
           </div>
         </div>
         <div class="echarts">

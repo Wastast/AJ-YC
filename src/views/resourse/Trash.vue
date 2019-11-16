@@ -1,6 +1,6 @@
 <template>
   <div class="Trash">
-    <party-box title="垃圾桶监测" width="592" height="392">
+    <party-box title="果壳箱监测" width="592" height="392">
       <template slot="content">
         <ul class="ul">
           <li class="li" v-for="(item, index) of list" :key="index">
@@ -14,12 +14,12 @@
                     容量监测
                   </p>
                   <p class="p-value">
-                    <countTo
+                    {{item.rongliang}}
+                    <!-- <countTo
                       :startVal="parseInt(0)"
                       :endVal="parseFloat(item.rongliang)"
                       :duration="4000"
-                    ></countTo>
-                    %
+                    ></countTo> -->
                   </p>
                 </div>
                 <!-- <div class="righ">
@@ -41,55 +41,54 @@
 
 <script>
 import PartyBox from '@/components/party-box'
-import countTo from 'vue-count-to'
 export default {
   name: 'Trash',
   data() {
     return {
       list: [
         {
+          type: '两山绿道1',
+          rongliang: '未满',
+          shidu: '20'
+        },
+        {
+          type: '两山绿道2',
+          rongliang: '未满',
+          shidu: '20'
+        },
+        {
+          type: '两山绿道3',
+          rongliang: '未满',
+          shidu: '20'
+        },
+        {
+          type: '两山绿道4',
+          rongliang: '未满',
+          shidu: '20'
+        },
+        {
+          type: '篮球场',
+          rongliang: '未满',
+          shidu: '20'
+        },
+        {
+          type: '门球场',
+          rongliang: '未满',
+          shidu: '20'
+        },
+        {
+          type: '停车场',
+          rongliang: '未满',
+          shidu: '20'
+        },
+        {
           type: '村委',
-          rongliang: '27',
+          rongliang: '未满',
           shidu: '20'
         },
         {
-          type: '接待中心',
-          rongliang: '28',
-          shidu: '20'
-        },
-        {
-          type: '电影院',
-          rongliang: '42',
-          shidu: '20'
-        },
-        {
-          type: '文化礼堂',
-          rongliang: '10',
-          shidu: '20'
-        },
-        {
-          type: '公交车站1',
-          rongliang: '19',
-          shidu: '20'
-        },
-        {
-          type: '公交车站2',
-          rongliang: '28',
-          shidu: '20'
-        },
-        {
-          type: '公交车站3',
-          rongliang: '34',
-          shidu: '20'
-        },
-        {
-          type: '停车场1',
-          rongliang: '52',
-          shidu: '20'
-        },
-        {
-          type: '停车场2',
-          rongliang: '42',
+          type: '大石碑',
+          rongliang: '未满',
           shidu: '20'
         }
       ]
@@ -99,7 +98,7 @@ export default {
   watch: {},
   methods: {},
   mounted() {},
-  components: { PartyBox, countTo }
+  components: { PartyBox }
 }
 </script>
 
@@ -162,16 +161,18 @@ export default {
           padding-top: px2rem(15rem);
           margin: auto;
           .p-type {
-            font-size: px2rem(12rem);
+            font-size: px2rem(20rem);
           }
           .p-value {
             font-family: 'DS-DIGII';
-            font-size: px2rem(32rem);
+            font-size: px2rem(18rem);
             margin-top: px2rem(5rem);
+            color: #00e5a2ba;
           }
         }
         .left {
-          width: px2rem(88rem);
+          // width: px2rem(150rem);
+          text-align: center;
           // background: rgba(2, 8, 28, 0.8);
         }
       }

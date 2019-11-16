@@ -6,12 +6,7 @@
           <vuescroll ref="vs">
             <li class="li" v-for="(item, index) of list" :key="index" @click="getTeamValue(item)">
               <div class="div-imgbox">
-                <img
-                  :src="
-                    `${req}/dwdTourEventInfo/getImg?access_token=${token}&imgUrl=${item.teamImages}`
-                  "
-                  alt=""
-                />
+                <img :src="req + '/upload/volunteerTeam/' + item.teamImages" alt="" />
               </div>
               <div class="div-text">
                 <p class="p-titles ellipsis">
@@ -91,6 +86,7 @@ export default {
   },
   mounted() {
     getTeam().then(data => {
+      console.log(data)
       if (data.code === 0) {
         this.list = data.data
       }

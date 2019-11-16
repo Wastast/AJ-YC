@@ -1,22 +1,8 @@
 <template>
   <div class="mediate">
-    <party-box title="乡贤调解" width="532" height="392">
+    <party-box title="乡贤事迹" width="532" height="180">
       <template slot="content">
-        <div class="box div-show">
-          <!-- <p class="p-title">
-            乡贤展示
-          </!-->
-          <ul class="ul">
-            <li class="li" v-for="(item, index) of peopleList" :key="index" @click="getValue(item)">
-              {{ item.name }}
-              <span>{{ item.number }}</span>
-            </li>
-          </ul>
-        </div>
         <div class="box div-shi">
-          <p class="p-title">
-            乡贤事迹
-          </p>
           <div class="box wrapper" ref="wrapper">
             <vuescroll ref="vs" :ops="ops">
               <ul class="ul content" ref="length" :style="{ width: length }">
@@ -105,12 +91,7 @@ export default {
     }
   },
   watch: {},
-  methods: {
-    // 获取数据
-    getValue(obj) {
-      console.log(obj)
-    }
-  },
+  methods: {},
   mounted() {
     this.$nextTick(() => {
       let width = getComputedStyle(this.$refs['length']).width.split('px')[0]
@@ -118,7 +99,7 @@ export default {
         {
           x: width
         },
-        1000 * 10
+        1000 * 50
       )
     })
   },
@@ -138,7 +119,7 @@ export default {
 <style scoped lang="scss">
 .mediate {
   position: absolute;
-  top: px2rem(594rem);
+  top: px2rem(805rem);
   left: px2rem(1344rem);
   z-index: 1050;
   display: flow-root;
@@ -192,7 +173,7 @@ export default {
     }
   }
   .div-shi {
-    height: px2rem(168rem);
+    height: px2rem(140rem);
     margin-top: px2rem(8rem);
     .box {
       width: px2rem(473rem);
@@ -215,6 +196,12 @@ export default {
           }
         }
       }
+    }
+  }
+  .popText {
+    p {
+      line-height: px2rem(36rem);
+      font-size: px2rem(18rem);
     }
   }
 }

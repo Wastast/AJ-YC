@@ -71,6 +71,7 @@
       <div class="poptext">
         <p class="p">事件发生时间: {{ event.time }}</p>
         <p class="p">事件内容: {{ event.content }}</p>
+        <p class="p">事件来源: {{ textValue[event.user_type] }}</p>
         <div class="div-imgbox" v-if="event.imgurl">
           <img
             :src="`${req}/dwdTourEventInfo/getImg?access_token=${token}&imgUrl=${event.imgurl}`"
@@ -98,9 +99,14 @@ export default {
         time: '',
         content: '',
         imgurl: '',
-        title: ''
+        title: '',
+        user_type: ''
       },
-      scroll: null
+      scroll: null,
+      textValue: {
+        1: '村民上报信息',
+        0: '家园卫队成员上报信息'
+      }
     }
   },
   computed: {
@@ -114,6 +120,7 @@ export default {
       this.event.content = obj.content
       this.event.imgurl = obj.pic_url[0]
       this.event.title = obj.title
+      this.event.user_type = obj.user_type
       this.dialogVisible = true
     }
   },
@@ -121,6 +128,7 @@ export default {
     // 获取事件
     getEvent().then(data => {
       if (data.code === 200) {
+        console.log(data)
         let list = data.data.repairList
         this.list = list
         this.scroll = new BScroll(this.$refs['wrapper'], {

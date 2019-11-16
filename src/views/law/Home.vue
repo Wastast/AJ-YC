@@ -7,13 +7,13 @@
           <ul class="ul">
             <li class="li" v-for="(items, index) of item.node" :key="index">
               <dl>
-                <dt>
+                <dt :style="{color: items.state?'':'#999'}">
                   {{ items.name }}
                   <span style="font-size: 12px;">
                     {{ items.remark == '村民组长' ? '(组长)' : '' }}
                   </span>
                 </dt>
-                <dd>{{ items.phone }}</dd>
+                <dd :style="{color: items.state?'':'#999'}">{{ items.phone }}</dd>
               </dl>
             </li>
           </ul>
@@ -169,6 +169,7 @@ export default {
       if (!range) {
         return
       }
+      TMapAPI.ClearFeatures()
       var ppsMainBuild = SPoint.GetPointSFromString(range)
       var xlMansion = new SLineString(ppsMainBuild)
       var fsMansion = new SFeatureStyle()
@@ -185,13 +186,12 @@ export default {
       // 范围 属性 TAG 扩展说明
       var pfMansion = new SFeature(xlMansion, fsMansion, '1')
       TMapAPI.GetVectorLayer().AddFeatures([pfMansion])
-      TMapAPI.map.SetCenter(new SLonLat(item.lon, item.lat), 2)
+      TMapAPI.map.SetCenter(new SLonLat(item.lon, item.lat), 1)
     }
   },
   mounted() {
     getHome().then(data => {
       if (data.code === 200) {
-        console.log(data)
         this.list = data.data
       }
     })

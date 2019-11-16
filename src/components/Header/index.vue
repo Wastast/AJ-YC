@@ -71,6 +71,7 @@ export default {
     },
     getWether() {
       weather().then(data => {
+        console.log(data)
         let obj = data.HeWeather6[0].now
         this.cond_txt = obj.cond_txt
         this.tmp = obj.tmp

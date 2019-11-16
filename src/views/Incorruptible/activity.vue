@@ -57,21 +57,24 @@ export default {
   methods: {
     // 设置中心点
     getCenter(item) {
-      var infoText = `<div style="width: 200px;height: 200px;">
-                    <img src="${this.imgRep +
-                      '/upload/volunteerActivity/' +
-                      item.images}" width="200" heght="200"> </img>
-                    </div>`
-      var lonlat = new SLonLat(item.lon, item.lat)
+      // var infoText = `<div style="width: 200px;height: 200px;">
+      //               <img src="${this.imgRep +
+      //                 '/upload/volunteerActivity/' +
+      //                 item.images}" width="200" heght="200"> </img>
+      //                 <p>志愿队名称: ${item.teamName}</p>
+      //                 <p>活动主题: ${item.title}</p>
+      //                 <p>活动时间: ${item.createTime.slice(0, 10)}</p>
+      //               </div>`
+      // var lonlat = new SLonLat(item.lon, item.lat)
+      // // TMapAPI.GetMap().SInfoWindow.SetLonLat(lonlat, null, false)
       // TMapAPI.GetMap().SInfoWindow.SetLonLat(lonlat, null, false)
-      TMapAPI.GetMap().SInfoWindow.SetLonLat(lonlat, null, false)
-      // 信息面板显示内容
-      TMapAPI.GetMap().SInfoWindow.SetInnerHTML(infoText)
-      // 面板底部对应图标位置
-      TMapAPI.GetMap().SInfoWindow.SetOffset(new SSize(0, 0))
-      // 信息面板长宽
-      TMapAPI.GetMap().SInfoWindow.SetSize(new SSize(250, 200))
-      TMapAPI.GetMap().SInfoWindow.Show()
+      // // 信息面板显示内容
+      // TMapAPI.GetMap().SInfoWindow.SetInnerHTML(infoText)
+      // // 面板底部对应图标位置
+      // TMapAPI.GetMap().SInfoWindow.SetOffset(new SSize(0, 0))
+      // // 信息面板长宽
+      // TMapAPI.GetMap().SInfoWindow.SetSize(new SSize(300, 300))
+      // TMapAPI.GetMap().SInfoWindow.Show()
       // TMapAPI.map.SetCenter(new SLonLat(item.lon, item.lat), 2)
     }
   },
@@ -141,14 +144,14 @@ export default {
       }
       .span-type {
         left: px2rem(20rem);
-        width: px2rem(56rem);
+        width: px2rem(100rem);
       }
       .span-title {
-        left: px2rem(100rem);
+        left: px2rem(130rem);
         width: px2rem(110rem);
       }
       .span-message {
-        left: px2rem(230rem);
+        left: px2rem(260rem);
         width: px2rem(262rem);
         font-weight: bold;
       }
