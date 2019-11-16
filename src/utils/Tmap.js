@@ -89,6 +89,27 @@ TTuJing.prototype.drawRangeLableFire = function(item) {
   lbl.GetDiv().style.zIndex = 9999
 }
 // 绘制标签lable
+TTuJing.prototype.drawRangeLableMs = function(item) {
+  // 地址，联系人，联系电话，订餐桌数，房间数
+  var infoText = `<div class="tmapWindowFire">
+                    <p>名宿</p>
+                    <p>名称：${item.name}</p>
+                    <p>地址：${item.address || ''}</p>
+                    <p>联系人：${item.person || ''}</p>
+                    <p>联系电话：${item.phone || ''}</p>
+                    <p>订餐桌数：${item.tableNum || ''}</p>
+                    <p>房间数：${item.roomNum || ''}</p>
+                  </div>`
+  var sLonLat = new SLonLat(item.lon, item.lat)
+  var lbl = new SLabel(null, sLonLat, null, infoText)
+  lbl.SetTag('default' + item.id)
+  lbl.SetOpacity(1)
+  lbl.SetOffset(new SSize(15, -60))
+  lbl.SetAdaptive()
+  TMapAPI.map.AddLabel(lbl)
+  lbl.GetDiv().style.zIndex = 9999
+}
+// 绘制标签lable
 TTuJing.prototype.drawRangeLable_house = function(item) {
   if (!item.range) {
     return
@@ -112,7 +133,7 @@ TTuJing.prototype.drawRangeLable_house = function(item) {
 // 绘制标签lable
 TTuJing.prototype.drawRangeLable_dyzj = function(item) {
   var infoText = `<div class="tmapWindowFire">
-                    <p>党员之家:</p>
+                    <p>党员之家</p>
                     <p>姓名：${item.dimTourBasResidentInfo.name}</p>
                     <p>地址：${item.address || ''}</p>
                     <p>电话：${item.dimTourBasResidentInfo.tel || ''}</p>
@@ -129,7 +150,7 @@ TTuJing.prototype.drawRangeLable_dyzj = function(item) {
 // 绘制标签lable
 TTuJing.prototype.drawRangeLable_wxzj = function(item) {
   var infoText = `<div class="tmapWindowFire">
-                    <p>五星之家:</p>
+                    <p>五星之家</p>
                     <p>姓名：${item.dimTourBasResidentInfo.name}</p>
                     <p>地址：${item.address || ''}</p>
                     <p>电话：${item.dimTourBasResidentInfo.tel || ''}</p>

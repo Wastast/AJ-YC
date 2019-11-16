@@ -25,10 +25,10 @@ export default {
       // 在地图内添加图标
       let sIcon
       if (zIndex) {
-        sIcon = new SIcon(iconPath, new SSize(width, height), new SPixel(-width / 2, -height - 9))
+        sIcon = new SIcon(iconPath, new SSize(width, height), new SPixel(-width / 2 - 9, -height - 9))
         sIcon.GetDiv().style.zIndex = zIndex
       } else {
-        sIcon = new SIcon(iconPath, new SSize(width, height), new SPixel(-width / 2, -height + 9))
+        sIcon = new SIcon(iconPath, new SSize(width, height), new SPixel(-width / 2 + 9, -height + 9))
         sIcon.GetDiv().style.zIndex = zIndex
       }
       let sMarker = new SMarker(sLonLat, sIcon)

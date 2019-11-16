@@ -2,7 +2,7 @@
   <div class="video">
     <ul class="ul">
       <li class="li" v-for="item of list" :key="item.type" @click="popVideo(item.type)">
-        <img src="@/assets/img/beijing.png" alt="" />
+        <img :src="item.img" alt="" />
       </li>
     </ul>
 
@@ -10,6 +10,7 @@
       :modal="false"
       title="提示"
       @opened="getVideo"
+      :destroy-on-close="true"
       :visible.sync="dialogVisible"
       width="40%"
     >
@@ -24,12 +25,12 @@
     </el-dialog>
 
     <!-- 添加预览控件（需要先在windows下注册） -->
-    <object
+    <!-- <object
       classid="CLSID:7E393848-7238-4CE3-82EE-44AF444B240A"
       wmode="opaque"
       id="PlayViewOCX"
       style="width:0;heght:0;"
-    ></object>
+    ></object> -->
   </div>
 </template>
 
@@ -52,16 +53,20 @@ export default {
       CamList: '',
       list: [
         {
-          type: '001001001'
+          type: '7e61ca0ed015445db18d5cb44902e6a3',
+          img: require('@/assets/img/08对大石碑球机_20191116070001_11948_14DF4AC8_15739003181.jpg')
         },
         {
-          type: '001001002'
+          type: '001001006',
+          img: require('@/assets/img/17村委会东墙鹰眼_20191116080005_11948_2E60B070_15739005721.jpg')
         },
         {
-          type: '001001003'
+          type: '5bc6b7dd26e34f83a5091bf5b6a8420a',
+          img: require('@/assets/img/10光交1号对面河边球机_20191116084110_11948_14DCFEA8_15739004201.jpg')
         },
         {
-          type: '001001004'
+          type: '61e626767df34eeab79f4f67509f26d2',
+          img: require('@/assets/img/22余村出村人脸_20191116080004_11948_14E05A60_15739005381.jpg')
         }
       ],
       dialogVisible: false,
@@ -137,6 +142,12 @@ export default {
   mounted() {}
 }
 </script>
+
+<style scoped>
+.video >>> .el-dialog__body {
+  padding: 0 20px 30px;
+}
+</style>
 
 <style scoped lang="scss">
 .video {
