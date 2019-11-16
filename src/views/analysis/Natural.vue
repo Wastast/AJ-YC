@@ -14,14 +14,14 @@
             <img src="@/assets/analysis/圆角矩形 6 拷贝 3@2x.png" alt="" />
             <dl>
               <dt>气压</dt>
-              <dd>{{ tmp }}℃</dd>
+              <dd>996 <span>hPa</span></dd>
             </dl>
           </li>
           <li class="li">
             <img src="@/assets/analysis/圆角矩形 6 拷贝@2x.png" alt="" />
             <dl>
               <dt>湿度</dt>
-              <dd>{{ hum }}%</dd>
+              <dd>55.6 <span>%</span></dd>
             </dl>
           </li>
           <li class="li">
@@ -35,14 +35,14 @@
             <img src="@/assets/analysis/圆角矩形 6 拷贝 3@2x.png" alt="" />
             <dl>
               <dt>风速</dt>
-              <dd>2ppm</dd>
+              <dd>1.4m/s</dd>
             </dl>
           </li>
           <li class="li">
             <img src="@/assets/analysis/圆角矩形 6 拷贝 3@2x(1).png" alt="" />
             <dl>
               <dt>降雨量</dt>
-              <dd>5.6</dd>
+              <dd>无降水</dd>
             </dl>
           </li>
           <li class="li">
@@ -129,9 +129,12 @@ export default {
           margin-bottom: px2rem(19rem);
         }
         dd {
-          font-size: px2rem(28rem);
+          font-size: px2rem(24rem);
           font-style: italic;
           color: rgba(98, 208, 243, 1);
+          span {
+            font-size: px2rem(16rem);
+          }
         }
       }
     }

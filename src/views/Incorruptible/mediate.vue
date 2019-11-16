@@ -75,6 +75,7 @@ export default {
   methods: {},
   mounted() {
     getMediate().then(data => {
+      console.log(data)
       // console.log(data)
       // if (data.code === 0) {
       //   this.list = data.data.slice

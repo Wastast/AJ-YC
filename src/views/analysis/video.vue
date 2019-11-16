@@ -97,8 +97,12 @@ export default {
         indexcode: this.videoCode
       }).then(data => {
         let { CamList, appSecret, appkey, time, timeSecret } = data
+        // hikvideoclient://ReqType:PlayReal;VersionTag:artemis;
+        // ReqType:PlayReal;WndCount: 1;
         this.init()
           .then(() => {
+            // let param = `hikvideoclient://ReqType:PlayReal;VersionTag:artemis;SvrIp:33.155.144.50;SvrPort:443;Appkey:${appkey};AppSecret:${appSecret};time:${time};timesecret:${timeSecret};httpsflag:1;CamList:${CamList};`
+            // let param = `ReqType:PlayReal;WndCount: 1;SvrIp:33.155.144.50;SvrPort:443;Appkey:${appkey};AppSecret:${appSecret};time:${time};timesecret:${timeSecret};httpsflag: 1;CamList:${CamList};`
             let param =
               'ReqType:PlayReal;WndCount: 1;SvrIp:33.155.144.50;SvrPort:443;' +
               'Appkey:' +

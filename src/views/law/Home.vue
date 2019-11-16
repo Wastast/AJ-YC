@@ -64,9 +64,14 @@ export default {
         ],
         [
           {
+            name: '汪苗青',
+            number: '13515727609',
+            isZu: true
+          },
+          {
             name: '胡斌',
             number: '15967202382',
-            isZu: true
+            isZu: false
           },
           {
             name: '胡青峰',

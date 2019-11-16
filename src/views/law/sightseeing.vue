@@ -5,7 +5,7 @@
         <ul class="ul">
           <li class="li">
             <dl>
-              <dt>
+              <!-- <dt>
                 <el-select v-model="value" placeholder="请选择视频检测位置">
                   <el-option
                     v-for="item in options"
@@ -15,13 +15,13 @@
                   >
                   </el-option>
                 </el-select>
-              </dt>
+              </dt> -->
               <dd></dd>
             </dl>
           </li>
           <li class="li">
             <dl>
-              <dt>
+              <!-- <dt>
                 <el-select v-model="value" placeholder="请选择视频检测位置">
                   <el-option
                     v-for="item in options"
@@ -31,7 +31,7 @@
                   >
                   </el-option>
                 </el-select>
-              </dt>
+              </!-->
               <dd></dd>
             </dl>
           </li>
@@ -104,8 +104,8 @@ export default {
       margin-left: px2rem(35rem);
       float: left;
       dt {
-        width: 240px;
-        height: 40px;
+        width: px2rem(240rem);
+        height: px2rem(40rem);
         background: rgba(49, 129, 191, 0.26);
         border: 1px solid rgba(45, 126, 182, 1);
         opacity: 0.8;
@@ -113,8 +113,8 @@ export default {
         box-sizing: border-box;
       }
       dd {
-        width: 240px;
-        height: 132px;
+        width: px2rem(240rem);
+        height: px2rem(170rem);
         background: rgba(2, 7, 26, 1);
         border-radius: 4px;
       }

@@ -3,19 +3,21 @@
     <party-box title="志愿信息" width="532" height="392">
       <template slot="content">
         <ul class="ul">
-          <li class="li" v-for="(item, index) of list" :key="index">
-            <div class="div-imgbox">
-              <img src="@/assets/img/fengchebuluo.jpg" alt="">
-            </div>
-            <div class="div-text">
-              <p class="p-titles ellipsis">
-                {{ item.title }}
-              </p>
-              <div class="text-box" :title="item.message">
-                {{ (item.message+'').slice(0, 80) }}
+          <vuescroll ref="vs">
+            <li class="li" v-for="(item, index) of list" :key="index">
+              <div class="div-imgbox">
+                <img src="@/assets/img/fengchebuluo.jpg" alt="" />
               </div>
-            </div>
-          </li>
+              <div class="div-text">
+                <p class="p-titles ellipsis">
+                  {{ item.title }}
+                </p>
+                <div class="text-box" :title="item.message">
+                  {{ (item.message + '').slice(0, 80) }}
+                </div>
+              </div>
+            </li>
+          </vuescroll>
         </ul>
       </template>
     </party-box>
@@ -25,6 +27,7 @@
 <script>
 import PartyBox from '@/components/party-box'
 import { getVolunteer, getMediate } from '@/api/incorruptible'
+import vuescroll from 'vuescroll'
 export default {
   name: 'volunteer',
   data() {
@@ -36,16 +39,22 @@ export default {
   watch: {},
   methods: {},
   mounted() {
-    getVolunteer().then(data => {
-    })
+    getVolunteer().then(data => {})
     getMediate().then(data => {
       if (data.code === 0) {
-        this.list = data.data.slice(0, 2)
+        this.list = data.data
       }
+      this.$refs['vs'].scrollTo(
+        {
+          y: '500'
+        },
+        1000 * 5
+      )
     })
   },
   components: {
-    PartyBox
+    PartyBox,
+    vuescroll
   }
 }
 </script>
@@ -64,6 +73,7 @@ export default {
   z-index: 1050;
   display: flow-root;
   .ul {
+    height: px2rem(330rem);
     .li {
       padding: px2rem(6rem) 0 0 px2rem(10rem);
       height: px2rem(160rem);
