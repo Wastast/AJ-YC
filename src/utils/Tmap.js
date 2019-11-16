@@ -59,8 +59,7 @@ TTuJing.prototype.drawRange = function(item, color) {
 }
 // 绘制标签lable
 TTuJing.prototype.drawRangeLableDefault = function(item) {
-  var infoText =
-    `<div class="tmapWindowDefault">
+  var infoText = `<div class="tmapWindowDefault">
                     <p>${item.name}</p>
                   </div>`
   var sLonLat = new SLonLat(item.lon, item.lat)
@@ -74,8 +73,7 @@ TTuJing.prototype.drawRangeLableDefault = function(item) {
 }
 // 绘制标签lable
 TTuJing.prototype.drawRangeLableFire = function(item) {
-  var infoText =
-    `<div class="tmapWindowFire">
+  var infoText = `<div class="tmapWindowFire">
                     <p>党员之家:</p>
                     <p>姓名：${item.name}</p>
                     <p>地址：${item.address}</p>
@@ -107,6 +105,40 @@ TTuJing.prototype.drawRangeLable_house = function(item) {
   lbl.SetTag('house' + item.id)
   lbl.SetOpacity(1)
   lbl.SetOffset(new SSize(0, 0))
+  lbl.SetAdaptive()
+  TMapAPI.map.AddLabel(lbl)
+  lbl.GetDiv().style.zIndex = 9999
+}
+// 绘制标签lable
+TTuJing.prototype.drawRangeLable_dyzj = function(item) {
+  var infoText = `<div class="tmapWindowFire">
+                    <p>党员之家:</p>
+                    <p>姓名：${item.dimTourBasResidentInfo.name}</p>
+                    <p>地址：${item.address || ''}</p>
+                    <p>电话：${item.dimTourBasResidentInfo.tel || ''}</p>
+                  </div>`
+  var sLonLat = new SLonLat(item.centerX, item.centerY)
+  var lbl = new SLabel(null, sLonLat, null, infoText)
+  lbl.SetTag('dyzj' + item.id)
+  lbl.SetOpacity(1)
+  lbl.SetOffset(new SSize(15, -60))
+  lbl.SetAdaptive()
+  TMapAPI.map.AddLabel(lbl)
+  lbl.GetDiv().style.zIndex = 9999
+}
+// 绘制标签lable
+TTuJing.prototype.drawRangeLable_wxzj = function(item) {
+  var infoText = `<div class="tmapWindowFire">
+                    <p>五星之家:</p>
+                    <p>姓名：${item.dimTourBasResidentInfo.name}</p>
+                    <p>地址：${item.address || ''}</p>
+                    <p>电话：${item.dimTourBasResidentInfo.tel || ''}</p>
+                  </div>`
+  var sLonLat = new SLonLat(item.centerX, item.centerY)
+  var lbl = new SLabel(null, sLonLat, null, infoText)
+  lbl.SetTag('wxzj' + item.id)
+  lbl.SetOpacity(1)
+  lbl.SetOffset(new SSize(15, -60))
   lbl.SetAdaptive()
   TMapAPI.map.AddLabel(lbl)
   lbl.GetDiv().style.zIndex = 9999

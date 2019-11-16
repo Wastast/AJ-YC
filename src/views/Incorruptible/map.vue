@@ -8,17 +8,97 @@
 </template>
 
 <script>
+import { getHouse } from '@/api/mapapi'
 export default {
   name: 'Map',
   data() {
-    return {}
+    return {
+      imgRep: req.slice(0, -3)
+    }
   },
   computed: {},
   watch: {},
-  methods: {},
+  methods: {
+    addPointWxzjDyzj(item, img, width, height, zIndex) {
+      let sLonLat = new SLonLat(item.centerX, item.centerY)
+      let iconPath = this.imgRep + '/upload/icon/' + img
+      // 在地图内添加图标
+      let sIcon
+      if (zIndex) {
+        sIcon = new SIcon(iconPath, new SSize(width, height), new SPixel(-width / 2, -height - 9))
+        sIcon.GetDiv().style.zIndex = zIndex
+      } else {
+        sIcon = new SIcon(iconPath, new SSize(width, height), new SPixel(-width / 2, -height + 9))
+        sIcon.GetDiv().style.zIndex = zIndex
+      }
+      let sMarker = new SMarker(sLonLat, sIcon)
+      TMapAPI.markerLayer.AddMarker(sMarker)
+      sMarker.AddEventListener('mousemove', item, () => {
+        if (zIndex) {
+          TMapAPI.map.ShowLabelsByTag('dyzj' + item.id)
+        } else {
+          TMapAPI.map.ShowLabelsByTag('wxzj' + item.id)
+        }
+      })
+      sMarker.AddEventListener('mouseout', item, () => {
+        if (zIndex) {
+          TMapAPI.map.HideLabelsByTag('dyzj' + item.id)
+        } else {
+          TMapAPI.map.HideLabelsByTag('wxzj' + item.id)
+        }
+      })
+    },
+    // 绘制房屋
+    drawHouse() {
+      getHouse().then(data => {
+        if (data.code === 200) {
+          this.list = data.data
+          this.list.forEach(e => {
+            TMapAPI.drawRange(e, '#B56FE2')
+          })
+        }
+      })
+    },
+    // 获取地图层级
+    getZoom() {
+      let zoom = TMapAPI.map.GetZoom()
+      if (zoom >= 2) {
+        if (this.isDraw !== true) {
+          this.isDraw = true
+          this.drawHouse()
+        }
+      } else {
+        this.isDraw = false
+        TMapAPI.ClearFeatures()
+      }
+    }
+  },
   mounted() {
     TMapAPI.InitMap('maps')
     TMapAPI.map.SetCenter(new SLonLat(1500, 1010), 1)
+    getHouse().then(data => {
+      if (data.code === 200) {
+        this.list = data.data
+        this.list.forEach(e => {
+          TMapAPI.drawRangeLable_house(e)
+          if (e.dimTourBasResidentInfo.partyMemberNum > 0) {
+            // 党员之家
+            this.addPointWxzjDyzj(e, e.img2, e.width2, e.height2, 999)
+            TMapAPI.drawRangeLable_dyzj(e)
+          }
+          if (e.dimTourBasResidentInfo.houseTip === 5) {
+            // 五星之家
+            this.addPointWxzjDyzj(e, e.img, e.width, e.height)
+            TMapAPI.drawRangeLable_wxzj(e)
+          }
+        })
+        TMapAPI.map.HideLabels()
+      }
+    })
+    TMapAPI.GetMap().AddEventListener('zoomend', () => {
+      TMapAPI.map.HideLabels()
+      this.getZoom()
+    })
   }
 }
 </script>
