@@ -17,3 +17,6 @@ export const getVideoData = data => post('/hikocx', data)
 
 // 来源地数据
 export const getOrign = data => get('/dwsTourSelfDriveTouristsFromCityD/getCityData', data)
+
+// 获取图片资源
+export const getPicUrl = data => get('/dwdTourEventInfo/getImg', data)

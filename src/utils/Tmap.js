@@ -1,5 +1,8 @@
 // 添加绘画房子功能
 TTuJing.prototype.drawRange = function(item, color) {
+  if (!item.range) {
+    return
+  }
   var range = item.range
   var mapid = item.id
   var ppsMainBuild = SPoint.GetPointSFromString(range)
@@ -21,6 +24,29 @@ TTuJing.prototype.drawRange = function(item, color) {
   pfMansion.Activate()
   // 点击事件
   pfMansion.AddEventListener('click', pfMansion, function() {
-    console.log(item)
+    let position = item.range.split(',')[0].split(' ')
+    var infoText = `<div class="tmapWindow">
+                      <p>户主姓名: ${item.name}</p>
+                      <p>联系人电话: ${item.dimTourBasResidentInfo.phone}</p>
+                      <p>家庭地址: ${item.address}</p>
+                      <p>家庭人数: ${item.dimTourBasResidentInfo.memberNum}</p>
+                      <p>家庭: ${item.dimTourBasResidentInfo.houseTip}</p>
+                    </div>`
+    var lonlat = new SLonLat(position[0], position[1])
+    // TMapAPI.GetMap().SInfoWindow.SetLonLat(lonlat, null, false)
+    TMapAPI.GetMap().SInfoWindow.SetLonLat(lonlat, null, false)
+    // 信息面板显示内容
+    TMapAPI.GetMap().SInfoWindow.SetInnerHTML(infoText)
+    // 面板底部对应图标位置
+    TMapAPI.GetMap().SInfoWindow.SetOffset(new SSize(0, 0))
+    // 信息面板长宽
+    TMapAPI.GetMap().SInfoWindow.SetSize(new SSize(250, 200))
+    TMapAPI.GetMap().SInfoWindow.Show()
+    // 当前点居中,3是层级（0-3层）
+    TMapAPI.GetMap().SetCenter(lonlat, 2)
+    // TMapAPI.GetMap().SInfoWindow2.ReWriteInfoClose(function() {
+    //   alert(1)
+    //   TMapAPI.GetMap().SInfoWindow2.Hide()
+    // })
   })
 }

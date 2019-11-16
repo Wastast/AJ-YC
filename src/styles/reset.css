@@ -29,3 +29,11 @@ a:hover {color: #25a4bb;text-decoration: none;}
 .show {display: block;} /* 显示 */
 .ellipsis {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;} /* 字体溢出显示省略号 */
 .SPanZoomBar {display: none !important;}
+.tmapWindow p {
+  margin-top: 10px;
+  overflow: hidden;
+  width: 230px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

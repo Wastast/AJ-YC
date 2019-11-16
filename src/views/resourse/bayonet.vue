@@ -3,7 +3,7 @@
     <party-box title="车辆监测" width="592" height="323">
       <template slot="content">
         <div class="div-top">
-          <el-select v-model="value" placeholder="请选择卡口位置">
+          <!-- <el-select v-model="value" placeholder="请选择卡口位置">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -11,7 +11,7 @@
               :value="item.value"
             >
             </el-option>
-          </el-select>
+          </el-select> -->
         </div>
         <div class="div-center">
           <div class="div-in">
@@ -234,12 +234,12 @@ export default {
   left: px2rem(41rem);
   z-index: 100;
   .div-top {
-    height: px2rem(40rem);
-    background: rgba(49, 129, 191, 0.26);
-    border: 1px solid rgba(45, 126, 182, 1);
-    opacity: 0.8;
-    border-radius: 6px;
-    box-sizing: border-box;
+    height: px2rem(15rem);
+    // background: rgba(49, 129, 191, 0.26);
+    // border: 1px solid rgba(45, 126, 182, 1);
+    // opacity: 0.8;
+    // border-radius: 6px;
+    // box-sizing: border-box;
   }
   .div-center {
     margin-top: px2rem(9rem);

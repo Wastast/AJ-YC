@@ -12,7 +12,8 @@ export default {
     return {
       list: [],
       timer: null,
-      imgRep: req.slice(0, -3)
+      imgRep: req.slice(0, -3),
+      isDraw: false
     }
   },
   methods: {
@@ -28,8 +29,7 @@ export default {
       )
       let sMarker = new SMarker(sLonLat, sIcon, iconValue.typeId)
       TMapAPI.markerLayer.AddMarker(sMarker)
-      sMarker.AddEventListener('click', iconValue, () => {
-      })
+      sMarker.AddEventListener('click', iconValue, () => {})
     },
     // 绘制房屋
     drawHouse() {
@@ -41,10 +41,24 @@ export default {
           })
         }
       })
+    },
+    // 获取地图层级
+    getZoom() {
+      let zoom = TMapAPI.map.GetZoom()
+      if (zoom >= 2) {
+        if (this.isDraw !== true) {
+          this.isDraw = true
+          this.drawHouse()
+        }
+      } else {
+        this.isDraw = false
+        TMapAPI.ClearFeatures()
+      }
     }
   },
   mounted() {
-    this.drawHouse()
+    TMapAPI.InitMap('map')
+    TMapAPI.map.SetCenter(new SLonLat(1500, 1010), 1)
     getShouye().then(data => {
       if (data.code === 200) {
         data.data.forEach(item => {
@@ -59,8 +73,12 @@ export default {
         })
       }
     })
-    TMapAPI.InitMap('map')
-    TMapAPI.map.SetCenter(new SLonLat(1500, 1010), 1)
+    TMapAPI.GetMap().AddEventListener('zoomend', () => {
+      this.getZoom()
+    })
+  },
+  beforeDestroy() {
+    TMapAPI.GetMap().ReleaseEventListener('zoomend', this.getZoom())
   }
 }
 </script>

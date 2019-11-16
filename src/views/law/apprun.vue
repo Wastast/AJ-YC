@@ -99,7 +99,7 @@ export default {
       }
       EleResize.on(resizeDiv, listener)
       let option = {
-        color: ['#044B9C', '#ECB32B', '#CB371F'],
+        color: ['rgb(236, 179, 43)', 'rgb(0, 202, 232)', 'rgb(195, 55, 0)'],
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b}: {c} ({d}%)'
@@ -232,7 +232,7 @@ export default {
         ],
         series: [
           {
-            name: '客流量',
+            name: '代办事项',
             type: 'bar',
             barWidth: 20,
             data: data,
@@ -401,7 +401,7 @@ export default {
       }
       EleResize.on(resizeDiv, listener)
       let option = {
-        color: ['#044B9C', '#ECB32B', '#CB371F'],
+        color: ['#FF0000 ', '#FF7F00', '#FFFF00', '#00FF00', '#00FFFF', '#0000FF', '#8B00FF'],
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b}: {c} ({d}%)'

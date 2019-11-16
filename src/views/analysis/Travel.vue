@@ -24,7 +24,7 @@
 
 <script>
 import ModuleBox from '@/components/analys-box'
-import { getEvent } from '@/api/analysis'
+import { getEvent, getPicUrl } from '@/api/analysis'
 export default {
   name: 'Travel',
   data() {
@@ -34,8 +34,18 @@ export default {
   },
   computed: {},
   watch: {},
-  methods: {},
+  methods: {
+    // 获取图片流
+    getImgUrl(url) {
+      getPicUrl({
+        imgUrl: url
+      }).then(data => {
+        console.log(data)
+      })
+    }
+  },
   mounted() {
+    // 获取事件
     getEvent().then(data => {
       if (data.code === 200) {
         let list = data.data.repairList
