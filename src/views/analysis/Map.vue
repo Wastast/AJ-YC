@@ -29,7 +29,20 @@ export default {
       )
       let sMarker = new SMarker(sLonLat, sIcon, iconValue.typeId)
       TMapAPI.markerLayer.AddMarker(sMarker)
-      sMarker.AddEventListener('click', iconValue, () => {})
+      sMarker.AddEventListener('mousemove', iconValue, () => {
+        if (item.typeId) {
+          TMapAPI.map.ShowLabelsByTag('default' + item.id)
+        } else {
+          TMapAPI.map.ShowLabelsByTag('fire' + item.id)
+        }
+      })
+      sMarker.AddEventListener('mouseout', iconValue, () => {
+        if (item.typeId) {
+          TMapAPI.map.HideLabelsByTag('default' + item.id)
+        } else {
+          TMapAPI.map.HideLabelsByTag('fire' + item.id)
+        }
+      })
     },
     // 绘制房屋
     drawHouse() {
@@ -63,14 +76,27 @@ export default {
       if (data.code === 200) {
         data.data.forEach(item => {
           this.addPoint(item)
+          TMapAPI.drawRangeLableDefault(item)
         })
+        TMapAPI.map.HideLabels()
       }
     })
     getFire().then(data => {
       if (data.code === 200) {
         data.data.forEach(item => {
           this.addPoint(item)
+          TMapAPI.drawRangeLableFire(item)
         })
+        TMapAPI.map.HideLabels()
+      }
+    })
+    getHouse().then(data => {
+      if (data.code === 200) {
+        this.list = data.data
+        this.list.forEach(e => {
+          TMapAPI.drawRangeLable_house(e)
+        })
+        TMapAPI.map.HideLabels()
       }
     })
     TMapAPI.GetMap().AddEventListener('zoomend', () => {
