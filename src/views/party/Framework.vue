@@ -90,7 +90,7 @@ export default {
           ],
           [
             {
-              imgUrl: require('@/assets/party/李辉.jpg'),
+              imgUrl: require('@/assets/party/胡青宇.jpg'),
               name: '胡青宇'
             },
             {
@@ -126,7 +126,7 @@ export default {
           ],
           [
             {
-              imgUrl: require('@/assets/party/李辉.jpg'),
+              imgUrl: require('@/assets/party/胡青宇.jpg'),
               name: '胡青宇'
             },
             {

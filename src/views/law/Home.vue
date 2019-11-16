@@ -2,16 +2,18 @@
   <div class="Home">
     <party-box title="家园卫队" width="592" height="372">
       <template slot="content">
-        <div class="div-box" v-for="(item, index) of list" :key="index">
+        <div class="div-box" v-for="(item, index) of list" :key="index" @click="drawCircle(item)">
           <div class="title">第{{ index + 1 }}组</div>
           <ul class="ul">
-            <li class="li" v-for="(items, index) of item" :key="index">
+            <li class="li" v-for="(items, index) of item.node" :key="index">
               <dl>
                 <dt>
                   {{ items.name }}
-                  <span style="font-size: 12px;"> {{ items.isZu ? '(组长)' : '' }} </span>
+                  <span style="font-size: 12px;">
+                    {{ items.remark == '村民组长' ? '(组长)' : '' }}
+                  </span>
                 </dt>
-                <dd>{{ items.number }}</dd>
+                <dd>{{ items.phone }}</dd>
               </dl>
             </li>
           </ul>
@@ -23,6 +25,7 @@
 
 <script>
 import PartyBox from '@/components/party-box'
+import { getHome } from '@/api/law'
 export default {
   name: 'Home',
   data() {
@@ -159,8 +162,40 @@ export default {
   },
   computed: {},
   watch: {},
-  methods: {},
-  mounted() {},
+  methods: {
+    // 绘制圆圈
+    drawCircle(item) {
+      let range = item.range
+      if (!range) {
+        return
+      }
+      var ppsMainBuild = SPoint.GetPointSFromString(range)
+      var xlMansion = new SLineString(ppsMainBuild)
+      var fsMansion = new SFeatureStyle()
+      fsMansion.SetFillColor('transparent')
+      fsMansion.SetFillColor('#B56FE2')
+      // 模型边框外壳
+      fsMansion.SetStrokeWidth(0)
+      // fsMansion.SetStrokeColor("#B56FE2");
+      fsMansion.SetHoverFillColor('#B56FE2')
+      fsMansion.SetHoverStrokeColor('#B56FE2')
+      // 外壳2
+      fsMansion.SetHoverStrokeWidth(2)
+      fsMansion.SetHoverEnabled(true)
+      // 范围 属性 TAG 扩展说明
+      var pfMansion = new SFeature(xlMansion, fsMansion, '1')
+      TMapAPI.GetVectorLayer().AddFeatures([pfMansion])
+      TMapAPI.map.SetCenter(new SLonLat(item.lon, item.lat), 2)
+    }
+  },
+  mounted() {
+    getHome().then(data => {
+      if (data.code === 200) {
+        console.log(data)
+        this.list = data.data
+      }
+    })
+  },
   components: { PartyBox }
 }
 </script>
@@ -176,6 +211,7 @@ export default {
     padding-left: px2rem(10rem);
     padding-top: px2rem(8rem);
     float: left;
+    height: px2rem(180rem);
     .title {
       color: rgba(128, 165, 206, 1);
       margin-bottom: px2rem(5rem);
@@ -187,6 +223,7 @@ export default {
       box-sizing: border-box;
       padding: px2rem(5rem) px2rem(12rem) px2rem(10rem) px2rem(12rem);
       .li {
+
         dt {
           font-size: px2rem(18rem);
           color: rgba(13, 123, 225, 1);

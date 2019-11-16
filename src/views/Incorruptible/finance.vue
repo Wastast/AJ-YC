@@ -1,6 +1,6 @@
 <template>
   <div class="finance">
-    <party-box title="财务公开" width="592" height="470">
+    <party-box title="财务公开" width="592" height="392">
       <!-- <template slot="content">
         <ul class="ul">
           <li class="li" v-for="(item, index) of [1, 2, 3]" :key="index">
@@ -32,7 +32,13 @@
         </ul>
       </template>
     </party-box>
-    <el-dialog title="财务报表" :visible.sync="dialogVisible" width="40%">
+    <el-dialog
+      title="财务报表"
+      :visible.sync="dialogVisible"
+      width="40%"
+      :destroy-on-close="true"
+      :modal="false"
+    >
       <ul class="ul-imgs">
         <vuescroll :ops="ops" ref="vs">
           <li class="li" v-for="(item, index) of imgList" :key="index">
@@ -113,10 +119,10 @@ export default {
   position: absolute;
   top: px2rem(134rem);
   left: px2rem(41rem);
-  z-index: 2011;
+  z-index: 1052;
   display: flow-root;
   .ul {
-    height: px2rem(467rem);
+    height: px2rem(392rem);
     .li {
       height: px2rem(40rem);
       line-height: px2rem(40rem);

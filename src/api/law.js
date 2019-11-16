@@ -11,3 +11,6 @@ export const getGovernment = data => get('/dwdTourEventTypeCountInfo/find', data
 
 // 高频事项代办数量
 export const getFrequency = data => get('/dwdTourEventAgencyInfo/find', data)
+
+// 高频事项代办数量
+export const getHome = data => get('/dwdTourHomeGuardAreaInfo/findArea', data)

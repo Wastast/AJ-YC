@@ -11,6 +11,7 @@
       title="提示"
       @opened="getVideo"
       :visible.sync="dialogVisible"
+      :destroy-on-close="true"
       width="40%"
     >
       <div style="height: 500px;">
@@ -22,14 +23,6 @@
         ></object>
       </div>
     </el-dialog>
-
-    <!-- 添加预览控件（需要先在windows下注册） -->
-    <object
-      classid="CLSID:7E393848-7238-4CE3-82EE-44AF444B240A"
-      wmode="opaque"
-      id="PlayViewOCX"
-      style="width:0;heght:0;"
-    ></object>
   </div>
 </template>
 
@@ -75,7 +68,6 @@ export default {
     popVideo(type) {
       this.videoCode = type
       // 这里弹出
-      // this.getVideo(),
       this.dialogVisible = true
     },
     play_ocx_do(param) {
@@ -121,6 +113,8 @@ export default {
               'CamList:' +
               CamList +
               ';'
+            console.log(time)
+            console.log(param)
             setTimeout(() => {
               this.play_ocx_do(param)
             }, 2000)

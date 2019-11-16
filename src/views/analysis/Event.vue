@@ -91,7 +91,8 @@ export default {
               show: false
             },
             axisLabel: {
-              color: 'rgba(131,178,255,1)'
+              color: 'rgba(131,178,255,1)',
+              fontSize: 13
             },
             show: true
           }

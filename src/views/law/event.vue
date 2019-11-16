@@ -18,9 +18,9 @@
         </div>
         <ul class="ul">
           <vuescroll :ops="ops">
-            <li class="li" v-for="item of list" :key="item.id">
+            <li class="li" v-for="item of list" :key="item.id" @click="getData(item)">
               <span class="span span-block"> </span>
-              <span class="span span-text">
+              <span class="span span-text ellipsis">
                 {{ item.title }}
               </span>
               <span class="span span-event ellipsis">
@@ -29,12 +29,37 @@
               <span class="span span-time">
                 {{ item.create_date.slice(0, 10) }}
               </span>
-              <img class="img" :src="item.pic_url[0]" alt="" />
+              <img
+                v-if="item.pic_url[0]"
+                class="img"
+                :src="
+                  `${req}/dwdTourEventInfo/getImg?access_token=${token}&imgUrl=${item.pic_url[0]}`
+                "
+                alt=""
+              />
             </li>
           </vuescroll>
         </ul>
       </template>
     </party-box>
+    <el-dialog
+      :title="event.title"
+      :visible.sync="dialogVisible"
+      width="30%"
+      :destroy-on-close="true"
+      :modal="false"
+    >
+      <div class="poptext">
+        <p class="p">事件发生时间: {{ event.time }}</p>
+        <p class="p">事件内容: {{ event.content }}</p>
+        <div class="div-imgbox" v-if="event.imgurl">
+          <img
+            :src="`${req}/dwdTourEventInfo/getImg?access_token=${token}&imgUrl=${event.imgurl}`"
+            alt=""
+          />
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -42,6 +67,7 @@
 import PartyBox from '@/components/party-box'
 import { getEvent } from '@/api/analysis'
 import vuescroll from 'vuescroll'
+import { mapGetters } from 'vuex'
 export default {
   name: 'event',
   data() {
@@ -52,12 +78,31 @@ export default {
         rail: {},
         bar: {}
       },
-      list: []
+      list: [],
+      req,
+      dialogVisible: false,
+      event: {
+        time: '',
+        content: '',
+        imgurl: '',
+        title: ''
+      }
     }
   },
-  computed: {},
+  computed: {
+    ...mapGetters(['token'])
+  },
   watch: {},
-  methods: {},
+  methods: {
+    // 获取事件信息
+    getData(obj) {
+      this.event.time = obj.create_date
+      this.event.content = obj.content
+      this.event.imgurl = obj.pic_url[0]
+      this.event.title = obj.title
+      this.dialogVisible = true
+    }
+  },
   mounted() {
     getEvent().then(data => {
       if (data.code === 200) {
@@ -74,14 +119,14 @@ export default {
   position: absolute;
   top: px2rem(744rem);
   left: px2rem(663rem);
-  z-index: 100;
+  z-index: 1050;
   .div-top {
     // margin-bottom: px2rem(28rem);
     // margin-top: px2rem(20rem);
     position: relative;
     display: flow-root;
-    height: .96rem;
-    line-height: .96rem;
+    height: 0.96rem;
+    line-height: 0.96rem;
     .span {
       color: rgba(44, 137, 232, 1);
     }
@@ -145,6 +190,7 @@ export default {
       }
       .span-text {
         left: px2rem(55rem);
+        width: px2rem(100rem);
       }
       .span-event {
         left: px2rem(177rem);
@@ -161,6 +207,21 @@ export default {
         right: px2rem(22rem);
         top: 50%;
         transform: translateY(-50%);
+      }
+    }
+  }
+  .poptext {
+    .p {
+      line-height: px2rem(35rem);
+    }
+    .div-imgbox {
+      width: px2rem(500rem);
+      height: px2rem(500rem);
+      border-radius: 5px;
+      overflow: hidden;
+      img {
+        width: 100%;
+        height: 100%;
       }
     }
   }

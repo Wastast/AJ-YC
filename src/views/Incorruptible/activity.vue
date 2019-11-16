@@ -49,7 +49,7 @@ export default {
           type: 'jingye'
         }
       ],
-      imgRep: req.slice(0, -2)
+      imgRep: req.slice(0, -3)
     }
   },
   computed: {},
@@ -57,8 +57,10 @@ export default {
   methods: {
     // 设置中心点
     getCenter(item) {
-      var infoText = `<div class="tmapWindow" style="width: 200px;height: 200px;">
-                    <img src="${this.imgRep + item.images}" width="200" heght="200"> </img>
+      var infoText = `<div style="width: 200px;height: 200px;">
+                    <img src="${this.imgRep +
+                      '/upload/volunteerActivity/' +
+                      item.images}" width="200" heght="200"> </img>
                     </div>`
       var lonlat = new SLonLat(item.lon, item.lat)
       // TMapAPI.GetMap().SInfoWindow.SetLonLat(lonlat, null, false)
@@ -70,7 +72,7 @@ export default {
       // 信息面板长宽
       TMapAPI.GetMap().SInfoWindow.SetSize(new SSize(250, 200))
       TMapAPI.GetMap().SInfoWindow.Show()
-      TMapAPI.map.SetCenter(new SLonLat(item.lon, item.lat), 2)
+      // TMapAPI.map.SetCenter(new SLonLat(item.lon, item.lat), 2)
     }
   },
   mounted() {

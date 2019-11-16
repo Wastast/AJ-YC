@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <a-header title="数字乡村信息化管理平台"></a-header>
+    <a-header title="数字余村综合管控平台"></a-header>
     <a-natural></a-natural>
     <a-car></a-car>
     <a-desc></a-desc>

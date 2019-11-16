@@ -71,6 +71,7 @@ export default {
       .span-title {
         left: px2rem(23rem);
         color: rgba(78, 236, 255, 1);
+        width: px2rem(80rem);
       }
       .span-event {
         left: px2rem(159rem);

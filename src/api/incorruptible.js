@@ -17,3 +17,9 @@ export const getMediate = data => get('/dwdTourVillagersMediationInfo', data)
 
 // 查询志愿信息
 export const getVolunteer = data => get('/dwdTourVolunteerOrganizationInfo', data)
+
+// 获取志愿者队伍信息
+export const getTeam = data => get('/dwdTourVolunteerTeamInfo', data)
+
+// 获取单个志愿者队伍信息
+export const getFloatTeam = data => get('/dwdTourVolunteerOrganizationInfo/findListByTeamNo', data)

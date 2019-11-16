@@ -21,7 +21,7 @@
             <img src="@/assets/analysis/圆角矩形 6 拷贝@2x.png" alt="" />
             <dl>
               <dt>湿度</dt>
-              <dd>55.6 <span>%</span></dd>
+              <dd>45.8 <span>%</span></dd>
             </dl>
           </li>
           <li class="li">
@@ -49,7 +49,7 @@
             <img src="@/assets/analysis/圆角矩形 6 拷贝 3@2x(2).png" alt="" />
             <dl>
               <dt>二氧化碳浓度</dt>
-              <dd>9.3</dd>
+              <dd>546 <span>ppm</span></dd>
             </dl>
           </li>
           <li class="li">

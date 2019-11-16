@@ -1,6 +1,6 @@
 <template>
   <div class="sightseeing">
-    <party-box title="治安视频" width="592" height="184">
+    <party-box title="公共区域" width="592" height="184">
       <template slot="content">
         <ul class="ul">
           <li class="li">

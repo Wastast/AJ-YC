@@ -3,11 +3,11 @@
     <party-box title="乡贤调解" width="532" height="392">
       <template slot="content">
         <div class="box div-show">
-          <p class="p-title">
+          <!-- <p class="p-title">
             乡贤展示
-          </p>
+          </!-->
           <ul class="ul">
-            <li class="li" v-for="(item, index) of peopleList" :key="index">
+            <li class="li" v-for="(item, index) of peopleList" :key="index" @click="getValue(item)">
               {{ item.name }}
               <span>{{ item.number }}</span>
             </li>
@@ -17,17 +17,15 @@
           <p class="p-title">
             乡贤事迹
           </p>
-          <ul class="ul">
-            <li class="li">
-              <img src="@/assets/img/图层 683@2x.png" alt="">
-            </li>
-            <li class="li">
-              <img src="@/assets/img/图层 684@2x.png" alt="">
-            </li>
-            <li class="li">
-              <img src="@/assets/img/图层 685@2x.png" alt="">
-            </li>
-          </ul>
+          <div class="box wrapper" ref="wrapper">
+            <vuescroll ref="vs" :ops="ops">
+              <ul class="ul content" ref="length" :style="{ width: length }">
+                <li class="li" v-for="item of imgList" :key="item.imgUrl">
+                  <img :src="item.imgUrl" alt="" />
+                </li>
+              </ul>
+            </vuescroll>
+          </div>
         </div>
       </template>
     </party-box>
@@ -36,7 +34,7 @@
 
 <script>
 import PartyBox from '@/components/party-box'
-import { getMediate } from '@/api/incorruptible'
+import vuescroll from 'vuescroll'
 export default {
   name: 'mediate',
   data() {
@@ -45,45 +43,88 @@ export default {
       peopleList: [
         {
           name: '俞春华',
-          number: '13567278553'
+          number: '13567278553',
+          frequency: '1'
         },
         {
           name: '刘备军',
-          number: '13868283334'
+          number: '13868283334',
+          frequency: '2'
         },
         {
           name: '宋瑶',
-          number: '15157255909'
+          number: '15157255909',
+          frequency: '3'
         },
         {
           name: '赵水根',
-          number: '13657221980'
+          number: '13657221980',
+          frequency: '4'
         },
         {
           name: '俞金宝',
-          number: '13567970055'
+          number: '13567970055',
+          frequency: '5'
         },
         {
           name: '赵必成',
-          number: '15157241398'
+          number: '15157241398',
+          frequency: '6'
         }
-      ]
+      ],
+      imgList: [
+        {
+          imgUrl: require('@/assets/img/83b22164837afe09b28d4fff760cced.jpg')
+        },
+        {
+          imgUrl: require('@/assets/img/CY0A609.jpg')
+        },
+        {
+          imgUrl: require('@/assets/img/CY0A6.jpg')
+        },
+        {
+          imgUrl: require('@/assets/img/CY0A61.jpg')
+        },
+        {
+          imgUrl: require('@/assets/img/CY6118.jpg')
+        },
+        {
+          imgUrl: require('@/assets/img/CY6185.jpg')
+        }
+      ],
+      ops: {
+        bar: {
+          opacity: 0
+        }
+      }
     }
   },
-  computed: {},
+  computed: {
+    length() {
+      return (this.imgList.length + 1) * 2.94 - 1 + 'rem'
+    }
+  },
   watch: {},
-  methods: {},
+  methods: {
+    // 获取数据
+    getValue(obj) {
+      console.log(obj)
+    }
+  },
   mounted() {
-    getMediate().then(data => {
-      console.log(data)
-      // console.log(data)
-      // if (data.code === 0) {
-      //   this.list = data.data.slice
-      // }
+    this.$nextTick(() => {
+      let width = getComputedStyle(this.$refs['length']).width.split('px')[0]
+      this.$refs['vs'].scrollTo(
+        {
+          x: width
+        },
+        1000 * 10
+      )
     })
   },
   components: {
-    PartyBox
+    PartyBox,
+    vuescroll
   }
 }
 </script>
@@ -121,6 +162,7 @@ export default {
       display: flow-root;
       box-sizing: border-box;
       padding-left: px2rem(8rem);
+      margin-top: 0.5rem;
       .li {
         width: px2rem(240rem);
         height: px2rem(34rem);
@@ -132,6 +174,7 @@ export default {
         line-height: px2rem(34rem);
         color: #00fcff;
         margin-top: px2rem(12rem);
+        cursor: pointer;
         &:nth-child(even) {
           margin-left: px2rem(11rem);
         }
@@ -151,20 +194,25 @@ export default {
   .div-shi {
     height: px2rem(168rem);
     margin-top: px2rem(8rem);
-    .ul {
-      box-sizing: border-box;
+    .box {
+      width: px2rem(473rem);
+      height: px2rem(120rem);
       padding: px2rem(8rem) 0 0 px2rem(15rem);
-      .li {
-        width: px2rem(147rem);
-        height: px2rem(110rem);
-        float: left;
-        background: #000;
-        &:nth-child(n + 2) {
-          margin-left: px2rem(16rem);
-        }
-        img {
-          width: 100%;
-          height: 100%;
+      overflow: hidden;
+      .ul {
+        overflow: hidden;
+        .li {
+          width: px2rem(147rem);
+          height: px2rem(110rem);
+          float: left;
+          background: #000;
+          &:nth-child(n + 2) {
+            margin-left: px2rem(16rem);
+          }
+          img {
+            width: 100%;
+            height: 100%;
+          }
         }
       }
     }

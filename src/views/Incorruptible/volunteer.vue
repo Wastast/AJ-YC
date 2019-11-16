@@ -4,16 +4,21 @@
       <template slot="content">
         <ul class="ul">
           <vuescroll ref="vs">
-            <li class="li" v-for="(item, index) of list" :key="index">
+            <li class="li" v-for="(item, index) of list" :key="index" @click="getTeamValue(item)">
               <div class="div-imgbox">
-                <img src="@/assets/img/fengchebuluo.jpg" alt="" />
+                <img
+                  :src="
+                    `${req}/dwdTourEventInfo/getImg?access_token=${token}&imgUrl=${item.teamImages}`
+                  "
+                  alt=""
+                />
               </div>
               <div class="div-text">
                 <p class="p-titles ellipsis">
-                  {{ item.title }}
+                  {{ item.teamName }}
                 </p>
-                <div class="text-box" :title="item.message">
-                  {{ (item.message + '').slice(0, 80) }}
+                <div class="text-box" :title="item.describe">
+                  {{ item.describe }}
                 </div>
               </div>
             </li>
@@ -21,35 +26,74 @@
         </ul>
       </template>
     </party-box>
+    <el-dialog
+      :title="Team.teamName"
+      :visible.sync="dialogVisible"
+      width="32%"
+      :modal="false"
+      :destroy-on-close="true"
+    >
+      <div class="popbox">
+        <vuescroll>
+          <el-table :data="Team.peopleList">
+            <el-table-column property="name" label="名字" width="150"></el-table-column>
+            <el-table-column property="duty" label="职位" width="150"></el-table-column>
+            <el-table-column property="phone" label="电话" width="150"></el-table-column>
+          </el-table>
+          <p>队伍介绍: {{ Team.describe }}</p>
+        </vuescroll>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import PartyBox from '@/components/party-box'
-import { getVolunteer, getMediate } from '@/api/incorruptible'
+import { getTeam, getFloatTeam } from '@/api/incorruptible'
 import vuescroll from 'vuescroll'
+import { mapGetters } from 'vuex'
 export default {
   name: 'volunteer',
   data() {
     return {
-      list: []
+      list: [],
+      dialogVisible: false,
+      req,
+      Team: {
+        teamName: '',
+        describe: '',
+        peopleList: []
+      }
     }
   },
-  computed: {},
+  computed: {
+    ...mapGetters(['token'])
+  },
   watch: {},
-  methods: {},
+  methods: {
+    // 获取队伍
+    getTeamValue(obj) {
+      getFloatTeam({
+        teamNo: obj.id
+      }).then(data => {
+        if (data.code === 0) {
+          console.log(data)
+          let { teamName, describe } = obj
+          this.Team = {
+            teamName,
+            describe,
+            peopleList: data.data
+          }
+          this.dialogVisible = true
+        }
+      })
+    }
+  },
   mounted() {
-    getVolunteer().then(data => {})
-    getMediate().then(data => {
+    getTeam().then(data => {
       if (data.code === 0) {
         this.list = data.data
       }
-      this.$refs['vs'].scrollTo(
-        {
-          y: '500'
-        },
-        1000 * 5
-      )
     })
   },
   components: {
@@ -70,10 +114,16 @@ export default {
   position: absolute;
   top: px2rem(134rem);
   left: px2rem(1344rem);
-  z-index: 1050;
+  z-index: 1055;
   display: flow-root;
+  .popbox {
+    height: px2rem(500rem);
+    p {
+      line-height: px2rem(24rem);
+    }
+  }
   .ul {
-    height: px2rem(330rem);
+    height: px2rem(340rem);
     .li {
       padding: px2rem(6rem) 0 0 px2rem(10rem);
       height: px2rem(160rem);
@@ -105,7 +155,7 @@ export default {
         .p-titles {
           font-size: px2rem(22rem);
           color: rgba(255, 255, 255, 1);
-          margin-bottom: px2rem(20rem);
+          margin-bottom: px2rem(10rem);
           display: inline-block;
           width: px2rem(225rem);
         }
@@ -113,6 +163,8 @@ export default {
           font-size: px2rem(14rem);
           line-height: 24px;
           color: rgba(159, 187, 201, 1);
+          overflow: hidden;
+          height: px2rem(115rem);
         }
       }
     }

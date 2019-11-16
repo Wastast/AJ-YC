@@ -10,7 +10,7 @@
         </div>
         <div class="div">
           <p class="p-title">
-            村集体经济总收入: 万元
+            村人均收入: 万元
           </p>
           <div id="tongji"></div>
         </div>
