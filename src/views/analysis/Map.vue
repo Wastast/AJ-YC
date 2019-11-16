@@ -100,6 +100,7 @@ export default {
       }
     })
     TMapAPI.GetMap().AddEventListener('zoomend', () => {
+      TMapAPI.map.HideLabels()
       this.getZoom()
     })
   },
