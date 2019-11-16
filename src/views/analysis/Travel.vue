@@ -3,9 +3,9 @@
     <module-box title="村情直通车">
       <template slot="content">
         <ul class="ul">
-          <li class="li" v-for="item of list" :key="item.id">
+          <li class="li" v-for="(item, index) of list" :key="item.id" :data-id="index">
             <span class="span span-block"> </span>
-            <span class="span span-text">
+            <span class="span span-text ellipsis" :title="item.title">
               {{ item.title }}
             </span>
             <span class="span span-event ellipsis" :title="item.content">
@@ -14,7 +14,13 @@
             <span class="span span-time">
               {{ item.create_date.slice(0, 10) }}
             </span>
-            <img class="img" :src="item.pic_url[0]" alt="" />
+            <img
+              class="img"
+              :src="
+                `${req}/dwdTourEventInfo/getImg?access_token=${token}&imgUrl=${item.pic_url[0]}`
+              "
+              alt=""
+            />
           </li>
         </ul>
       </template>
@@ -24,27 +30,21 @@
 
 <script>
 import ModuleBox from '@/components/analys-box'
-import { getEvent, getPicUrl } from '@/api/analysis'
+import { getEvent } from '@/api/analysis'
+import { mapGetters } from 'vuex'
 export default {
   name: 'Travel',
   data() {
     return {
-      list: []
+      list: [],
+      req
     }
   },
-  computed: {},
+  computed: {
+    ...mapGetters(['token'])
+  },
   watch: {},
-  methods: {
-    // 获取图片流
-    getImgUrl(url) {
-      getPicUrl({
-        imgUrl: url
-      }).then(data => {
-        console.log(data)
-        console.log(1111111111)
-      })
-    }
-  },
+  methods: {},
   mounted() {
     // 获取事件
     getEvent().then(data => {
@@ -72,6 +72,8 @@ export default {
   top: px2rem(737rem);
   right: px2rem(10rem);
   .ul {
+    height: px2rem(234rem);
+    width: px2rem(494rem);
     .li {
       height: px2rem(47rem);
       line-height: px2rem(47rem);
@@ -100,6 +102,7 @@ export default {
       }
       .span-text {
         left: px2rem(40rem);
+        width: px2rem(75rem);
       }
       .span-event {
         left: px2rem(143rem);

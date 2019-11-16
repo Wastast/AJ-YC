@@ -24,7 +24,7 @@
       <template slot="content">
         <ul class="ul">
           <vuescroll :ops="ops">
-            <li class="li" v-for="(item, index) of list" :key="index">
+            <li class="li" v-for="(item, index) of list" :key="index" @click="getData(item)">
               <span class="span span-type" :title="item.title">{{ item.title }}</span>
               <span class="span span-title ellipsis">{{ item.release_time.slice(0, 10) }}</span>
             </li>
@@ -32,6 +32,19 @@
         </ul>
       </template>
     </party-box>
+    <el-dialog title="财务报表" :visible.sync="dialogVisible" width="40%">
+      <ul class="ul-imgs">
+        <vuescroll :ops="ops" ref="vs">
+          <li class="li" v-for="(item, index) of imgList" :key="index">
+            <img
+              class="img"
+              :src="`${req}/dwdTourEventInfo/getImg?access_token=${token}&imgUrl=${item}`"
+              alt=""
+            />
+          </li>
+        </vuescroll>
+      </ul>
+    </el-dialog>
   </div>
 </template>
 
@@ -39,6 +52,7 @@
 import PartyBox from '@/components/party-box'
 import { getEconomics, getOpenValue } from '@/api/incorruptible'
 import vuescroll from 'vuescroll'
+import { mapGetters } from 'vuex'
 export default {
   name: 'finance',
   data() {
@@ -49,13 +63,32 @@ export default {
         scrollPanel: {},
         rail: {},
         bar: {}
-      }
+      },
+      imgList: [],
+      dialogVisible: false,
+      req
     }
   },
-  computed: {},
+  computed: {
+    ...mapGetters(['token'])
+  },
   watch: {},
-  methods: {},
+  methods: {
+    getData(item) {
+      if (this.$refs['vs']) {
+        this.$refs['vs'].scrollTo(
+          {
+            y: 0
+          },
+          1
+        )
+      }
+      this.imgList = item.imglists
+      this.dialogVisible = true
+    }
+  },
   mounted() {
+    // 获取报表数据
     getEconomics().then(data => {
       let id = data.data[4].node[1].node_code
       getOpenValue({
@@ -80,15 +113,19 @@ export default {
   position: absolute;
   top: px2rem(134rem);
   left: px2rem(41rem);
-  z-index: 1050;
+  z-index: 2011;
   display: flow-root;
   .ul {
     height: px2rem(467rem);
     .li {
       height: px2rem(40rem);
       line-height: px2rem(40rem);
+      cursor: pointer;
       &:nth-child(odd) {
         background: rgba(5, 60, 140, 0.2);
+      }
+      &:hover {
+        background: rgba(5, 60, 140, 0.5);
       }
       .span {
         font-size: px2rem(16rem);
@@ -101,6 +138,16 @@ export default {
       .span-title {
         left: px2rem(400rem);
         color: #83b2ff;
+      }
+    }
+  }
+  .ul-imgs {
+    height: px2rem(480rem);
+    .li {
+      width: px2rem(680rem);
+      img {
+        width: 100%;
+        height: 100%;
       }
     }
   }

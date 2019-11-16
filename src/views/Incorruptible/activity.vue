@@ -4,11 +4,13 @@
       <template slot="content">
         <ul class="ul">
           <vuescroll :ops="ops">
-            <li class="li" v-for="(item, index) of list" :key="index">
-              <span class="span span-type">{{item.teamName}}</span>
-              <span class="span span-title ellipsis" :title="item.title">{{item.title}}</span>
-              <span class="span span-message ellipsis" :title="item.message">{{item.message}}</span>
-              <span class="span span-time">{{(item.createTime + '').slice(0,10)}}</span>
+            <li class="li" v-for="(item, index) of list" :key="index" @click="getCenter(item)">
+              <span class="span span-type ellipsis">{{ item.teamName }}</span>
+              <span class="span span-title ellipsis" :title="item.title">{{ item.title }}</span>
+              <span class="span span-message ellipsis" :title="item.message">{{
+                item.message
+              }}</span>
+              <span class="span span-time">{{ (item.createTime + '').slice(0, 10) }}</span>
             </li>
           </vuescroll>
         </ul>
@@ -46,12 +48,31 @@ export default {
           name: '爱党敬业',
           type: 'jingye'
         }
-      ]
+      ],
+      imgRep: req.slice(0, -2)
     }
   },
   computed: {},
   watch: {},
-  methods: {},
+  methods: {
+    // 设置中心点
+    getCenter(item) {
+      var infoText = `<div class="tmapWindow" style="width: 200px;height: 200px;">
+                    <img src="${this.imgRep + item.images}" width="200" heght="200"> </img>
+                    </div>`
+      var lonlat = new SLonLat(item.lon, item.lat)
+      // TMapAPI.GetMap().SInfoWindow.SetLonLat(lonlat, null, false)
+      TMapAPI.GetMap().SInfoWindow.SetLonLat(lonlat, null, false)
+      // 信息面板显示内容
+      TMapAPI.GetMap().SInfoWindow.SetInnerHTML(infoText)
+      // 面板底部对应图标位置
+      TMapAPI.GetMap().SInfoWindow.SetOffset(new SSize(0, 0))
+      // 信息面板长宽
+      TMapAPI.GetMap().SInfoWindow.SetSize(new SSize(250, 200))
+      TMapAPI.GetMap().SInfoWindow.Show()
+      TMapAPI.map.SetCenter(new SLonLat(item.lon, item.lat), 2)
+    }
+  },
   mounted() {
     getActivity().then(data => {
       if (data.code === 0) {
@@ -118,6 +139,7 @@ export default {
       }
       .span-type {
         left: px2rem(20rem);
+        width: px2rem(56rem);
       }
       .span-title {
         left: px2rem(100rem);

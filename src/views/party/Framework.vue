@@ -73,7 +73,7 @@ export default {
           [
             {
               imgUrl: require('@/assets/party/俞小平.jpg'),
-              name: '余小平'
+              name: '俞小平'
             },
             {
               imgUrl: require('@/assets/party/张苗芳.jpg'),
@@ -85,7 +85,7 @@ export default {
           [
             {
               imgUrl: require('@/assets/party/俞小平.jpg'),
-              name: '余小平'
+              name: '俞小平'
             }
           ],
           [
@@ -108,11 +108,11 @@ export default {
           ],
           [
             {
-              imgUrl: require('@/assets/party/俞小平.jpg'),
+              imgUrl: require('@/assets/party/叶百能.jpg'),
               name: '叶百能'
             },
             {
-              imgUrl: require('@/assets/party/俞小平.jpg'),
+              imgUrl: require('@/assets/party/cde.jpg'),
               name: '俞月仙'
             }
           ]
