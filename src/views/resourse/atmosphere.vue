@@ -21,28 +21,28 @@
             <li class="li">
               <div class="div-text">
                 <p class="p-type">PM2.5</p>
-                <p class="p-value">33 <span>ug/m³</span></p>
+                <p class="p-value">{{pm25}} <span>μg/m³</span></p>
               </div>
               <div class="div-imgbox">
-                <img src="@/assets/resouse/pm@2x.png" alt="">
+                <img src="@/assets/resouse/pm@2x.png" alt="" />
               </div>
             </li>
             <li class="li">
               <div class="div-text">
                 <p class="p-type">气压</p>
-                <p class="p-value">996 <span>hPa</span></p>
+                <p class="p-value">{{pres}} <span>hPa</span></p>
               </div>
               <div class="div-imgbox">
-                <img src="@/assets/resouse/qiya@2x.png" alt="">
+                <img src="@/assets/resouse/qiya@2x.png" alt="" />
               </div>
             </li>
             <li class="li">
               <div class="div-text">
                 <p class="p-type">风速</p>
-                <p class="p-value">1.4 <span>m/s</span></p>
+                <p class="p-value">{{windSpd}} <span>m/s</span></p>
               </div>
               <div class="div-imgbox">
-                <img src="@/assets/resouse/fengsu@2x.png" alt="">
+                <img src="@/assets/resouse/fengsu@2x.png" alt="" />
               </div>
             </li>
           </ul>
@@ -53,28 +53,28 @@
             <li class="li">
               <div class="div-text">
                 <p class="p-type">降雨量</p>
-                <p class="p-value">无降水</p>
+                <p class="p-value">{{pcpn}}</p>
               </div>
               <div class="div-imgbox">
-                <img src="@/assets/resouse/Envirjiangyuliangchuanganqi@2x.png" alt="">
+                <img src="@/assets/resouse/Envirjiangyuliangchuanganqi@2x.png" alt="" />
               </div>
             </li>
             <li class="li">
               <div class="div-text">
-                <p class="p-type">云量</p>
-                <p class="p-value">12.5%</p>
+                <p class="p-type">负氧离子</p>
+                <p class="p-value">{{anion}} <span>/cm³</span></p>
               </div>
               <div class="div-imgbox">
-                <img src="@/assets/resouse/pmcopy@2x.png" alt="">
+                <img src="@/assets/resouse/pmcopy@2x.png" alt="" />
               </div>
             </li>
             <li class="li">
               <div class="div-text">
                 <p class="p-type">二氧化碳浓度</p>
-                <p class="p-value">546 <span>ppm</span></p>
+                <p class="p-value">{{co2}} <span>ppm</span></p>
               </div>
               <div class="div-imgbox">
-                <img src="@/assets/resouse/shidu@2x.png" alt="">
+                <img src="@/assets/resouse/shidu@2x.png" alt="" />
               </div>
             </li>
           </ul>
@@ -86,6 +86,7 @@
 
 <script>
 import PartyBox from '@/components/party-box'
+import { getEnvironmental } from '@/api/analysis'
 export default {
   name: 'atmosphere',
   data() {
@@ -112,13 +113,34 @@ export default {
           label: '北京烤鸭'
         }
       ],
-      value: ''
+      value: '',
+      pm25: '0',
+      tmp: '0',
+      hum: '0',
+      pres: '0',
+      anion: '0',
+      windSpd: '0',
+      pcpn: '0',
+      co2: '0'
     }
   },
   computed: {},
   watch: {},
   methods: {},
-  mounted() {},
+  mounted() {
+    getEnvironmental().then(data => {
+      if (data.code === 0) {
+        let obj = data.data[0]
+        this.pm25 = obj.pm25
+        this.pres = obj.pres
+        this.hum = obj.hum
+        this.anion = obj.anion
+        this.windSpd = obj.windSpd
+        this.pcpn = obj.pcpn
+        this.co2 = obj.co2
+      }
+    })
+  },
   components: { PartyBox }
 }
 </script>
@@ -133,7 +155,7 @@ export default {
 }
 .div-top >>> .el-input__inner {
   border: 1px solid rgba(220, 223, 230, 0);
-  background-color: rgba(0,0,0,0);
+  background-color: rgba(0, 0, 0, 0);
   color: #fff;
 }
 </style>
@@ -157,25 +179,25 @@ export default {
       display: flow-root;
       width: px2rem(266rem);
       position: relative;
-      background: rgba(2,8,28,.3);
+      background: rgba(2, 8, 28, 0.3);
       margin-top: px2rem(13rem);
       float: left;
-      &:nth-child(n+2) {
+      &:nth-child(n + 2) {
         margin-left: px2rem(5rem);
       }
       .p-title {
         position: absolute;
         top: 0;
         left: 0;
-        background:rgba(2,7,26,.8);
-        border-radius:5px;
+        background: rgba(2, 7, 26, 0.8);
+        border-radius: 5px;
         width: px2rem(87rem);
         height: px2rem(31rem);
         text-align: center;
         line-height: px2rem(31rem);
-        color: rgba(161,207,255,1);
+        color: rgba(161, 207, 255, 1);
       }
-      .li{
+      .li {
         height: px2rem(103rem);
         position: relative;
         display: flow-root;
@@ -193,7 +215,7 @@ export default {
           }
           .p-value {
             font-size: px2rem(36rem);
-            font-family: "DS-DIGII";
+            font-family: 'DS-DIGII';
             margin-top: px2rem(10rem);
             span {
               font-size: px2rem(18rem);
@@ -212,7 +234,7 @@ export default {
           }
         }
         &:nth-child(odd) {
-          background:rgba(0,14,41,.66);
+          background: rgba(0, 14, 41, 0.66);
         }
       }
     }

@@ -3,14 +3,23 @@
     <module-box title="村情简介">
       <template slot="content">
         <ul class="ul">
-          <li class="li" v-for="(item, index) of list" :key="index">
+          <li
+            class="li"
+            v-for="(item, index) of list"
+            :key="index"
+            @click="getType(item.type || '')"
+          >
             <img :src="item.imgUrl" alt="" />
             <dl :style="{ color: item.color }">
               <dt>
                 {{ item.name }}
               </dt>
               <dd>
-                <countTo :startVal="parseInt(0)" :endVal="parseFloat(item.value)" :duration="4000"></countTo>
+                <countTo
+                  :startVal="parseInt(0)"
+                  :endVal="parseFloat(item.value)"
+                  :duration="4000"
+                ></countTo>
                 {{ item.unit }}
               </dd>
             </dl>
@@ -63,17 +72,23 @@ export default {
           name: '党员人数',
           value: '0',
           unit: '人',
-          color: 'rgba(232,56,107,1)'
+          color: 'rgba(232,56,107,1)',
+          type: 'dyzj'
         },
         {
           imgUrl: require('@/assets/analysis/wuxing@2x.png'),
           name: '5星之家',
           value: '0',
           unit: '家',
-          color: 'rgba(61,144,246,1)'
+          color: 'rgba(61,144,246,1)',
+          type: 'wxzj'
         }
       ],
-      timer: null
+      timer: null,
+      typeValue: {
+        dyzj: true,
+        wxzj: true
+      }
     }
   },
   computed: {},
@@ -93,6 +108,22 @@ export default {
           })
         }
       })
+    },
+    // 显示隐藏点位
+    showHidePoint() {
+      TMapAPI.HideMarkersByTag('dyzj')
+      TMapAPI.HideMarkersByTag('wzxj')
+    },
+    // 获取type
+    getType(type) {
+      if (type) {
+        if (this.typeValue[type]) {
+          TMapAPI.ShowMarkersByTag(type)
+        } else {
+          TMapAPI.HideMarkersByTag(type)
+        }
+        this.typeValue[type] = !this.typeValue[type]
+      }
     }
   },
   mounted() {

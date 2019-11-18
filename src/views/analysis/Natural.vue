@@ -7,49 +7,49 @@
             <img src="@/assets/analysis/圆角矩形 6@2x.png" alt="" />
             <dl>
               <dt>PM2.5</dt>
-              <dd>33 <span>ug/m³</span></dd>
+              <dd>{{ pm25 }} <span>μg/m³</span></dd>
             </dl>
           </li>
           <li class="li">
             <img src="@/assets/analysis/圆角矩形 6 拷贝 3@2x.png" alt="" />
             <dl>
               <dt>气压</dt>
-              <dd>996 <span>hPa</span></dd>
+              <dd>{{ pres }} <span>hPa</span></dd>
             </dl>
           </li>
           <li class="li">
             <img src="@/assets/analysis/圆角矩形 6 拷贝@2x.png" alt="" />
             <dl>
               <dt>湿度</dt>
-              <dd>55.6 <span>%</span></dd>
+              <dd>{{ hum }} <span>%</span></dd>
             </dl>
           </li>
           <li class="li">
             <img src="@/assets/analysis/圆角矩形 6 拷贝 2@2x(1).png" alt="" />
             <dl>
               <dt>负氧离子</dt>
-              <dd>3700<span>/cm³</span></dd>
+              <dd>{{ anion }}<span>/cm³</span></dd>
             </dl>
           </li>
           <li class="li">
             <img src="@/assets/analysis/圆角矩形 6 拷贝 3@2x.png" alt="" />
             <dl>
               <dt>风速</dt>
-              <dd>1.4m/s</dd>
+              <dd>{{ windSpd }}<span>m/s</span></dd>
             </dl>
           </li>
           <li class="li">
             <img src="@/assets/analysis/圆角矩形 6 拷贝 3@2x(1).png" alt="" />
             <dl>
-              <dt>降雨量</dt>
-              <dd>无降水</dd>
+              <dt>整点降雨量</dt>
+              <dd>{{ pcpn }}</dd>
             </dl>
           </li>
           <li class="li">
             <img src="@/assets/analysis/圆角矩形 6 拷贝 3@2x(2).png" alt="" />
             <dl>
               <dt>二氧化碳浓度</dt>
-              <dd>546 <span>ppm</span></dd>
+              <dd>{{ co2 }} <span>ppm</span></dd>
             </dl>
           </li>
           <li class="li">
@@ -67,28 +67,38 @@
 
 <script>
 import ModuleBox from '@/components/analys-box'
-import { weather } from '@/api/login'
+import { getEnvironmental } from '@/api/analysis'
 
 export default {
   name: 'Natural',
   data() {
     return {
-      pm: '32',
+      pm25: '0',
       tmp: '0',
-      hum: '0'
+      hum: '0',
+      pres: '0',
+      anion: '0',
+      windSpd: '0',
+      pcpn: '0',
+      co2: '0'
     }
   },
   computed: {},
   watch: {},
   methods: {},
   mounted() {
-    weather()
-      .then(data => {
-        let obj = data.HeWeather6[0].now
+    getEnvironmental().then(data => {
+      if (data.code === 0) {
+        let obj = data.data[0]
+        this.pm25 = obj.pm25
+        this.pres = obj.pres
         this.hum = obj.hum
-        this.tmp = obj.tmp
-      })
-      .catch(() => {})
+        this.anion = obj.anion
+        this.windSpd = obj.windSpd
+        this.pcpn = obj.pcpn
+        this.co2 = obj.co2
+      }
+    })
   },
   components: {
     ModuleBox

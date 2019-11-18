@@ -12,6 +12,7 @@
       <img :src="`http://172.26.16.29:8088/HeWeather/${cond_code}.png`" alt="" />
       <span class="span-date">{{ cond_txt }}</span>
       <span class="span-week">{{ tmp }}℃</span>
+      <span v-if="alarmText" class="span-alerm" style="color: red">{{alarmText}}</span>
     </div>
     <div v-if="router !== '/'" class="div-home" @click="jumpHome()"></div>
   </div>
@@ -19,6 +20,7 @@
 
 <script>
 import { weather } from '@/api/login'
+import { getEnvironmental } from '@/api/analysis'
 export default {
   props: {
     title: {
@@ -33,7 +35,8 @@ export default {
       nowDate: '',
       cond_txt: '',
       tmp: '',
-      cond_code: '100'
+      cond_code: '100',
+      alarmText: ''
     }
   },
   computed: {
@@ -85,6 +88,12 @@ export default {
     setInterval(() => {
       this.timeInterval()
     }, 1000)
+    getEnvironmental().then(data => {
+      if (data.code === 0) {
+        let obj = data.data[0]
+        this.alarmText = obj.alarm
+      }
+    })
   }
 }
 </script>
@@ -121,6 +130,9 @@ export default {
     }
     .span-week {
       margin-left: px2rem(15rem);
+    }
+    .span-alerm {
+
     }
   }
   .div-home {

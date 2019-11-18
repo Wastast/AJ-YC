@@ -41,6 +41,7 @@ export default {
       let iconPath = this.imgRep + '/upload/icon/' + img
       // 在地图内添加图标
       let sIcon
+      let sMarker
       if (zIndex) {
         sIcon = new SIcon(
           iconPath,
@@ -48,6 +49,7 @@ export default {
           new SPixel(-width / 2 - 9, -height - 9)
         )
         sIcon.GetDiv().style.zIndex = zIndex
+        sMarker = new SMarker(sLonLat, sIcon, 'dyzj')
       } else {
         sIcon = new SIcon(
           iconPath,
@@ -55,8 +57,8 @@ export default {
           new SPixel(-width / 2 + 9, -height + 9)
         )
         sIcon.GetDiv().style.zIndex = zIndex
+        sMarker = new SMarker(sLonLat, sIcon, 'wxzj')
       }
-      let sMarker = new SMarker(sLonLat, sIcon)
       TMapAPI.markerLayer.AddMarker(sMarker)
       sMarker.AddEventListener('mousemove', item, () => {
         if (zIndex) {
@@ -146,6 +148,8 @@ export default {
           }
         })
         TMapAPI.map.HideLabels()
+        TMapAPI.HideMarkersByTag('dyzj')
+        TMapAPI.HideMarkersByTag('wxzj')
       }
     })
     TMapAPI.GetMap().AddEventListener('zoomend', () => {

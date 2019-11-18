@@ -5,11 +5,13 @@
         <div class="div-top">
           <div class="left">
             <p class="top">实时水位监测</p>
-            <p class="value">{{ value[new Date().getHours()] }} <span style="font-size: 20px;">米</span></p>
+            <p class="value">
+              {{ value[new Date().getHours()] }} <span style="font-size: 20px;">米</span>
+            </p>
           </div>
           <div class="right">
             <p class="top">本月水位峰值</p>
-            <p class="value">11.75 <span style="font-size: 20px;">米</span></p>
+            <p class="value">11.2 <span style="font-size: 20px;">米</span></p>
           </div>
         </div>
         <div class="echarts">
@@ -26,7 +28,6 @@
 <script>
 import PartyBox from '@/components/party-box'
 import { EleResize } from '@/utils/esresize'
-// import { getRepair } from '@/api/analysis'
 export default {
   name: 'level',
   data() {
@@ -37,25 +38,25 @@ export default {
         11.03,
         11.04,
         11.04,
-        11.3,
+        11.1,
         11.06,
         11.1,
-        11.8,
+        11.13,
         11.04,
-        11.8,
-        11.4,
-        11.7,
-        11.05,
-        11.6,
-        11.08,
-        11.7,
+        11.15,
+        11.14,
+        11.11,
+        11.09,
+        11.11,
+        11.12,
+        11.2,
         11.1,
-        11.6,
+        11.13,
         11.08,
-        11.9,
+        11.12,
         11.04,
-        11.5,
-        11.4,
+        11.09,
+        11.12,
         11.08,
         11.09
       ]
@@ -199,28 +200,10 @@ export default {
       }, 1000)
       myChart.clear()
       myChart.setOption(option, true)
-    },
-    // 定时请求数据
-    STI_getValue() {
-      // 请求小时旅游数据
-      // getRepair().then(data => {
-      //   if (data.code === 200) {
-      //     this.echarts_evnet(data)
-      //   }
-      // })
-      // this.timer = setInterval(() => {
-      //   clearInterval(this.qiyeTimer)
-      //   getRepair().then(data => {
-      //     if (data.code === 200) {
-      //       this.echarts_evnet(data)
-      //     }
-      //   })
-      // }, 1000 * 30)
     }
   },
   mounted() {
     this.echarts_evnet()
-    this.STI_getValue()
   },
   beforeDestroy() {
     clearInterval(this.qiyeTimer)

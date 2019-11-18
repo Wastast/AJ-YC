@@ -106,7 +106,8 @@ export default {
       textValue: {
         1: '村民上报信息',
         0: '家园卫队成员上报信息'
-      }
+      },
+      timer: null
     }
   },
   computed: {
@@ -122,24 +123,32 @@ export default {
       this.event.title = obj.title
       this.event.user_type = obj.user_type
       this.dialogVisible = true
+    },
+    // 请求事件
+    requestEvent() {
+      // 获取事件
+      getEvent().then(data => {
+        if (data.code === 200) {
+          console.log(data)
+          let list = data.data.repairList
+          this.list = list
+          this.scroll = new BScroll(this.$refs['wrapper'], {
+            click: true,
+            probeType: 2,
+            mouseWheel: true
+          })
+        }
+      })
     }
   },
   mounted() {
-    // 获取事件
-    getEvent().then(data => {
-      if (data.code === 200) {
-        console.log(data)
-        let list = data.data.repairList
-        this.list = list
-        this.scroll = new BScroll(this.$refs['wrapper'], {
-          click: true,
-          probeType: 2,
-          mouseWheel: true
-        })
-      }
-    })
+    this.requestEvent()
+    this.timer = setInterval(() => {
+      this.requestEvent()
+    }, 1000 * 60)
   },
   beforeDestroy() {
+    clearInterval(this.timer)
     this.scroll.destroy()
   },
   components: {

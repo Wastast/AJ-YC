@@ -5,7 +5,7 @@
         <div class="box">
           <div class="list">
             <ul class="ul">
-              <li class="li" v-for="item of list" :key="item.color">
+              <li class="li" v-for="(item,index) of list" :key="index">
                 <span class="span span-block" :style="{ background: item.color }"></span>
                 <span class="span span-type" :style="{ color: item.type === '用电安全' || '消防水压' ? item.color :''  }">{{ item.type }}</span>
                 <!-- <span class="span span-value">{{ (item.value / 53 * 100).toFixed(1)}}%</span> -->

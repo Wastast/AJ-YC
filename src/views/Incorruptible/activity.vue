@@ -81,6 +81,7 @@ export default {
   mounted() {
     getActivity().then(data => {
       if (data.code === 0) {
+        console.log(data)
         this.list = data.data
       }
     })

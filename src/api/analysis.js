@@ -20,3 +20,6 @@ export const getOrign = data => get('/dwsTourSelfDriveTouristsFromCityD/getCityD
 
 // 获取图片资源
 export const getPicUrl = data => get('/dwdTourEventInfo/getImg', data)
+
+// 环境数据接口
+export const getEnvironmental = data => get('/dwsTourWeatherMonitorRt', data)
