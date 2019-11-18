@@ -91,14 +91,22 @@ TTuJing.prototype.drawRangeLableFire = function(item) {
 // 绘制标签lable
 TTuJing.prototype.drawRangeLableMs = function(item) {
   // 地址，联系人，联系电话，订餐桌数，房间数
+  var countIn = parseInt((item.roomNum || 0) * 0.6)
+  var countSy = item.roomNum - countIn
+  var p = 0
+  if (item.roomNum !== 0) {
+    p = ((parseFloat(countIn) / parseFloat(item.roomNum)) * 100).toFixed(2)
+  }
   var infoText = `<div class="tmapWindowFire">
-                    <p>名宿</p>
+                    <p>民宿</p>
                     <p>名称：${item.name}</p>
                     <p>地址：${item.address || ''}</p>
                     <p>联系人：${item.person || ''}</p>
                     <p>联系电话：${item.phone || ''}</p>
                     <p>订餐桌数：${item.tableNum || ''}</p>
-                    <p>房间数：${item.roomNum || ''}</p>
+                    <p>房间数：${item.roomNum || 0}</p>
+                    <p>剩余房间数：${countSy}</p>
+                    <p>入住率：${p}%</p>
                   </div>`
   var sLonLat = new SLonLat(item.lon, item.lat)
   var lbl = new SLabel(null, sLonLat, null, infoText)

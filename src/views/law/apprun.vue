@@ -74,7 +74,7 @@ export default {
           color: '#00CAE8'
         },
         {
-          type: '不满意',
+          type: '基本满意',
           value: '2102人',
           baifen: '0.02',
           imgUrl: require('@/assets/law/down.png'),

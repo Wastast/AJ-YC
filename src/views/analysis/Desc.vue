@@ -53,7 +53,7 @@ export default {
         },
         {
           imgUrl: require('@/assets/analysis/zichan@2x.png'),
-          name: '总收入',
+          name: '集体经济收入',
           value: '0',
           unit: '万元',
           color: 'rgba(168,83,233,1)'
