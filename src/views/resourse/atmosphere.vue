@@ -52,7 +52,7 @@
             </p> -->
             <li class="li">
               <div class="div-text">
-                <p class="p-type">降雨量</p>
+                <p class="p-type">整点降雨量</p>
                 <p class="p-value">{{pcpn}}</p>
               </div>
               <div class="div-imgbox">
