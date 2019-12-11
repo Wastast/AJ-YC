@@ -12,15 +12,15 @@
       <img :src="`http://172.26.16.29:8088/HeWeather/${cond_code}.png`" alt="" />
       <span class="span-date">{{ cond_txt }}</span>
       <span class="span-week">{{ tmp }}℃</span>
-      <span v-if="alarmText" class="span-alerm" style="color: red">{{alarmText}}</span>
+      <span v-if="alarmText" class="span-alerm" style="color: red">{{ alarmText }}</span>
     </div>
     <div v-if="router !== '/'" class="div-home" @click="jumpHome()"></div>
   </div>
 </template>
 
 <script>
-import { weather } from '@/api/login'
-import { getEnvironmental } from '@/api/analysis'
+import { weather } from '@/api/login';
+import { getEnvironmental } from '@/api/analysis';
 export default {
   props: {
     title: {
@@ -37,65 +37,64 @@ export default {
       tmp: '',
       cond_code: '100',
       alarmText: ''
-    }
+    };
   },
   computed: {
     router() {
-      return this.$route.path
+      return this.$route.path;
     }
   },
   watch: {},
   methods: {
     // 跳转到首页
     jumpHome() {
-      this.$router.push({ path: '/' })
+      this.$router.push({ path: '/' });
     },
     timeInterval() {
-      let now = new Date()
-      this.timeHHMMSS(now)
-      this.timeWeek(now)
-      this.timeYYYYMMDD(now)
+      let now = new Date();
+      this.timeHHMMSS(now);
+      this.timeWeek(now);
+      this.timeYYYYMMDD(now);
     },
     timeWeek(now) {
-      let weekDay = now.getDay()
-      let week = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
-      this.nowWeek = week[weekDay]
+      let weekDay = now.getDay();
+      let week = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+      this.nowWeek = week[weekDay];
     },
     timeYYYYMMDD(now) {
-      let y = now.getFullYear()
-      let m = now.getMonth() + 1
-      let d = now.getDate()
-      m = m < 10 ? '0' + m : m
-      d = d < 10 ? '0' + d : d
-      this.nowDate = y + '年' + m + '月' + d + '日'
+      let y = now.getFullYear();
+      let m = now.getMonth() + 1;
+      let d = now.getDate();
+      m = m < 10 ? '0' + m : m;
+      d = d < 10 ? '0' + d : d;
+      this.nowDate = y + '年' + m + '月' + d + '日';
     },
     timeHHMMSS(now) {
-      this.nowTime = now.toTimeString().slice(0, 8)
+      this.nowTime = now.toTimeString().slice(0, 8);
     },
     getWether() {
       weather().then(data => {
-        console.log(data)
-        let obj = data.HeWeather6[0].now
-        this.cond_txt = obj.cond_txt
-        this.tmp = obj.tmp
-        this.cond_code = obj.cond_code
-      })
+        let obj = data.HeWeather6[0].now;
+        this.cond_txt = obj.cond_txt;
+        this.tmp = obj.tmp;
+        this.cond_code = obj.cond_code;
+      });
     }
   },
   mounted() {
-    this.timeInterval()
-    this.getWether()
+    this.timeInterval();
+    this.getWether();
     setInterval(() => {
-      this.timeInterval()
-    }, 1000)
+      this.timeInterval();
+    }, 1000);
     getEnvironmental().then(data => {
       if (data.code === 0) {
-        let obj = data.data[0]
-        this.alarmText = obj.alarm
+        let obj = data.data[0];
+        this.alarmText = obj.alarm;
       }
-    })
+    });
   }
-}
+};
 </script>
 
 <style scoped lang="scss">
@@ -130,9 +129,6 @@ export default {
     }
     .span-week {
       margin-left: px2rem(15rem);
-    }
-    .span-alerm {
-
     }
   }
   .div-home {

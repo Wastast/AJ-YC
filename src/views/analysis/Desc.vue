@@ -31,9 +31,9 @@
 </template>
 
 <script>
-import ModuleBox from '@/components/analys-box'
-import { getDesc } from '@/api/analysis'
-import countTo from 'vue-count-to'
+import ModuleBox from '@/components/analys-box';
+import { getDesc } from '@/api/analysis';
+import countTo from 'vue-count-to';
 export default {
   name: 'event',
   data() {
@@ -89,7 +89,7 @@ export default {
         dyzj: true,
         wxzj: true
       }
-    }
+    };
   },
   computed: {},
   watch: {},
@@ -99,47 +99,47 @@ export default {
       getDesc().then(data => {
         if (data.code === 200) {
           this.list.forEach((item, index) => {
-            let name = item.name
+            let name = item.name;
             data.data.map(e => {
               if (e.name === name) {
-                item.value = e.value
+                item.value = e.value;
               }
-            })
-          })
+            });
+          });
         }
-      })
+      });
     },
     // 显示隐藏点位
     showHidePoint() {
-      TMapAPI.HideMarkersByTag('dyzj')
-      TMapAPI.HideMarkersByTag('wzxj')
+      TMapAPI.HideMarkersByTag('dyzj');
+      TMapAPI.HideMarkersByTag('wzxj');
     },
     // 获取type
     getType(type) {
       if (type) {
         if (this.typeValue[type]) {
-          TMapAPI.ShowMarkersByTag(type)
+          TMapAPI.ShowMarkersByTag(type);
         } else {
-          TMapAPI.HideMarkersByTag(type)
+          TMapAPI.HideMarkersByTag(type);
         }
-        this.typeValue[type] = !this.typeValue[type]
+        this.typeValue[type] = !this.typeValue[type];
       }
     }
   },
   mounted() {
-    this.getValue()
+    this.getValue();
     this.timer = setInterval(() => {
-      this.getValue()
-    }, 1000 * 60 * 5)
+      this.getValue();
+    }, 1000 * 60 * 5);
   },
   beforeDestroy() {
-    clearInterval(this.timer)
+    clearInterval(this.timer);
   },
   components: {
     ModuleBox,
     countTo
   }
-}
+};
 </script>
 
 <style scoped lang="scss">

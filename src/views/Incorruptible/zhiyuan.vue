@@ -15,7 +15,11 @@
               {{ type === 'huodong' ? '今日志愿活动' : '今日志愿者' }}
             </div>
             <li class="li" v-for="(item, index) of valueList" :key="index">
-              <span class="span span-huodong ellipsis" :style="{left: type === 'zhiyuan' ? '2rem' : '' }" :title="item.name">
+              <span
+                class="span span-huodong ellipsis"
+                :style="{ left: type === 'zhiyuan' ? '2rem' : '' }"
+                :title="item.name"
+              >
                 {{ item.name }}
               </span>
               <span class="span span-time ellipsis" :title="item.time">
@@ -47,15 +51,15 @@
       :destroy-on-close="true"
     >
       <div class="popbox">
-        <p>队伍名称: {{value.name}}</p>
-        <p>队伍介绍: {{value.desc}}</p>
+        <p>队伍名称: {{ value.name }}</p>
+        <p>队伍介绍: {{ value.desc }}</p>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import PartyBox from '@/components/party-box'
+import PartyBox from '@/components/party-box';
 export default {
   name: 'zhiyuan',
   data() {
@@ -172,36 +176,36 @@ export default {
         desc: ''
       },
       timer: null
-    }
+    };
   },
   computed: {},
   watch: {
     type() {
-      this.valueList = this.typeValue[this.type]
+      this.valueList = this.typeValue[this.type];
     }
   },
   methods: {
     checkTyep() {
-      this.type = this.type === 'huodong' ? 'zhiyuan' : 'huodong'
+      this.type = this.type === 'huodong' ? 'zhiyuan' : 'huodong';
     },
     getValue(obj) {
-      this.value = obj
-      this.dialogVisible = true
+      this.value = obj;
+      this.dialogVisible = true;
     }
   },
   mounted() {
-    this.type = 'huodong'
+    this.type = 'huodong';
     this.timer = setInterval(() => {
-      this.checkTyep()
-    }, 1000 * 5)
+      this.checkTyep();
+    }, 1000 * 5);
   },
   beforeDestroy() {
-    clearInterval(this.timer)
+    clearInterval(this.timer);
   },
   components: {
     PartyBox
   }
-}
+};
 </script>
 
 <style scoped>

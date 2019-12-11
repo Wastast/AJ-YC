@@ -15,9 +15,9 @@
 </template>
 
 <script>
-import ModuleBox from '@/components/analys-box'
-import { EleResize } from '@/utils/esresize'
-import { getSatisfied, getGovernment } from '@/api/law'
+import ModuleBox from '@/components/analys-box';
+import { EleResize } from '@/utils/esresize';
+import { getSatisfied, getGovernment } from '@/api/law';
 export default {
   name: 'Event',
   data() {
@@ -28,44 +28,44 @@ export default {
         manyi: '代办办件群众满意率'
       },
       qiyeTimer: null
-    }
+    };
   },
   computed: {},
   watch: {
     moduleType(newValue, oldValue) {
       if (this.qiyeTimer) {
-        clearInterval(this.qiyeTimer)
+        clearInterval(this.qiyeTimer);
       }
       if (this.moduleType === 'run') {
         // 政府办事事项
         getGovernment().then(data => {
           if (data.code === 200) {
-            let typeArr = data.type
-            this.echarts_evnet(typeArr, data.data)
+            let typeArr = data.type;
+            this.echarts_evnet(typeArr, data.data);
           }
-        })
+        });
       } else {
         // 请求满意度调查数据
         getSatisfied().then(data => {
           if (data.code === 200) {
             let typeArr = data.data.map(item => {
-              return item.name
-            })
-            this.ecahrt_manyi(typeArr, data.data)
+              return item.name;
+            });
+            this.ecahrt_manyi(typeArr, data.data);
           }
-        })
+        });
       }
     }
   },
   methods: {
     // 事件柱状图
     echarts_evnet(typeArr, data) {
-      let myChart = this.$echarts.init(document.getElementById('events'))
-      let resizeDiv = document.getElementById('events')
+      let myChart = this.$echarts.init(document.getElementById('events'));
+      let resizeDiv = document.getElementById('events');
       let listener = () => {
-        myChart.resize()
-      }
-      EleResize.on(resizeDiv, listener)
+        myChart.resize();
+      };
+      EleResize.on(resizeDiv, listener);
       let option = {
         tooltip: {
           trigger: 'axis',
@@ -148,41 +148,41 @@ export default {
             }
           }
         ]
-      }
-      let index = 0
+      };
+      let index = 0;
       this.qiyeTimer = setInterval(() => {
-        var dataLen = option.series[0].data.length
+        var dataLen = option.series[0].data.length;
         // 取消之前高亮的图形
         myChart.dispatchAction({
           type: 'downplay',
           seriesIndex: 0,
           dataIndex: index
-        })
+        });
         // 高亮当前图形
         myChart.dispatchAction({
           type: 'highlight',
           seriesIndex: 0,
           dataIndex: index
-        })
+        });
         // 显示 tooltip
         myChart.dispatchAction({
           type: 'showTip',
           seriesIndex: 0,
           dataIndex: index
-        })
-        index = (index + 1) % dataLen
-      }, 1000)
-      myChart.clear()
-      myChart.setOption(option, true)
+        });
+        index = (index + 1) % dataLen;
+      }, 1000);
+      myChart.clear();
+      myChart.setOption(option, true);
     },
     // 满意度饼图
     ecahrt_manyi(typeArr, data) {
-      let myChart = this.$echarts.init(document.getElementById('events'))
-      let resizeDiv = document.getElementById('events')
+      let myChart = this.$echarts.init(document.getElementById('events'));
+      let resizeDiv = document.getElementById('events');
       let listener = () => {
-        myChart.resize()
-      }
-      EleResize.on(resizeDiv, listener)
+        myChart.resize();
+      };
+      EleResize.on(resizeDiv, listener);
       let option = {
         color: ['#044B9C', '#ECB32B', '#CB371F'],
         tooltip: {
@@ -227,48 +227,48 @@ export default {
             data: data
           }
         ]
-      }
-      let index = 0
+      };
+      let index = 0;
       this.qiyeTimer = setInterval(() => {
-        var dataLen = option.series[0].data.length
+        var dataLen = option.series[0].data.length;
         // 取消之前高亮的图形
         myChart.dispatchAction({
           type: 'downplay',
           seriesIndex: 0,
           dataIndex: index
-        })
-        index = (index + 1) % dataLen
+        });
+        index = (index + 1) % dataLen;
         // 高亮当前图形
         myChart.dispatchAction({
           type: 'highlight',
           seriesIndex: 0,
           dataIndex: index
-        })
+        });
         // 显示 tooltip
         myChart.dispatchAction({
           type: 'showTip',
           seriesIndex: 0,
           dataIndex: index
-        })
-      }, 1000)
-      myChart.clear()
-      myChart.setOption(option, true)
+        });
+      }, 1000);
+      myChart.clear();
+      myChart.setOption(option, true);
     },
     checkModule() {
       if (this.moduleType === 'run') {
-        this.moduleType = 'manyi'
+        this.moduleType = 'manyi';
       } else {
-        this.moduleType = 'run'
+        this.moduleType = 'run';
       }
     }
   },
   mounted() {
-    this.moduleType = 'run'
+    this.moduleType = 'run';
   },
   components: {
     ModuleBox
   }
-}
+};
 </script>
 
 <style scoped lang="scss">

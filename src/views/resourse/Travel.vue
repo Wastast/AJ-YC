@@ -47,9 +47,7 @@
                   <p class="p-city">
                     {{ item.province }}
                   </p>
-                  <p class="span-value">
-                    {{ ((item.num / AllSum) * 100).toFixed(2)}}%
-                  </p>
+                  <p class="span-value">{{ ((item.num / AllSum) * 100).toFixed(2) }}%</p>
                 </div>
               </li>
             </ul>
@@ -61,11 +59,11 @@
 </template>
 
 <script>
-import PartyBox from '@/components/party-box'
-import { getConsumption, getSex, getAge, getTouristOrign, getTourData } from '@/api/resourse'
-import { EleResize } from '@/utils/esresize'
-import countTo from 'vue-count-to'
-import { getRepair } from '@/api/analysis'
+import PartyBox from '@/components/party-box';
+import { getConsumption, getSex, getAge, getTouristOrign, getTourData } from '@/api/resourse';
+import { EleResize } from '@/utils/esresize';
+import countTo from 'vue-count-to';
+import { getRepair } from '@/api/analysis';
 export default {
   name: 'Travel',
   data() {
@@ -91,52 +89,52 @@ export default {
         consumption: () => {
           return new Promise((resolve, reject) => {
             getConsumption().then(data => {
-              resolve(data)
-            })
-          })
+              resolve(data);
+            });
+          });
         },
         age: () => {
           return new Promise((resolve, reject) => {
             getAge().then(data => {
-              resolve(data)
-            })
-          })
+              resolve(data);
+            });
+          });
         },
         sex: () => {
           return new Promise((resolve, reject) => {
             getSex().then(data => {
-              resolve(data)
-            })
-          })
+              resolve(data);
+            });
+          });
         }
       },
       TourData: 0,
       qiyeTimer: null,
       AllSum: 0
-    }
+    };
   },
   computed: {},
   watch: {
     type(newValue, oldValue) {
-      this.getValue(newValue)
+      this.getValue(newValue);
     }
   },
   methods: {
     // 切换type
     checkType(type) {
       if (this.type === type) {
-        return
+        return;
       }
-      this.type = type
+      this.type = type;
     },
     // 查询人群画像数据
     echarts_kakou(type, data) {
-      let myChart = this.$echarts.init(document.getElementById('renqun'))
-      let resizeDiv = document.getElementById('renqun')
+      let myChart = this.$echarts.init(document.getElementById('renqun'));
+      let resizeDiv = document.getElementById('renqun');
       let listener = () => {
-        myChart.resize()
-      }
-      EleResize.on(resizeDiv, listener)
+        myChart.resize();
+      };
+      EleResize.on(resizeDiv, listener);
       let option = {
         color: ['#00E5A2', '#00A1D6', '#C56721', '#E94700', '#AD0041', '#9E00BB'],
         tooltip: {
@@ -183,43 +181,43 @@ export default {
             data: data
           }
         ]
-      }
-      let index = 0
+      };
+      let index = 0;
       this.qiyeTimer = setInterval(() => {
-        var dataLen = option.series[0].data.length
+        var dataLen = option.series[0].data.length;
         // 取消之前高亮的图形
         myChart.dispatchAction({
           type: 'downplay',
           seriesIndex: 0,
           dataIndex: index
-        })
-        index = (index + 1) % dataLen
+        });
+        index = (index + 1) % dataLen;
         // 高亮当前图形
         myChart.dispatchAction({
           type: 'highlight',
           seriesIndex: 0,
           dataIndex: index
-        })
+        });
         // 显示 tooltip
         myChart.dispatchAction({
           type: 'showTip',
           seriesIndex: 0,
           dataIndex: index
-        })
-      }, 1000)
-      myChart.clear()
-      myChart.setOption(option, true)
+        });
+      }, 1000);
+      myChart.clear();
+      myChart.setOption(option, true);
     },
     // 获取人群画像数据
     async getValue(type) {
-      let data = await this.typeFn[type]()
+      let data = await this.typeFn[type]();
       let typeArr = data.data.map(item => {
-        return item.name
-      })
+        return item.name;
+      });
       if (this.qiyeTimer) {
-        clearInterval(this.qiyeTimer)
+        clearInterval(this.qiyeTimer);
       }
-      this.echarts_kakou(typeArr, data.data)
+      this.echarts_kakou(typeArr, data.data);
     },
     // 获取游客来源地分析
     Orign() {
@@ -228,49 +226,49 @@ export default {
           if (data.code === 200) {
             // 总数
             let AllSum = data.data.map(item => {
-              return item.num
-            })
-            this.AllSum = AllSum.reduce((a, b) => a + b)
-            let arr = data.data.slice(5)
-            let sum = 0
+              return item.num;
+            });
+            this.AllSum = AllSum.reduce((a, b) => a + b);
+            let arr = data.data.slice(5);
+            let sum = 0;
             arr.forEach(item => {
-              sum += item.num
-            })
+              sum += item.num;
+            });
             let obj = {
               province: '其他',
               num: sum
-            }
-            this.list = data.data.slice(0, 5)
-            this.list.push(obj)
+            };
+            this.list = data.data.slice(0, 5);
+            this.list.push(obj);
           }
         })
-        .catch(() => {})
+        .catch(() => {});
     },
     // 获取游客实时数据
     realTime() {
       getTourData().then(data => {
         if (data.code) {
-          this.TourData = data.number
+          this.TourData = data.number;
         }
-      })
+      });
     }
   },
   beforeDestroy() {
-    clearInterval(this.qiyeTimer)
+    clearInterval(this.qiyeTimer);
   },
   mounted() {
-    this.type = 'consumption'
-    this.Orign()
-    this.realTime()
+    this.type = 'consumption';
+    this.Orign();
+    this.realTime();
     getRepair().then(data => {
       if (data.code === 200) {
-        let sum = data.number.reduce((a, b) => a + b)
-        this.nowSum = sum
+        let sum = data.number.reduce((a, b) => a + b);
+        this.nowSum = sum;
       }
-    })
+    });
   },
   components: { PartyBox, countTo }
-}
+};
 </script>
 
 <style scoped>

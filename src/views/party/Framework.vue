@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import PartyBox from '@/components/party-box'
+import PartyBox from '@/components/party-box';
 export default {
   name: 'Framework',
   data() {
@@ -137,7 +137,7 @@ export default {
         ]
       },
       list: []
-    }
+    };
   },
   computed: {},
   watch: {},
@@ -145,19 +145,19 @@ export default {
     // 切换type值
     check(type) {
       if (this.type === type) {
-        return
+        return;
       }
-      this.type = type
-      this.list = this.dataValue[this.type]
+      this.type = type;
+      this.list = this.dataValue[this.type];
     }
   },
   mounted() {
-    this.list = this.dataValue[this.type]
+    this.list = this.dataValue[this.type];
   },
   components: {
     PartyBox
   }
-}
+};
 </script>
 
 <style scoped lang="scss">

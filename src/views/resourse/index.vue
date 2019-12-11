@@ -12,19 +12,19 @@
 </template>
 
 <script>
-import RHeader from '@/components/Header'
-import RTrash from './Trash'
-import RTravel from './Travel'
-import RAlarm from './alarm'
-import RAtmosphere from './atmosphere'
-import RBayonet from './bayonet'
-import RLevel from './level'
-import RQuality from './quality'
-import { resize } from '@/mixin'
+import RHeader from '@/components/Header';
+import RTrash from './Trash';
+import RTravel from './Travel';
+import RAlarm from './alarm';
+import RAtmosphere from './atmosphere';
+import RBayonet from './bayonet';
+import RLevel from './level';
+import RQuality from './quality';
+import { resize } from '@/mixin';
 export default {
   name: 'home',
   data() {
-    return {}
+    return {};
   },
   computed: {},
   watch: {},
@@ -41,7 +41,7 @@ export default {
     RQuality
   },
   mixins: [resize]
-}
+};
 </script>
 
 <style scoped lang="scss">

@@ -5,18 +5,18 @@
 </template>
 
 <script>
-import PartyBox from '@/components/party-box'
+import PartyBox from '@/components/party-box';
 export default {
   name: 'public',
   data() {
-    return {}
+    return {};
   },
   computed: {},
   watch: {},
   methods: {},
   mounted() {},
   components: { PartyBox }
-}
+};
 </script>
 
 <style scoped lang="scss">

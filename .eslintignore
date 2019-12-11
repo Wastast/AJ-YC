@@ -1,5 +1,5 @@
-build/*.js
 src/assets
+src/icons
 public
 dist
-src/icons
+node_modules

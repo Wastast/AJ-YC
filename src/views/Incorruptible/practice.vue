@@ -52,9 +52,9 @@
 </template>
 
 <script>
-import PartyBox from '@/components/party-box'
-import { getPracticeInfo } from '@/api/incorruptible'
-import { EleResize } from '@/utils/esresize'
+import PartyBox from '@/components/party-box';
+import { getPracticeInfo } from '@/api/incorruptible';
+import { EleResize } from '@/utils/esresize';
 export default {
   name: 'practice',
   data() {
@@ -79,19 +79,19 @@ export default {
           unit: '次'
         }
       ]
-    }
+    };
   },
   computed: {},
   watch: {},
   methods: {
     // 文明实践模块
     echart_frequency() {
-      let myChart = this.$echarts.init(document.getElementById('wenming'))
-      let resizeDiv = document.getElementById('wenming')
+      let myChart = this.$echarts.init(document.getElementById('wenming'));
+      let resizeDiv = document.getElementById('wenming');
       let listener = () => {
-        myChart.resize()
-      }
-      EleResize.on(resizeDiv, listener)
+        myChart.resize();
+      };
+      EleResize.on(resizeDiv, listener);
       let option = {
         color: [
           '#FF0000 ',
@@ -196,54 +196,54 @@ export default {
             ]
           }
         ]
-      }
-      let index = 0
+      };
+      let index = 0;
       this.gaopinTimer = setInterval(() => {
-        var dataLen = option.series[0].data.length
+        var dataLen = option.series[0].data.length;
         // 取消之前高亮的图形
         myChart.dispatchAction({
           type: 'downplay',
           seriesIndex: 0,
           dataIndex: index
-        })
-        index = (index + 1) % dataLen
+        });
+        index = (index + 1) % dataLen;
         // 高亮当前图形
         myChart.dispatchAction({
           type: 'highlight',
           seriesIndex: 0,
           dataIndex: index
-        })
+        });
         // 显示 tooltip
         myChart.dispatchAction({
           type: 'showTip',
           seriesIndex: 0,
           dataIndex: index
-        })
-      }, 1000)
-      myChart.clear()
-      myChart.setOption(option, true)
+        });
+      }, 1000);
+      myChart.clear();
+      myChart.setOption(option, true);
     }
   },
   mounted() {
-    this.echart_frequency()
+    this.echart_frequency();
     getPracticeInfo().then(data => {
       if (data.code === 0) {
-        this.list = data.data.slice(0, 2)
+        this.list = data.data.slice(0, 2);
       }
-    })
+    });
     this.timer = setInterval(() => {
-      clearInterval(this.gaopinTimer)
-      this.echart_frequency()
-    }, 1000 * 60)
+      clearInterval(this.gaopinTimer);
+      this.echart_frequency();
+    }, 1000 * 60);
   },
   components: {
     PartyBox
   },
   beforeDestroy() {
-    clearInterval(this.gaopinTimer)
-    clearInterval(this.timer)
+    clearInterval(this.gaopinTimer);
+    clearInterval(this.timer);
   }
-}
+};
 </script>
 
 <style scoped lang="scss">

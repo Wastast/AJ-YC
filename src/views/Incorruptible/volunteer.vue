@@ -43,10 +43,10 @@
 </template>
 
 <script>
-import PartyBox from '@/components/party-box'
-import { getTeam, getFloatTeam } from '@/api/incorruptible'
-import vuescroll from 'vuescroll'
-import { mapGetters } from 'vuex'
+import PartyBox from '@/components/party-box';
+import { getTeam, getFloatTeam } from '@/api/incorruptible';
+import vuescroll from 'vuescroll';
+import { mapGetters } from 'vuex';
 export default {
   name: 'volunteer',
   data() {
@@ -59,7 +59,7 @@ export default {
         describe: '',
         peopleList: []
       }
-    }
+    };
   },
   computed: {
     ...mapGetters(['token'])
@@ -72,31 +72,31 @@ export default {
         teamNo: obj.id
       }).then(data => {
         if (data.code === 0) {
-          console.log(data)
-          let { teamName, describe } = obj
+          console.log(data);
+          let { teamName, describe } = obj;
           this.Team = {
             teamName,
             describe,
             peopleList: data.data
-          }
-          this.dialogVisible = true
+          };
+          this.dialogVisible = true;
         }
-      })
+      });
     }
   },
   mounted() {
     getTeam().then(data => {
-      console.log(data)
+      console.log(data);
       if (data.code === 0) {
-        this.list = data.data
+        this.list = data.data;
       }
-    })
+    });
   },
   components: {
     PartyBox,
     vuescroll
   }
-}
+};
 </script>
 
 <style scoped>

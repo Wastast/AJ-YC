@@ -1,7 +1,7 @@
 <template>
   <div class="index">
     <div class="div-header">
-      {{title}}
+      {{ title }}
     </div>
     <div class="div-content">
       <slot name="content"></slot>
@@ -19,13 +19,13 @@ export default {
   },
   name: 'index',
   data() {
-    return {}
+    return {};
   },
   computed: {},
   watch: {},
   methods: {},
   mounted() {}
-}
+};
 </script>
 
 <style scoped lang="scss">

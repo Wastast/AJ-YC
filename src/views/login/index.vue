@@ -1,88 +1,170 @@
 <template>
-  <div class="index">
-    <div class="login">
-      <div class="logo"></div>
+  <div class="login">
+    <div class="login-box">
+      <div class="logo">
+        <img src="@/assets/login/ab88e081ec9a239f0b8379f57a729cc.jpg" alt="没有图标" />
+      </div>
       <div class="text">
         余村数字乡村
       </div>
       <div class="denglu">
-        <div class="user">
-          <span>
-            账号
-          </span>
-          <input type="text" v-model="user.username" />
-        </div>
-        <div class="password" @keyup.enter="login()">
-          <span>
-            密码
-          </span>
-          <input type="password" v-model="user.password" />
-        </div>
+        <el-form
+          ref="form"
+          :rules="loginRules"
+          class="form-box"
+          :model="loginForm"
+          label-width="0.6rem"
+        >
+          <el-form-item prop="username">
+            <span class="span el-icon-user-solid"> </span>
+            <el-input
+              ref="username"
+              v-model="loginForm.username"
+              placeholder="请输入用户名"
+              name="username"
+              type="text"
+              @keyup.enter.native="login"
+            />
+          </el-form-item>
+          <el-form-item prop="password">
+            <span class="span el-icon-lock"> </span>
+            <el-input
+              :key="passwordType"
+              ref="password"
+              v-model="loginForm.password"
+              :type="passwordType"
+              placeholder="请输入密码"
+              name="password"
+              :show-password="true"
+              @keyup.enter.native="login"
+            />
+          </el-form-item>
+        </el-form>
       </div>
-      <div class="loging" @click="login()">
-        登录
-      </div>
+      <el-button @click="login()" class="loging" type="primary" :loading="loading">
+        {{ loading ? '登录中' : '登录' }}
+      </el-button>
     </div>
   </div>
 </template>
 
 <script>
-import { TipsPop } from '@/utils/el_ui.js'
-import { setToken } from '@/utils/auth.js'
-import { userLogin } from '@/api/login'
-
+import { TipsPop } from '@/utils/el_ui.js';
+import { setToken } from '@/utils/auth.js';
+import { userLogin } from '@/api/login';
 export default {
-  name: 'index',
+  name: 'login',
   data() {
-    return {
-      user: {
-        password: '',
-        username: ''
+    // 用户名验证
+    const validateUsername = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请输入用户名'));
+      } else {
+        callback();
       }
-    }
+    };
+    // 密码验证
+    const validatePassword = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('请输入密码'));
+      } else {
+        callback();
+      }
+    };
+    return {
+      loginForm: {
+        username: '',
+        password: ''
+      },
+      loginRules: {
+        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+      },
+      loading: false,
+      passwordType: 'password',
+      redirect: undefined
+    };
   },
+  computed: {},
+  watch: {},
   methods: {
     // 登录
     login() {
-      let { password, username } = this.user
-      if (password === '' || username === '') {
-        TipsPop({
-          message: '账号或者密码不允许为空,请输入有效数据',
-          type: 'info'
-        })
-        return
-      }
-      userLogin({
-        username,
-        password
-      }).then(data => {
-        if (data.code === 200) {
-          TipsPop({
-            message: '登录成功'
-          })
-          setToken(data.access_token)
-          setTimeout(() => {
-            this.$router.push({ path: '/' })
-          }, 1000)
-        } else {
-          TipsPop({
-            message: '登录失败,密码或者账号不正确',
-            type: 'error'
-          })
+      this.$refs['form'].validate(valid => {
+        if (valid) {
+          this.loading = true;
+          let { username, password } = this.loginForm;
+          userLogin({
+            username,
+            password
+          }).then(data => {
+            if (data.code === 200) {
+              TipsPop({
+                message: '登录成功'
+              });
+              setToken(data.access_token);
+              setTimeout(() => {
+                this.$router.push({ path: '/' });
+              }, 500);
+            } else {
+              TipsPop({
+                message: '登录失败,密码或者账号不正确',
+                type: 'error'
+              });
+            }
+            this.loading = false;
+          });
         }
-      })
+      });
     }
-  }
-}
+  },
+  mounted() {},
+  components: {}
+};
 </script>
 
+<style scoped>
+.login-box .denglu >>> .el-form-item {
+  color: #454545;
+  border-radius: 50px;
+  background: #fff;
+}
+.login-box .denglu >>> .el-input input {
+  background: transparent;
+  border: 0px;
+  -webkit-appearance: none;
+  border-radius: 0px;
+  height: 0.94rem;
+  color: #000;
+  font-size: 0.32rem;
+  padding: 0;
+  text-indent: 1em;
+  line-height: 0.8rem;
+}
+.login-box .denglu >>> .el-input {
+  display: inline-block;
+  height: 0.94rem;
+  width: 85%;
+}
+.login-box .denglu >>> .el-form-item__content {
+  line-height: 0.8rem;
+  font-size: 0.28rem;
+}
+.login-box .denglu >>> .el-input .el-input__clear {
+  font-size: 0.4rem;
+  width: 0.5rem;
+  line-height: 0.8rem;
+  vertical-align: -webkit-baseline-middle;
+}
+</style>
+
 <style scoped lang="scss">
-.index {
+.login {
   width: 100vw;
   height: 100vh;
-  background: url('~@/assets/img/489F6A708413CF346F2BF557DCC079DD@2x.jpg');
+  background: url('~@/assets/login/489F6A708413CF346F2BF557DCC079DD@2x.jpg');
   background-size: 100% 100%;
-  .login {
+  .login-box {
     position: absolute;
     top: 0;
     left: px2rem(1220rem);
@@ -95,8 +177,10 @@ export default {
       margin: px2rem(89rem) 0 0 px2rem(124rem);
       width: px2rem(181rem);
       height: px2rem(98rem);
-      background: url('~@/assets/img/ab88e081ec9a239f0b8379f57a729cc.jpg');
-      background-size: 100% 100%;
+      img {
+        width: 100%;
+        height: 100%;
+      }
     }
     .text {
       margin-top: px2rem(17rem);
@@ -107,7 +191,11 @@ export default {
       text-align: center;
     }
     .denglu {
-      margin-top: px2rem(90rem);
+      margin-top: px2rem(70rem);
+      .form-box {
+        width: px2rem(300rem);
+        margin: 0 auto;
+      }
       > div {
         width: px2rem(300rem);
         height: px2rem(50rem);
@@ -118,21 +206,11 @@ export default {
         box-sizing: border-box;
         padding-left: px2rem(31rem);
       }
-      span {
+      .span {
         position: relative;
-        font-size: px2rem(16rem);
-        font-weight: bold;
+        font-size: px2rem(24rem);
         color: rgba(0, 116, 124, 1);
-        &::after {
-          content: '';
-          display: inline-block;
-          width: 1px;
-          height: px2rem(21rem);
-          background: rgba(0, 116, 124, 1);
-          vertical-align: middle;
-          margin-left: px2rem(20rem);
-          margin-top: -0.05rem;
-        }
+        vertical-align: middle;
       }
       input {
         background: rgba(0, 0, 0, 0);
@@ -144,6 +222,7 @@ export default {
       }
     }
     .loging {
+      display: block;
       width: px2rem(300rem);
       height: px2rem(50rem);
       border: 2px solid rgba(195, 238, 228, 1);
@@ -151,8 +230,8 @@ export default {
       border-radius: px2rem(25rem);
       margin: px2rem(49rem) 0 0 px2rem(64rem);
       text-align: center;
-      letter-spacing: 10px;
-      line-height: px2rem(50rem);
+      letter-spacing: px2rem(10rem);
+      // line-height: px2rem(50rem);
       color: #fff;
       font-weight: bold;
       font-size: px2rem(16rem);

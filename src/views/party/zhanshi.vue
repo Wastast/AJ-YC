@@ -24,7 +24,11 @@
             </div>
             <div class="div-text">
               <p class="p-value">
-                <countTo :startVal="parseInt(0)" :endVal="parseFloat(item.value)" :duration="4000"></countTo>
+                <countTo
+                  :startVal="parseInt(0)"
+                  :endVal="parseFloat(item.value)"
+                  :duration="4000"
+                ></countTo>
               </p>
               <p class="p-unit">单位: {{ item.unit }}</p>
             </div>
@@ -36,11 +40,11 @@
 </template>
 
 <script>
-import PartyBox from '@/components/party-box'
-import { EleResize } from '@/utils/esresize'
-import { getCollective, getAverage } from '@/api/party'
-import { getDesc } from '@/api/analysis'
-import countTo from 'vue-count-to'
+import PartyBox from '@/components/party-box';
+import { EleResize } from '@/utils/esresize';
+import { getCollective, getAverage } from '@/api/party';
+import { getDesc } from '@/api/analysis';
+import countTo from 'vue-count-to';
 export default {
   name: 'zhanshi',
   data() {
@@ -73,19 +77,19 @@ export default {
       ],
       jitiTimer: null,
       gerenTimer: null
-    }
+    };
   },
   computed: {},
   watch: {},
   methods: {
     // 收入柱状图
     echarts_shouru(value) {
-      let myChart = this.$echarts.init(document.getElementById('shouru'))
-      let resizeDiv = document.getElementById('shouru')
+      let myChart = this.$echarts.init(document.getElementById('shouru'));
+      let resizeDiv = document.getElementById('shouru');
       let listener = () => {
-        myChart.resize()
-      }
-      EleResize.on(resizeDiv, listener)
+        myChart.resize();
+      };
+      EleResize.on(resizeDiv, listener);
       let option = {
         tooltip: {
           trigger: 'axis',
@@ -169,40 +173,40 @@ export default {
             }
           }
         ]
-      }
-      let index = 0
+      };
+      let index = 0;
       this.jitiTimer = setInterval(() => {
-        var dataLen = option.series[0].data.length
+        var dataLen = option.series[0].data.length;
         // 取消之前高亮的图形
         myChart.dispatchAction({
           type: 'downplay',
           seriesIndex: 0,
           dataIndex: index
-        })
+        });
         // 高亮当前图形
         myChart.dispatchAction({
           type: 'highlight',
           seriesIndex: 0,
           dataIndex: index
-        })
+        });
         // 显示 tooltip
         myChart.dispatchAction({
           type: 'showTip',
           seriesIndex: 0,
           dataIndex: index
-        })
-        index = (index + 1) % dataLen
-      }, 1000)
-      myChart.setOption(option)
+        });
+        index = (index + 1) % dataLen;
+      }, 1000);
+      myChart.setOption(option);
     },
     // 人均收入柱状图
     echarts_tongji(value) {
-      let myChart = this.$echarts.init(document.getElementById('tongji'))
-      let resizeDiv = document.getElementById('tongji')
+      let myChart = this.$echarts.init(document.getElementById('tongji'));
+      let resizeDiv = document.getElementById('tongji');
       let listener = () => {
-        myChart.resize()
-      }
-      EleResize.on(resizeDiv, listener)
+        myChart.resize();
+      };
+      EleResize.on(resizeDiv, listener);
       let option = {
         tooltip: {
           trigger: 'axis',
@@ -285,68 +289,68 @@ export default {
             }
           }
         ]
-      }
-      let index = 0
+      };
+      let index = 0;
       this.gerenTimer = setInterval(() => {
-        var dataLen = option.series[0].data.length
+        var dataLen = option.series[0].data.length;
         // 取消之前高亮的图形
         myChart.dispatchAction({
           type: 'downplay',
           seriesIndex: 0,
           dataIndex: index
-        })
+        });
         // 高亮当前图形
         myChart.dispatchAction({
           type: 'highlight',
           seriesIndex: 0,
           dataIndex: index
-        })
+        });
         // 显示 tooltip
         myChart.dispatchAction({
           type: 'showTip',
           seriesIndex: 0,
           dataIndex: index
-        })
-        index = (index + 1) % dataLen
-      }, 1000)
-      myChart.setOption(option)
+        });
+        index = (index + 1) % dataLen;
+      }, 1000);
+      myChart.setOption(option);
     }
   },
   mounted() {
     // 集体总收入
     getCollective().then(data => {
       if (data.code === 200) {
-        this.echarts_shouru(data)
+        this.echarts_shouru(data);
       }
-    })
+    });
     // 村个人平均收入
     getAverage().then(data => {
       if (data.code === 200) {
-        this.echarts_tongji(data)
+        this.echarts_tongji(data);
       }
-    })
+    });
     getDesc().then(data => {
       if (data.code === 200) {
         this.list.forEach((item, index) => {
-          let name = item.title
+          let name = item.title;
           data.data.map(e => {
             if (e.name === name) {
-              item.value = e.value
+              item.value = e.value;
             }
-          })
-        })
+          });
+        });
       }
-    })
+    });
   },
   beforeDestroy() {
-    clearInterval(this.jitiTimer)
-    clearInterval(this.gerenTimer)
+    clearInterval(this.jitiTimer);
+    clearInterval(this.gerenTimer);
   },
   components: {
     PartyBox,
     countTo
   }
-}
+};
 </script>
 
 <style scoped lang="scss">

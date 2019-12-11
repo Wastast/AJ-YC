@@ -21,7 +21,7 @@
             <li class="li">
               <div class="div-text">
                 <p class="p-type">PM2.5</p>
-                <p class="p-value">{{pm25}} <span>μg/m³</span></p>
+                <p class="p-value">{{ pm25 }} <span>μg/m³</span></p>
               </div>
               <div class="div-imgbox">
                 <img src="@/assets/resouse/pm@2x.png" alt="" />
@@ -30,7 +30,7 @@
             <li class="li">
               <div class="div-text">
                 <p class="p-type">气压</p>
-                <p class="p-value">{{pres}} <span>hPa</span></p>
+                <p class="p-value">{{ pres }} <span>hPa</span></p>
               </div>
               <div class="div-imgbox">
                 <img src="@/assets/resouse/qiya@2x.png" alt="" />
@@ -39,7 +39,7 @@
             <li class="li">
               <div class="div-text">
                 <p class="p-type">风速</p>
-                <p class="p-value">{{windSpd}} <span>m/s</span></p>
+                <p class="p-value">{{ windSpd }} <span>m/s</span></p>
               </div>
               <div class="div-imgbox">
                 <img src="@/assets/resouse/fengsu@2x.png" alt="" />
@@ -53,7 +53,7 @@
             <li class="li">
               <div class="div-text">
                 <p class="p-type">整点降雨量</p>
-                <p class="p-value">{{pcpn}}</p>
+                <p class="p-value">{{ pcpn }}</p>
               </div>
               <div class="div-imgbox">
                 <img src="@/assets/resouse/Envirjiangyuliangchuanganqi@2x.png" alt="" />
@@ -62,7 +62,7 @@
             <li class="li">
               <div class="div-text">
                 <p class="p-type">负氧离子</p>
-                <p class="p-value">{{anion}} <span>/cm³</span></p>
+                <p class="p-value">{{ anion }} <span>/cm³</span></p>
               </div>
               <div class="div-imgbox">
                 <img src="@/assets/resouse/pmcopy@2x.png" alt="" />
@@ -71,7 +71,7 @@
             <li class="li">
               <div class="div-text">
                 <p class="p-type">二氧化碳浓度</p>
-                <p class="p-value">{{co2}} <span>ppm</span></p>
+                <p class="p-value">{{ co2 }} <span>ppm</span></p>
               </div>
               <div class="div-imgbox">
                 <img src="@/assets/resouse/shidu@2x.png" alt="" />
@@ -85,8 +85,8 @@
 </template>
 
 <script>
-import PartyBox from '@/components/party-box'
-import { getEnvironmental } from '@/api/analysis'
+import PartyBox from '@/components/party-box';
+import { getEnvironmental } from '@/api/analysis';
 export default {
   name: 'atmosphere',
   data() {
@@ -122,7 +122,7 @@ export default {
       windSpd: '0',
       pcpn: '0',
       co2: '0'
-    }
+    };
   },
   computed: {},
   watch: {},
@@ -130,19 +130,19 @@ export default {
   mounted() {
     getEnvironmental().then(data => {
       if (data.code === 0) {
-        let obj = data.data[0]
-        this.pm25 = obj.pm25
-        this.pres = obj.pres
-        this.hum = obj.hum
-        this.anion = obj.anion
-        this.windSpd = obj.windSpd
-        this.pcpn = obj.pcpn
-        this.co2 = obj.co2
+        let obj = data.data[0];
+        this.pm25 = obj.pm25;
+        this.pres = obj.pres;
+        this.hum = obj.hum;
+        this.anion = obj.anion;
+        this.windSpd = obj.windSpd;
+        this.pcpn = obj.pcpn;
+        this.co2 = obj.co2;
       }
-    })
+    });
   },
   components: { PartyBox }
-}
+};
 </script>
 
 <style scoped>

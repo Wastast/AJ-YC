@@ -37,13 +37,13 @@ export default {
   },
   name: 'index',
   data() {
-    return {}
+    return {};
   },
   computed: {},
   watch: {},
   methods: {},
   mounted() {}
-}
+};
 </script>
 
 <style scoped lang="scss">

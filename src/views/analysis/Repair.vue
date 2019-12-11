@@ -14,28 +14,28 @@
 </template>
 
 <script>
-import ModuleBox from '@/components/analys-box'
-import { EleResize } from '@/utils/esresize'
-import { getRepair } from '@/api/analysis'
+import ModuleBox from '@/components/analys-box';
+import { EleResize } from '@/utils/esresize';
+import { getRepair } from '@/api/analysis';
 export default {
   name: 'Repair',
   data() {
     return {
       timer: null,
       qiyeTimer: null
-    }
+    };
   },
   computed: {},
   watch: {},
   methods: {
     // 事件柱状图
     echarts_evnet(data) {
-      let myChart = this.$echarts.init(document.getElementById('repair-time'))
-      let resizeDiv = document.getElementById('repair-time')
+      let myChart = this.$echarts.init(document.getElementById('repair-time'));
+      let resizeDiv = document.getElementById('repair-time');
       let listener = () => {
-        myChart.resize()
-      }
-      EleResize.on(resizeDiv, listener)
+        myChart.resize();
+      };
+      EleResize.on(resizeDiv, listener);
       let option = {
         tooltip: {
           trigger: 'axis',
@@ -134,62 +134,62 @@ export default {
             data: data.number
           }
         ]
-      }
-      let index = 0
+      };
+      let index = 0;
       this.qiyeTimer = setInterval(() => {
-        var dataLen = option.series[0].data.length
+        var dataLen = option.series[0].data.length;
         // 取消之前高亮的图形
         myChart.dispatchAction({
           type: 'downplay',
           seriesIndex: 0,
           dataIndex: index
-        })
-        index = (index + 1) % dataLen
+        });
+        index = (index + 1) % dataLen;
         // 高亮当前图形
         myChart.dispatchAction({
           type: 'highlight',
           seriesIndex: 0,
           dataIndex: index
-        })
+        });
         // 显示 tooltip
         myChart.dispatchAction({
           type: 'showTip',
           seriesIndex: 0,
           dataIndex: index
-        })
-      }, 1000)
-      myChart.clear()
-      myChart.setOption(option, true)
+        });
+      }, 1000);
+      myChart.clear();
+      myChart.setOption(option, true);
     },
     // 定时请求数据
     STI_getValue() {
       // 请求小时旅游数据
       getRepair().then(data => {
         if (data.code === 200) {
-          this.echarts_evnet(data)
+          this.echarts_evnet(data);
         }
-      })
+      });
       this.timer = setInterval(() => {
-        clearInterval(this.qiyeTimer)
+        clearInterval(this.qiyeTimer);
         getRepair().then(data => {
           if (data.code === 200) {
-            this.echarts_evnet(data)
+            this.echarts_evnet(data);
           }
-        })
-      }, 1000 * 30)
+        });
+      }, 1000 * 30);
     }
   },
   mounted() {
-    this.STI_getValue()
+    this.STI_getValue();
   },
   components: {
     ModuleBox
   },
   beforeDestroy() {
-    clearInterval(this.timer)
-    clearInterval(this.qiyeTimer)
+    clearInterval(this.timer);
+    clearInterval(this.qiyeTimer);
   }
-}
+};
 </script>
 
 <style scoped lang="scss">

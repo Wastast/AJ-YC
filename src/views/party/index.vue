@@ -10,17 +10,17 @@
 </template>
 
 <script>
-import PHeader from '@/components/Header'
-import PZhanshi from './zhanshi'
-import POpen from './open'
-import PFramework from './Framework'
-import PHeart from './heart'
-import PMap from './map'
-import { resize } from '@/mixin'
+import PHeader from '@/components/Header';
+import PZhanshi from './zhanshi';
+import POpen from './open';
+import PFramework from './Framework';
+import PHeart from './heart';
+import PMap from './map';
+import { resize } from '@/mixin';
 export default {
   name: 'home',
   data() {
-    return {}
+    return {};
   },
   computed: {},
   watch: {},
@@ -35,7 +35,7 @@ export default {
     PMap
   },
   mixins: [resize]
-}
+};
 </script>
 
 <style scoped lang="scss">

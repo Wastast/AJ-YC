@@ -7,13 +7,13 @@
           <ul class="ul">
             <li class="li" v-for="(items, index) of item.node" :key="index">
               <dl>
-                <dt :style="{color: items.state?'':'#999'}">
+                <dt :style="{ color: items.state ? '' : '#999' }">
                   {{ items.name }}
                   <span style="font-size: 12px;">
                     {{ items.remark == '村民组长' ? '(组长)' : '' }}
                   </span>
                 </dt>
-                <dd :style="{color: items.state?'':'#999'}">{{ items.phone }}</dd>
+                <dd :style="{ color: items.state ? '' : '#999' }">{{ items.phone }}</dd>
               </dl>
             </li>
           </ul>
@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import PartyBox from '@/components/party-box'
-import { getHome } from '@/api/law'
+import PartyBox from '@/components/party-box';
+import { getHome } from '@/api/law';
 export default {
   name: 'Home',
   data() {
@@ -158,46 +158,46 @@ export default {
           }
         ]
       ]
-    }
+    };
   },
   computed: {},
   watch: {},
   methods: {
     // 绘制圆圈
     drawCircle(item) {
-      let range = item.range
+      let range = item.range;
       if (!range) {
-        return
+        return;
       }
-      TMapAPI.ClearFeatures()
-      var ppsMainBuild = SPoint.GetPointSFromString(range)
-      var xlMansion = new SLineString(ppsMainBuild)
-      var fsMansion = new SFeatureStyle()
-      fsMansion.SetFillColor('transparent')
-      fsMansion.SetFillColor('#B56FE2')
+      TMapAPI.ClearFeatures();
+      var ppsMainBuild = SPoint.GetPointSFromString(range);
+      var xlMansion = new SLineString(ppsMainBuild);
+      var fsMansion = new SFeatureStyle();
+      fsMansion.SetFillColor('transparent');
+      fsMansion.SetFillColor('#B56FE2');
       // 模型边框外壳
-      fsMansion.SetStrokeWidth(0)
+      fsMansion.SetStrokeWidth(0);
       // fsMansion.SetStrokeColor("#B56FE2");
-      fsMansion.SetHoverFillColor('#B56FE2')
-      fsMansion.SetHoverStrokeColor('#B56FE2')
+      fsMansion.SetHoverFillColor('#B56FE2');
+      fsMansion.SetHoverStrokeColor('#B56FE2');
       // 外壳2
-      fsMansion.SetHoverStrokeWidth(2)
-      fsMansion.SetHoverEnabled(true)
+      fsMansion.SetHoverStrokeWidth(2);
+      fsMansion.SetHoverEnabled(true);
       // 范围 属性 TAG 扩展说明
-      var pfMansion = new SFeature(xlMansion, fsMansion, '1')
-      TMapAPI.GetVectorLayer().AddFeatures([pfMansion])
-      TMapAPI.map.SetCenter(new SLonLat(item.lon, item.lat), 1)
+      var pfMansion = new SFeature(xlMansion, fsMansion, '1');
+      TMapAPI.GetVectorLayer().AddFeatures([pfMansion]);
+      TMapAPI.map.SetCenter(new SLonLat(item.lon, item.lat), 1);
     }
   },
   mounted() {
     getHome().then(data => {
       if (data.code === 200) {
-        this.list = data.data
+        this.list = data.data;
       }
-    })
+    });
   },
   components: { PartyBox }
-}
+};
 </script>
 
 <style scoped lang="scss">
@@ -223,7 +223,6 @@ export default {
       box-sizing: border-box;
       padding: px2rem(5rem) px2rem(12rem) px2rem(10rem) px2rem(12rem);
       .li {
-
         dt {
           font-size: px2rem(18rem);
           color: rgba(13, 123, 225, 1);

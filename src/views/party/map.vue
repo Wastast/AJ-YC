@@ -5,88 +5,96 @@
 </template>
 
 <script>
-import { getHouse } from '@/api/mapapi'
+import { getHouse } from '@/api/mapapi';
 export default {
   name: 'maps',
   data() {
     return {
       imgRep: req.slice(0, -3)
-    }
+    };
   },
   computed: {},
   watch: {},
   methods: {
     addPoint(item) {
-      let iconValue = item
-      let sLonLat = new SLonLat(iconValue.lon, iconValue.lat)
-      let iconPath = this.imgRep + '/upload/icon/' + iconValue.img
+      let iconValue = item;
+      let sLonLat = new SLonLat(iconValue.lon, iconValue.lat);
+      let iconPath = this.imgRep + '/upload/icon/' + iconValue.img;
       // 在地图内添加图标
       let sIcon = new SIcon(
         iconPath,
         new SSize(iconValue.width, iconValue.height),
         new SPixel(-iconValue.width / 2, -iconValue.height)
-      )
-      let sMarker = new SMarker(sLonLat, sIcon, iconValue.typeId)
-      TMapAPI.markerLayer.AddMarker(sMarker)
-      sMarker.AddEventListener('click', iconValue, () => {})
+      );
+      let sMarker = new SMarker(sLonLat, sIcon, iconValue.typeId);
+      TMapAPI.markerLayer.AddMarker(sMarker);
+      sMarker.AddEventListener('click', iconValue, () => {});
     },
     addPointWxzjDyzj(item, img, width, height, zIndex) {
-      let sLonLat = new SLonLat(item.centerX, item.centerY)
-      let iconPath = this.imgRep + '/upload/icon/' + img
+      let sLonLat = new SLonLat(item.centerX, item.centerY);
+      let iconPath = this.imgRep + '/upload/icon/' + img;
       // 在地图内添加图标
-      let sIcon
+      let sIcon;
       if (zIndex) {
-        sIcon = new SIcon(iconPath, new SSize(width, height), new SPixel(-width / 2 - 9, -height - 9))
-        sIcon.GetDiv().style.zIndex = zIndex
+        sIcon = new SIcon(
+          iconPath,
+          new SSize(width, height),
+          new SPixel(-width / 2 - 9, -height - 9)
+        );
+        sIcon.GetDiv().style.zIndex = zIndex;
       } else {
-        sIcon = new SIcon(iconPath, new SSize(width, height), new SPixel(-width / 2 + 9, -height + 9))
-        sIcon.GetDiv().style.zIndex = zIndex
+        sIcon = new SIcon(
+          iconPath,
+          new SSize(width, height),
+          new SPixel(-width / 2 + 9, -height + 9)
+        );
+        sIcon.GetDiv().style.zIndex = zIndex;
       }
-      let sMarker = new SMarker(sLonLat, sIcon)
-      TMapAPI.markerLayer.AddMarker(sMarker)
+      let sMarker = new SMarker(sLonLat, sIcon);
+      TMapAPI.markerLayer.AddMarker(sMarker);
       sMarker.AddEventListener('mousemove', item, () => {
         if (zIndex) {
-          TMapAPI.map.ShowLabelsByTag('dyzj' + item.id)
+          TMapAPI.map.ShowLabelsByTag('dyzj' + item.id);
         } else {
-          TMapAPI.map.ShowLabelsByTag('wxzj' + item.id)
+          TMapAPI.map.ShowLabelsByTag('wxzj' + item.id);
         }
-      })
+      });
       sMarker.AddEventListener('mouseout', item, () => {
         if (zIndex) {
-          TMapAPI.map.HideLabelsByTag('dyzj' + item.id)
+          TMapAPI.map.HideLabelsByTag('dyzj' + item.id);
         } else {
-          TMapAPI.map.HideLabelsByTag('wxzj' + item.id)
+          TMapAPI.map.HideLabelsByTag('wxzj' + item.id);
         }
-      })
+      });
     },
     // 绘制房屋
     drawHouse() {
       getHouse().then(data => {
         if (data.code === 200) {
-          this.list = data.data
+          this.list = data.data;
           this.list.forEach(e => {
-            TMapAPI.drawRange(e, '#B56FE2')
-          })
+            TMapAPI.drawRange(e, '#B56FE2');
+          });
         }
-      })
+      });
     },
     // 获取地图层级
     getZoom() {
-      let zoom = TMapAPI.map.GetZoom()
+      let zoom = TMapAPI.map.GetZoom();
       if (zoom >= 2) {
         if (this.isDraw !== true) {
-          this.isDraw = true
-          this.drawHouse()
+          this.isDraw = true;
+          this.drawHouse();
         }
       } else {
-        this.isDraw = false
-        TMapAPI.ClearFeatures()
+        this.isDraw = false;
+        TMapAPI.ClearFeatures();
       }
     }
   },
   mounted() {
-    TMapAPI.InitMap('maps')
-    TMapAPI.map.SetCenter(new SLonLat(1450, 1010), 1)
+    TMapAPI.InitMap('maps');
+    TMapAPI.map.SetCenter(new SLonLat(1450, 1010), 1);
     // getFire().then(data => {
     //   if (data.code === 200) {
     //     data.data.forEach(item => {
@@ -96,29 +104,29 @@ export default {
     // })
     getHouse().then(data => {
       if (data.code === 200) {
-        this.list = data.data
+        this.list = data.data;
         this.list.forEach(e => {
-          TMapAPI.drawRangeLable_house(e)
+          TMapAPI.drawRangeLable_house(e);
           if (e.partyMemberNum > 0) {
             // 党员之家
-            this.addPointWxzjDyzj(e, e.img2, e.width2, e.height2, 999)
-            TMapAPI.drawRangeLable_dyzj(e)
+            this.addPointWxzjDyzj(e, e.img2, e.width2, e.height2, 999);
+            TMapAPI.drawRangeLable_dyzj(e);
           }
           if (e.houseTip === 5) {
             // 五星之家
-            this.addPointWxzjDyzj(e, e.img, e.width, e.height)
-            TMapAPI.drawRangeLable_wxzj(e)
+            this.addPointWxzjDyzj(e, e.img, e.width, e.height);
+            TMapAPI.drawRangeLable_wxzj(e);
           }
-        })
-        TMapAPI.map.HideLabels()
+        });
+        TMapAPI.map.HideLabels();
       }
-    })
+    });
     TMapAPI.GetMap().AddEventListener('zoomend', () => {
-      TMapAPI.map.HideLabels()
-      this.getZoom()
-    })
+      TMapAPI.map.HideLabels();
+      this.getZoom();
+    });
   }
-}
+};
 </script>
 
 <style scoped lang="scss">

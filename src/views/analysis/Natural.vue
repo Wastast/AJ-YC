@@ -66,9 +66,8 @@
 </template>
 
 <script>
-import ModuleBox from '@/components/analys-box'
-import { getEnvironmental } from '@/api/analysis'
-
+import ModuleBox from '@/components/analys-box';
+import { getEnvironmental } from '@/api/analysis';
 export default {
   name: 'Natural',
   data() {
@@ -81,7 +80,7 @@ export default {
       windSpd: '0',
       pcpn: '0',
       co2: '0'
-    }
+    };
   },
   computed: {},
   watch: {},
@@ -89,21 +88,21 @@ export default {
   mounted() {
     getEnvironmental().then(data => {
       if (data.code === 0) {
-        let obj = data.data[0]
-        this.pm25 = obj.pm25
-        this.pres = obj.pres
-        this.hum = obj.hum
-        this.anion = obj.anion
-        this.windSpd = obj.windSpd
-        this.pcpn = obj.pcpn
-        this.co2 = obj.co2
+        let obj = data.data[0];
+        this.pm25 = obj.pm25;
+        this.pres = obj.pres;
+        this.hum = obj.hum;
+        this.anion = obj.anion;
+        this.windSpd = obj.windSpd;
+        this.pcpn = obj.pcpn;
+        this.co2 = obj.co2;
       }
-    })
+    });
   },
   components: {
     ModuleBox
   }
-}
+};
 </script>
 
 <style scoped lang="scss">

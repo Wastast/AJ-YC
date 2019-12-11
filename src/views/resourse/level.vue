@@ -26,8 +26,8 @@
 </template>
 
 <script>
-import PartyBox from '@/components/party-box'
-import { EleResize } from '@/utils/esresize'
+import PartyBox from '@/components/party-box';
+import { EleResize } from '@/utils/esresize';
 export default {
   name: 'level',
   data() {
@@ -60,19 +60,19 @@ export default {
         11.08,
         11.09
       ]
-    }
+    };
   },
   computed: {},
   watch: {},
   methods: {
     // 事件柱状图
     echarts_evnet(data) {
-      let myChart = this.$echarts.init(document.getElementById('water'))
-      let resizeDiv = document.getElementById('water')
+      let myChart = this.$echarts.init(document.getElementById('water'));
+      let resizeDiv = document.getElementById('water');
       let listener = () => {
-        myChart.resize()
-      }
-      EleResize.on(resizeDiv, listener)
+        myChart.resize();
+      };
+      EleResize.on(resizeDiv, listener);
       let option = {
         tooltip: {
           trigger: 'axis',
@@ -174,42 +174,42 @@ export default {
             data: this.value.slice(0, new Date().getHours() + 1)
           }
         ]
-      }
-      let index = 0
+      };
+      let index = 0;
       this.qiyeTimer = setInterval(() => {
-        var dataLen = option.series[0].data.length
+        var dataLen = option.series[0].data.length;
         // 取消之前高亮的图形
         myChart.dispatchAction({
           type: 'downplay',
           seriesIndex: 0,
           dataIndex: index
-        })
-        index = (index + 1) % dataLen
+        });
+        index = (index + 1) % dataLen;
         // 高亮当前图形
         myChart.dispatchAction({
           type: 'highlight',
           seriesIndex: 0,
           dataIndex: index
-        })
+        });
         // 显示 tooltip
         myChart.dispatchAction({
           type: 'showTip',
           seriesIndex: 0,
           dataIndex: index
-        })
-      }, 1000)
-      myChart.clear()
-      myChart.setOption(option, true)
+        });
+      }, 1000);
+      myChart.clear();
+      myChart.setOption(option, true);
     }
   },
   mounted() {
-    this.echarts_evnet()
+    this.echarts_evnet();
   },
   beforeDestroy() {
-    clearInterval(this.qiyeTimer)
+    clearInterval(this.qiyeTimer);
   },
   components: { PartyBox }
-}
+};
 </script>
 
 <style scoped>

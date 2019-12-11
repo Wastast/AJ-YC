@@ -42,15 +42,15 @@ export default {
           router: '/Incorruptible'
         }
       ]
-    }
+    };
   },
   methods: {
     // 跳转
     jump(path) {
-      this.$router.push({ path })
+      this.$router.push({ path });
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -64,7 +64,7 @@ export default {
     .li {
       float: left;
       cursor: pointer;
-      margin-left: .6rem;
+      margin-left: 0.6rem;
       dl {
         dt {
           width: px2rem(113rem);

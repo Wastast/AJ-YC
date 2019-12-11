@@ -9,26 +9,26 @@
 </template>
 
 <script>
-import PartyBox from '@/components/party-box'
-import { EleResize } from '@/utils/esresize'
+import PartyBox from '@/components/party-box';
+import { EleResize } from '@/utils/esresize';
 export default {
   name: 'alarm',
   data() {
     return {
       qiyeTimer: null
-    }
+    };
   },
   computed: {},
   watch: {},
   methods: {
     // 统计告警数据
     echarts_statistics() {
-      let myChart = this.$echarts.init(document.getElementById('statistics'))
-      let resizeDiv = document.getElementById('statistics')
+      let myChart = this.$echarts.init(document.getElementById('statistics'));
+      let resizeDiv = document.getElementById('statistics');
       let listener = () => {
-        myChart.resize()
-      }
-      EleResize.on(resizeDiv, listener)
+        myChart.resize();
+      };
+      EleResize.on(resizeDiv, listener);
       let option = {
         tooltip: {
           trigger: 'axis'
@@ -87,41 +87,41 @@ export default {
             }
           }
         ]
-      }
-      let index = 0
+      };
+      let index = 0;
       this.qiyeTimer = setInterval(() => {
-        var dataLen = option.series[0].data.length
+        var dataLen = option.series[0].data.length;
         // 取消之前高亮的图形
         myChart.dispatchAction({
           type: 'downplay',
           seriesIndex: 0,
           dataIndex: index
-        })
-        index = (index + 1) % dataLen
+        });
+        index = (index + 1) % dataLen;
         // 高亮当前图形
         myChart.dispatchAction({
           type: 'highlight',
           seriesIndex: 0,
           dataIndex: index
-        })
+        });
         // 显示 tooltip
         myChart.dispatchAction({
           type: 'showTip',
           seriesIndex: 0,
           dataIndex: index
-        })
-      }, 1000)
-      myChart.setOption(option)
+        });
+      }, 1000);
+      myChart.setOption(option);
     }
   },
   mounted() {
-    this.echarts_statistics()
+    this.echarts_statistics();
   },
   components: { PartyBox },
   beforeDestroy() {
-    clearInterval(this.qiyeTimer)
+    clearInterval(this.qiyeTimer);
   }
-}
+};
 </script>
 
 <style scoped lang="scss">

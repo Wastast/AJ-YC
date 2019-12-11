@@ -51,9 +51,9 @@
 </template>
 
 <script>
-import PartyBox from '@/components/party-box'
-import { EleResize } from '@/utils/esresize'
-import { getonWeek, getSatisfied, getGovernment, getFrequency } from '@/api/law'
+import PartyBox from '@/components/party-box';
+import { EleResize } from '@/utils/esresize';
+import { getonWeek, getSatisfied, getGovernment, getFrequency } from '@/api/law';
 export default {
   name: 'apprun',
   data() {
@@ -85,19 +85,19 @@ export default {
       zhengfuTimer: null,
       meizhouTimer: null,
       gaopinTimer: null
-    }
+    };
   },
   computed: {},
   watch: {},
   methods: {
     // 满意度echarts
     echarts_satisfied(typeArr, data) {
-      let myChart = this.$echarts.init(document.getElementById('satisfied'))
-      let resizeDiv = document.getElementById('satisfied')
+      let myChart = this.$echarts.init(document.getElementById('satisfied'));
+      let resizeDiv = document.getElementById('satisfied');
       let listener = () => {
-        myChart.resize()
-      }
-      EleResize.on(resizeDiv, listener)
+        myChart.resize();
+      };
+      EleResize.on(resizeDiv, listener);
       let option = {
         color: ['rgb(236, 179, 43)', 'rgb(0, 202, 232)', 'rgb(195, 55, 0)'],
         tooltip: {
@@ -144,40 +144,40 @@ export default {
             data: data
           }
         ]
-      }
-      let index = 0
+      };
+      let index = 0;
       this.manyiTimer = setInterval(() => {
-        var dataLen = option.series[0].data.length
+        var dataLen = option.series[0].data.length;
         // 取消之前高亮的图形
         myChart.dispatchAction({
           type: 'downplay',
           seriesIndex: 0,
           dataIndex: index
-        })
-        index = (index + 1) % dataLen
+        });
+        index = (index + 1) % dataLen;
         // 高亮当前图形
         myChart.dispatchAction({
           type: 'highlight',
           seriesIndex: 0,
           dataIndex: index
-        })
+        });
         // 显示 tooltip
         myChart.dispatchAction({
           type: 'showTip',
           seriesIndex: 0,
           dataIndex: index
-        })
-      }, 1000)
-      myChart.setOption(option)
+        });
+      }, 1000);
+      myChart.setOption(option);
     },
     // 政府办事事项
     echarts_statistics(typeArr, data) {
-      let myChart = this.$echarts.init(document.getElementById('statistics'))
-      let resizeDiv = document.getElementById('statistics')
+      let myChart = this.$echarts.init(document.getElementById('statistics'));
+      let resizeDiv = document.getElementById('statistics');
       let listener = () => {
-        myChart.resize()
-      }
-      EleResize.on(resizeDiv, listener)
+        myChart.resize();
+      };
+      EleResize.on(resizeDiv, listener);
       let option = {
         tooltip: {
           trigger: 'axis',
@@ -261,40 +261,40 @@ export default {
             }
           }
         ]
-      }
-      let index = 0
+      };
+      let index = 0;
       this.zhengfuTimer = setInterval(() => {
-        var dataLen = option.series[0].data.length
+        var dataLen = option.series[0].data.length;
         // 取消之前高亮的图形
         myChart.dispatchAction({
           type: 'downplay',
           seriesIndex: 0,
           dataIndex: index
-        })
-        index = (index + 1) % dataLen
+        });
+        index = (index + 1) % dataLen;
         // 高亮当前图形
         myChart.dispatchAction({
           type: 'highlight',
           seriesIndex: 0,
           dataIndex: index
-        })
+        });
         // 显示 tooltip
         myChart.dispatchAction({
           type: 'showTip',
           seriesIndex: 0,
           dataIndex: index
-        })
-      }, 1000)
-      myChart.setOption(option)
+        });
+      }, 1000);
+      myChart.setOption(option);
     },
     // 每周办件量情况
     echart_onweek(nowWeek, lastWeek) {
-      let myChart = this.$echarts.init(document.getElementById('onweek'))
-      let resizeDiv = document.getElementById('onweek')
+      let myChart = this.$echarts.init(document.getElementById('onweek'));
+      let resizeDiv = document.getElementById('onweek');
       let listener = () => {
-        myChart.resize()
-      }
-      EleResize.on(resizeDiv, listener)
+        myChart.resize();
+      };
+      EleResize.on(resizeDiv, listener);
       let option = {
         color: ['#4FA6F2', '#ECB32B'],
         tooltip: {
@@ -366,40 +366,40 @@ export default {
             symbol: 'circle'
           }
         ]
-      }
-      let index = 0
+      };
+      let index = 0;
       this.meizhouTimer = setInterval(() => {
-        var dataLen = option.series[0].data.length
+        var dataLen = option.series[0].data.length;
         // 取消之前高亮的图形
         myChart.dispatchAction({
           type: 'downplay',
           seriesIndex: 0,
           dataIndex: index
-        })
-        index = (index + 1) % dataLen
+        });
+        index = (index + 1) % dataLen;
         // 高亮当前图形
         myChart.dispatchAction({
           type: 'highlight',
           seriesIndex: 0,
           dataIndex: index
-        })
+        });
         // 显示 tooltip
         myChart.dispatchAction({
           type: 'showTip',
           seriesIndex: 0,
           dataIndex: index
-        })
-      }, 1000)
-      myChart.setOption(option)
+        });
+      }, 1000);
+      myChart.setOption(option);
     },
     // 高频事项echarts
     echart_frequency(typeArr, data) {
-      let myChart = this.$echarts.init(document.getElementById('frequency'))
-      let resizeDiv = document.getElementById('frequency')
+      let myChart = this.$echarts.init(document.getElementById('frequency'));
+      let resizeDiv = document.getElementById('frequency');
       let listener = () => {
-        myChart.resize()
-      }
-      EleResize.on(resizeDiv, listener)
+        myChart.resize();
+      };
+      EleResize.on(resizeDiv, listener);
       let option = {
         color: ['#FF0000 ', '#FF7F00', '#FFFF00', '#00FF00', '#00FFFF', '#0000FF', '#8B00FF'],
         tooltip: {
@@ -447,74 +447,74 @@ export default {
             data: data
           }
         ]
-      }
-      let index = 0
+      };
+      let index = 0;
       this.gaopinTimer = setInterval(() => {
-        var dataLen = option.series[0].data.length
+        var dataLen = option.series[0].data.length;
         // 取消之前高亮的图形
         myChart.dispatchAction({
           type: 'downplay',
           seriesIndex: 0,
           dataIndex: index
-        })
-        index = (index + 1) % dataLen
+        });
+        index = (index + 1) % dataLen;
         // 高亮当前图形
         myChart.dispatchAction({
           type: 'highlight',
           seriesIndex: 0,
           dataIndex: index
-        })
+        });
         // 显示 tooltip
         myChart.dispatchAction({
           type: 'showTip',
           seriesIndex: 0,
           dataIndex: index
-        })
-      }, 1000)
-      myChart.setOption(option)
+        });
+      }, 1000);
+      myChart.setOption(option);
     }
   },
   mounted() {
     // 每周办件量
     getonWeek().then(data => {
       if (data.code === 200) {
-        this.echart_onweek(data.thisWeek, data.lastWeek)
+        this.echart_onweek(data.thisWeek, data.lastWeek);
       }
-    })
+    });
     // 请求满意度调查数据
     getSatisfied().then(data => {
       if (data.code === 200) {
         let typeArr = data.data.map(item => {
-          return item.name
-        })
-        this.echarts_satisfied(typeArr, data.data)
+          return item.name;
+        });
+        this.echarts_satisfied(typeArr, data.data);
       }
-    })
+    });
     // 政府办事事项
     getGovernment().then(data => {
       if (data.code === 200) {
-        let typeArr = data.type
-        this.echarts_statistics(typeArr, data.data)
+        let typeArr = data.type;
+        this.echarts_statistics(typeArr, data.data);
       }
-    })
+    });
     // 高频事项代办数量
     getFrequency().then(data => {
       if (data.code === 200) {
         let typeArr = data.data.map(item => {
-          return item.name
-        })
-        this.echart_frequency(typeArr, data.data)
+          return item.name;
+        });
+        this.echart_frequency(typeArr, data.data);
       }
-    })
+    });
   },
   components: { PartyBox },
   beforeDestroy() {
-    clearInterval(this.manyiTimer)
-    clearInterval(this.zhengfuTimer)
-    clearInterval(this.meizhouTimer)
-    clearInterval(this.gaopinTimer)
+    clearInterval(this.manyiTimer);
+    clearInterval(this.zhengfuTimer);
+    clearInterval(this.meizhouTimer);
+    clearInterval(this.gaopinTimer);
   }
-}
+};
 </script>
 
 <style scoped>

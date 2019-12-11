@@ -16,26 +16,40 @@
 </template>
 
 <script>
-import AHeader from '@/components/Header'
-import ASwiper from '@/components/Swiper'
-import ANatural from './Natural'
-import ACar from './Car'
-import ADesc from './Desc'
-import AEvent from './Event'
-import ARepair from './Repair'
-import ATravel from './Travel'
-import AMap from './Map'
-import AVideo from './video'
-import { resize } from '@/mixin'
+import AHeader from '@/components/Header';
+import ASwiper from '@/components/Swiper';
+import ANatural from './Natural';
+import ACar from './Car';
+import ADesc from './Desc';
+import AEvent from './Event';
+import ARepair from './Repair';
+import ATravel from './Travel';
+import AMap from './Map';
+import AVideo from './video';
+import { resize } from '@/mixin';
 export default {
   name: 'home',
   data() {
-    return {}
+    return {};
   },
   computed: {},
   watch: {},
   methods: {},
-  mounted() {},
+  mounted() {
+    // let websocket = new WebSocket('ws://192.168.8.107:8083/websocket/eventInfo')
+    // websocket.onopen = function(event) {
+    //   console.log('成功调用')
+    //   console.log(event)
+    // }
+    // // 连接发生错误的回调方法
+    // websocket.onerror = function() {
+    //   console.log('报错')
+    // }
+    // websocket.onmessage = function(event) {
+    //   console.log('接收信息------------------')
+    //   console.log(JSON.parse(event.data))
+    // }
+  },
   components: {
     AHeader,
     ANatural,
@@ -49,7 +63,7 @@ export default {
     AVideo
   },
   mixins: [resize]
-}
+};
 </script>
 
 <style scoped lang="scss">

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { getHouse, getShouye } from '@/api/mapapi'
+import { getHouse, getShouye } from '@/api/mapapi';
 export default {
   name: 'Map',
   data() {
@@ -14,110 +14,110 @@ export default {
       timer: null,
       imgRep: req.slice(0, -3),
       isDraw: false
-    }
+    };
   },
   methods: {
     addPoint(item) {
-      let iconValue = item
-      let sLonLat = new SLonLat(iconValue.lon, iconValue.lat)
-      let iconPath = this.imgRep + '/upload/icon/' + iconValue.img
+      let iconValue = item;
+      let sLonLat = new SLonLat(iconValue.lon, iconValue.lat);
+      let iconPath = this.imgRep + '/upload/icon/' + iconValue.img;
       // 在地图内添加图标
       let sIcon = new SIcon(
         iconPath,
         new SSize(iconValue.width, iconValue.height),
         new SPixel(-iconValue.width / 2, -iconValue.height - 15)
-      )
-      let sMarker = new SMarker(sLonLat, sIcon, iconValue.typeId)
-      TMapAPI.markerLayer.AddMarker(sMarker)
+      );
+      let sMarker = new SMarker(sLonLat, sIcon, iconValue.typeId);
+      TMapAPI.markerLayer.AddMarker(sMarker);
       sMarker.AddEventListener('mousemove', iconValue, () => {
-        TMapAPI.map.ShowLabelsByTag('default' + item.id)
-      })
+        TMapAPI.map.ShowLabelsByTag('default' + item.id);
+      });
       sMarker.AddEventListener('mouseout', iconValue, () => {
-        TMapAPI.map.HideLabelsByTag('default' + item.id)
-      })
+        TMapAPI.map.HideLabelsByTag('default' + item.id);
+      });
     },
     addPointWxzjDyzj(item, img, width, height, zIndex) {
-      let sLonLat = new SLonLat(item.centerX, item.centerY)
-      let iconPath = this.imgRep + '/upload/icon/' + img
+      let sLonLat = new SLonLat(item.centerX, item.centerY);
+      let iconPath = this.imgRep + '/upload/icon/' + img;
       // 在地图内添加图标
-      let sIcon
-      let sMarker
+      let sIcon;
+      let sMarker;
       if (zIndex) {
         sIcon = new SIcon(
           iconPath,
           new SSize(width, height),
           new SPixel(-width / 2 - 9, -height - 9)
-        )
-        sIcon.GetDiv().style.zIndex = zIndex
-        sMarker = new SMarker(sLonLat, sIcon, 'dyzj')
+        );
+        sIcon.GetDiv().style.zIndex = zIndex;
+        sMarker = new SMarker(sLonLat, sIcon, 'dyzj');
       } else {
         sIcon = new SIcon(
           iconPath,
           new SSize(width, height),
           new SPixel(-width / 2 + 9, -height + 9)
-        )
-        sIcon.GetDiv().style.zIndex = zIndex
-        sMarker = new SMarker(sLonLat, sIcon, 'wxzj')
+        );
+        sIcon.GetDiv().style.zIndex = zIndex;
+        sMarker = new SMarker(sLonLat, sIcon, 'wxzj');
       }
-      TMapAPI.markerLayer.AddMarker(sMarker)
+      TMapAPI.markerLayer.AddMarker(sMarker);
       sMarker.AddEventListener('mousemove', item, () => {
         if (zIndex) {
-          TMapAPI.map.ShowLabelsByTag('dyzj' + item.id)
+          TMapAPI.map.ShowLabelsByTag('dyzj' + item.id);
         } else {
-          TMapAPI.map.ShowLabelsByTag('wxzj' + item.id)
+          TMapAPI.map.ShowLabelsByTag('wxzj' + item.id);
         }
-      })
+      });
       sMarker.AddEventListener('mouseout', item, () => {
         if (zIndex) {
-          TMapAPI.map.HideLabelsByTag('dyzj' + item.id)
+          TMapAPI.map.HideLabelsByTag('dyzj' + item.id);
         } else {
-          TMapAPI.map.HideLabelsByTag('wxzj' + item.id)
+          TMapAPI.map.HideLabelsByTag('wxzj' + item.id);
         }
-      })
+      });
     },
     // 绘制房屋
     drawHouse() {
       getHouse().then(data => {
         if (data.code === 200) {
-          this.list = data.data
+          this.list = data.data;
           this.list.forEach(e => {
-            TMapAPI.drawRange(e, '#B56FE2')
-          })
+            TMapAPI.drawRange(e, '#B56FE2');
+          });
         }
-      })
+      });
     },
     // 获取地图层级
     getZoom() {
-      let zoom = TMapAPI.map.GetZoom()
+      let zoom = TMapAPI.map.GetZoom();
       if (zoom >= 2) {
         if (this.isDraw !== true) {
-          this.isDraw = true
-          this.drawHouse()
+          this.isDraw = true;
+          this.drawHouse();
         }
       } else {
-        this.isDraw = false
-        TMapAPI.ClearFeatures()
+        this.isDraw = false;
+        TMapAPI.ClearFeatures();
       }
     }
   },
   mounted() {
-    TMapAPI.InitMap('map')
-    TMapAPI.map.SetCenter(new SLonLat(1500, 1010), 1)
+    TMapAPI.InitMap('map');
+    TMapAPI.map.SetCenter(new SLonLat(1500, 1010), 1);
     getShouye().then(data => {
       if (data.code === 200) {
         data.data.forEach(item => {
           if (item.typeId !== '001111') {
-            this.addPoint(item)
+            this.addPoint(item);
             if (item.typeId === '001003') {
-              TMapAPI.drawRangeLableMs(item)
+              TMapAPI.drawRangeLableMs(item);
             } else {
-              TMapAPI.drawRangeLableDefault(item)
+              TMapAPI.drawRangeLableDefault(item);
             }
           }
-        })
-        TMapAPI.map.HideLabels()
+        });
+        TMapAPI.map.HideLabels();
       }
-    })
+    });
     // getFire().then(data => {
     //   if (data.code === 200) {
     //     data.data.forEach(item => {
@@ -133,34 +133,34 @@ export default {
     // })
     getHouse().then(data => {
       if (data.code === 200) {
-        this.list = data.data
+        this.list = data.data;
         this.list.forEach(e => {
-          TMapAPI.drawRangeLable_house(e)
+          TMapAPI.drawRangeLable_house(e);
           if (e.partyMemberNum > 0) {
             // 党员之家
-            this.addPointWxzjDyzj(e, e.img2, e.width2, e.height2, 999)
-            TMapAPI.drawRangeLable_dyzj(e)
+            this.addPointWxzjDyzj(e, e.img2, e.width2, e.height2, 999);
+            TMapAPI.drawRangeLable_dyzj(e);
           }
           if (e.houseTip === 5) {
             // 五星之家
-            this.addPointWxzjDyzj(e, e.img, e.width, e.height)
-            TMapAPI.drawRangeLable_wxzj(e)
+            this.addPointWxzjDyzj(e, e.img, e.width, e.height);
+            TMapAPI.drawRangeLable_wxzj(e);
           }
-        })
-        TMapAPI.map.HideLabels()
-        TMapAPI.HideMarkersByTag('dyzj')
-        TMapAPI.HideMarkersByTag('wxzj')
+        });
+        TMapAPI.map.HideLabels();
+        TMapAPI.HideMarkersByTag('dyzj');
+        TMapAPI.HideMarkersByTag('wxzj');
       }
-    })
+    });
     TMapAPI.GetMap().AddEventListener('zoomend', () => {
-      TMapAPI.map.HideLabels()
-      this.getZoom()
-    })
+      TMapAPI.map.HideLabels();
+      this.getZoom();
+    });
   },
   beforeDestroy() {
-    TMapAPI.GetMap().ReleaseEventListener('zoomend', this.getZoom())
+    TMapAPI.GetMap().ReleaseEventListener('zoomend', this.getZoom());
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

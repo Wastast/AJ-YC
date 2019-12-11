@@ -22,9 +22,9 @@
 </template>
 
 <script>
-import ModuleBox from '@/components/analys-box'
-import { EleResize } from '@/utils/esresize'
-import { getBayonet, getOrign } from '@/api/analysis'
+import ModuleBox from '@/components/analys-box';
+import { EleResize } from '@/utils/esresize';
+import { getBayonet, getOrign } from '@/api/analysis';
 export default {
   name: 'Car',
   data() {
@@ -37,32 +37,32 @@ export default {
         car: '车辆卡口数据'
       },
       qiyeTimer: null
-    }
+    };
   },
   computed: {},
   watch: {
     moduleType(newValue, oldValue) {
       if (this.qiyeTimer) {
-        clearInterval(this.qiyeTimer)
+        clearInterval(this.qiyeTimer);
       }
       if (this.moduleType === 'car') {
         // 车辆卡口
-        this.getCar()
+        this.getCar();
       } else {
         // 来源地分析
-        this.getorigin()
+        this.getorigin();
       }
     }
   },
   methods: {
     // 车辆卡口数据
     echarts_car(province, city) {
-      let myChart = this.$echarts.init(document.getElementById('kakou'))
-      let resizeDiv = document.getElementById('kakou')
+      let myChart = this.$echarts.init(document.getElementById('kakou'));
+      let resizeDiv = document.getElementById('kakou');
       let listener = () => {
-        myChart.resize()
-      }
-      EleResize.on(resizeDiv, listener)
+        myChart.resize();
+      };
+      EleResize.on(resizeDiv, listener);
       let option = {
         tooltip: {
           trigger: 'item',
@@ -82,7 +82,7 @@ export default {
             fontSize: 14
           },
           formatter: name => {
-            return name
+            return name;
           }
         },
         series: [
@@ -151,18 +151,18 @@ export default {
             data: city
           }
         ]
-      }
-      myChart.clear()
-      myChart.setOption(option, true)
+      };
+      myChart.clear();
+      myChart.setOption(option, true);
     },
     // 来源地分析
     echarts_laiyuan(data) {
-      let myChart = this.$echarts.init(document.getElementById('kakou'))
-      let resizeDiv = document.getElementById('kakou')
+      let myChart = this.$echarts.init(document.getElementById('kakou'));
+      let resizeDiv = document.getElementById('kakou');
       let listener = () => {
-        myChart.resize()
-      }
-      EleResize.on(resizeDiv, listener)
+        myChart.resize();
+      };
+      EleResize.on(resizeDiv, listener);
       let option = {
         tooltip: {
           trigger: 'axis',
@@ -256,68 +256,68 @@ export default {
             }
           }
         ]
-      }
-      let index = 0
+      };
+      let index = 0;
       this.qiyeTimer = setInterval(() => {
-        var dataLen = option.series[0].data.length
+        var dataLen = option.series[0].data.length;
         // 取消之前高亮的图形
         myChart.dispatchAction({
           type: 'downplay',
           seriesIndex: 0,
           dataIndex: index
-        })
+        });
         // 高亮当前图形
         myChart.dispatchAction({
           type: 'highlight',
           seriesIndex: 0,
           dataIndex: index
-        })
+        });
         // 显示 tooltip
         myChart.dispatchAction({
           type: 'showTip',
           seriesIndex: 0,
           dataIndex: index
-        })
-        index = (index + 1) % dataLen
-      }, 1000)
-      myChart.clear()
-      myChart.setOption(option, true)
+        });
+        index = (index + 1) % dataLen;
+      }, 1000);
+      myChart.clear();
+      myChart.setOption(option, true);
     },
     // 切换显示数据模块
     checkModule() {
       if (this.moduleType === 'car') {
-        this.moduleType = 'origin'
+        this.moduleType = 'origin';
       } else {
-        this.moduleType = 'car'
+        this.moduleType = 'car';
       }
     },
     // 获取车辆卡口数据
     getCar() {
       getBayonet().then(data => {
         if (data.code === 200) {
-          this.Enter = data.Enter
-          this.out = data.Out
+          this.Enter = data.Enter;
+          this.out = data.Out;
           // 省数据
-          this.echarts_car(data.dataProvince, data.dataCity)
+          this.echarts_car(data.dataProvince, data.dataCity);
         }
-      })
+      });
     },
     // 获取来源地分析数据
     getorigin() {
       getOrign().then(data => {
         if (data.code === 200) {
-          this.echarts_laiyuan(data.data)
+          this.echarts_laiyuan(data.data);
         }
-      })
+      });
     }
   },
   mounted() {
-    this.moduleType = 'car'
+    this.moduleType = 'car';
   },
   components: {
     ModuleBox
   }
-}
+};
 </script>
 
 <style scoped lang="scss">

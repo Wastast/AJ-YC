@@ -12,19 +12,19 @@
 </template>
 
 <script>
-import RHeader from '@/components/Header'
-import LHome from './Home'
-import LApprun from './apprun'
-import LEvent from './event'
+import RHeader from '@/components/Header';
+import LHome from './Home';
+import LApprun from './apprun';
+import LEvent from './event';
 // import LPublic from './public'
-import LSightseeing from './sightseeing'
-import LSmoke from './smoke'
-import PMap from './map'
-import { resize } from '@/mixin'
+import LSightseeing from './sightseeing';
+import LSmoke from './smoke';
+import PMap from './map';
+import { resize } from '@/mixin';
 export default {
   name: 'home',
   data() {
-    return {}
+    return {};
   },
   computed: {},
   watch: {},
@@ -41,7 +41,7 @@ export default {
     PMap
   },
   mixins: [resize]
-}
+};
 </script>
 
 <style scoped lang="scss">

@@ -1,25 +1,25 @@
-import { get, post } from './http'
+import { get, post } from './http';
 
 //  报事报修 接口
-export const getEvent = data => get('/dwdTourEventInfo', data)
+export const getEvent = data => get('/dwdTourEventInfo', data);
 
 // 乡村旅游数据接口
-export const getRepair = data => get('/dwdTourTouristNumberH/find', data)
+export const getRepair = data => get('/dwdTourTouristNumberH/find', data);
 
 // 村情简介接口
-export const getDesc = data => post('/dimTourBasResidentInfo/api/analysis', data)
+export const getDesc = data => post('/dimTourBasResidentInfo/api/analysis', data);
 
 // 车辆卡口数据
-export const getBayonet = data => get('/tBayonetReal/find', data)
+export const getBayonet = data => get('/tBayonetReal/find', data);
 
 // 视频接口
-export const getVideoData = data => post('/hikocx', data)
+export const getVideoData = data => post('/hikocx', data);
 
 // 来源地数据
-export const getOrign = data => get('/dwsTourSelfDriveTouristsFromCityD/getCityData', data)
+export const getOrign = data => get('/dwsTourSelfDriveTouristsFromCityD/getCityData', data);
 
 // 获取图片资源
-export const getPicUrl = data => get('/dwdTourEventInfo/getImg', data)
+export const getPicUrl = data => get('/dwdTourEventInfo/getImg', data);
 
 // 环境数据接口
-export const getEnvironmental = data => get('/dwsTourWeatherMonitorRt', data)
+export const getEnvironmental = data => get('/dwsTourWeatherMonitorRt', data);

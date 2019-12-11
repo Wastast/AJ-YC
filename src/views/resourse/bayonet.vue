@@ -68,10 +68,10 @@
 </template>
 
 <script>
-import PartyBox from '@/components/party-box'
-import { EleResize } from '@/utils/esresize'
-import { getBayonet, getOrign } from '@/api/analysis'
-import countTo from 'vue-count-to'
+import PartyBox from '@/components/party-box';
+import { EleResize } from '@/utils/esresize';
+import { getBayonet, getOrign } from '@/api/analysis';
+import countTo from 'vue-count-to';
 export default {
   name: 'bayonet',
   data() {
@@ -109,19 +109,19 @@ export default {
         name: '省外',
         value: 0
       }
-    }
+    };
   },
   computed: {},
   watch: {},
   methods: {
     // 卡口数据
     echarts_kakou(data) {
-      let myChart = this.$echarts.init(document.getElementById('kakou'))
-      let resizeDiv = document.getElementById('kakou')
+      let myChart = this.$echarts.init(document.getElementById('kakou'));
+      let resizeDiv = document.getElementById('kakou');
       let listener = () => {
-        myChart.resize()
-      }
-      EleResize.on(resizeDiv, listener)
+        myChart.resize();
+      };
+      EleResize.on(resizeDiv, listener);
       let option = {
         color: ['#1398F7', '#EC8213'],
         tooltip: {
@@ -157,31 +157,31 @@ export default {
             data: data
           }
         ]
-      }
-      let index = 0
+      };
+      let index = 0;
       this.qiyeTimer = setInterval(() => {
-        var dataLen = option.series[0].data.length
+        var dataLen = option.series[0].data.length;
         // 取消之前高亮的图形
         myChart.dispatchAction({
           type: 'downplay',
           seriesIndex: 0,
           dataIndex: index
-        })
-        index = (index + 1) % dataLen
+        });
+        index = (index + 1) % dataLen;
         // 高亮当前图形
         myChart.dispatchAction({
           type: 'highlight',
           seriesIndex: 0,
           dataIndex: index
-        })
+        });
         // 显示 tooltip
         myChart.dispatchAction({
           type: 'showTip',
           seriesIndex: 0,
           dataIndex: index
-        })
-      }, 1000)
-      myChart.setOption(option)
+        });
+      }, 1000);
+      myChart.setOption(option);
     }
   },
   mounted() {
@@ -190,27 +190,27 @@ export default {
       if (data.code === 200) {
         data.dataProvince.map(item => {
           if (item.name === '省内') {
-            this.provinceIn = item
+            this.provinceIn = item;
           }
           if (item.name === '省外') {
-            this.provinceOut = item
+            this.provinceOut = item;
           }
-        })
-        this.echarts_kakou(data.dataProvince)
+        });
+        this.echarts_kakou(data.dataProvince);
       }
-    })
+    });
     // 获取来源地数据
     getOrign().then(data => {
       if (data.code === 200) {
-        this.list = data.day.slice(0, 4)
+        this.list = data.day.slice(0, 4);
       }
-    })
+    });
   },
   beforeDestroy() {
-    clearInterval(this.qiyeTimer)
+    clearInterval(this.qiyeTimer);
   },
   components: { PartyBox, countTo }
-}
+};
 </script>
 
 <style scoped>

@@ -20,9 +20,9 @@
 </template>
 
 <script>
-import PartyBox from '@/components/party-box'
-import { getActivity } from '@/api/incorruptible'
-import vuescroll from 'vuescroll'
+import PartyBox from '@/components/party-box';
+import { getActivity } from '@/api/incorruptible';
+import vuescroll from 'vuescroll';
 export default {
   name: 'activity',
   data() {
@@ -50,7 +50,7 @@ export default {
         }
       ],
       imgRep: req.slice(0, -3)
-    }
+    };
   },
   computed: {},
   watch: {},
@@ -81,16 +81,16 @@ export default {
   mounted() {
     getActivity().then(data => {
       if (data.code === 0) {
-        console.log(data)
-        this.list = data.data
+        console.log(data);
+        this.list = data.data;
       }
-    })
+    });
   },
   components: {
     PartyBox,
     vuescroll
   }
-}
+};
 </script>
 
 <style scoped lang="scss">

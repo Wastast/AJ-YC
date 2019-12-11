@@ -14,7 +14,7 @@
                     容量监测
                   </p>
                   <p class="p-value">
-                    {{item.rongliang}}
+                    {{ item.rongliang }}
                     <!-- <countTo
                       :startVal="parseInt(0)"
                       :endVal="parseFloat(item.rongliang)"
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import PartyBox from '@/components/party-box'
+import PartyBox from '@/components/party-box';
 export default {
   name: 'Trash',
   data() {
@@ -92,14 +92,14 @@ export default {
           shidu: '20'
         }
       ]
-    }
+    };
   },
   computed: {},
   watch: {},
   methods: {},
   mounted() {},
   components: { PartyBox }
-}
+};
 </script>
 
 <style scoped>

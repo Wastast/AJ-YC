@@ -22,14 +22,14 @@
 </template>
 
 <script>
-import PartyBox from '@/components/party-box'
-import { getHeart } from '@/api/party'
+import PartyBox from '@/components/party-box';
+import { getHeart } from '@/api/party';
 export default {
   name: 'heart',
   data() {
     return {
       list: []
-    }
+    };
   },
   computed: {},
   watch: {},
@@ -37,14 +37,14 @@ export default {
   mounted() {
     getHeart().then(data => {
       if (data.code === 0) {
-        this.list = data.data
+        this.list = data.data;
       }
-    })
+    });
   },
   components: {
     PartyBox
   }
-}
+};
 </script>
 
 <style scoped lang="scss">

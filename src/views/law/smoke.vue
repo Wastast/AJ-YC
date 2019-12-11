@@ -23,24 +23,24 @@
 </template>
 
 <script>
-import PartyBox from '@/components/party-box'
-import { EleResize } from '@/utils/esresize'
+import PartyBox from '@/components/party-box';
+import { EleResize } from '@/utils/esresize';
 export default {
   name: 'smoke',
   data() {
-    return {}
+    return {};
   },
   computed: {},
   watch: {},
   methods: {
     // 状态echarts
     echarts_status() {
-      let myChart = this.$echarts.init(document.getElementById('status'))
-      let resizeDiv = document.getElementById('status')
+      let myChart = this.$echarts.init(document.getElementById('status'));
+      let resizeDiv = document.getElementById('status');
       let listener = () => {
-        myChart.resize()
-      }
-      EleResize.on(resizeDiv, listener)
+        myChart.resize();
+      };
+      EleResize.on(resizeDiv, listener);
       let option = {
         color: ['#044B9C', '#ECB32B', '#CB371F', '#00A1D6'],
         tooltip: {
@@ -91,15 +91,15 @@ export default {
             ]
           }
         ]
-      }
-      myChart.setOption(option)
+      };
+      myChart.setOption(option);
     }
   },
   mounted() {
-    this.echarts_status()
+    this.echarts_status();
   },
   components: { PartyBox }
-}
+};
 </script>
 
 <style scoped lang="scss">

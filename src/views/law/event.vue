@@ -65,10 +65,10 @@
 </template>
 
 <script>
-import PartyBox from '@/components/party-box'
-import { getEvent } from '@/api/analysis'
-import vuescroll from 'vuescroll'
-import { mapGetters } from 'vuex'
+import PartyBox from '@/components/party-box';
+import { getEvent } from '@/api/analysis';
+import vuescroll from 'vuescroll';
+import { mapGetters } from 'vuex';
 export default {
   name: 'event',
   data() {
@@ -93,7 +93,7 @@ export default {
         1: '村民上报信息',
         0: '家园卫队成员上报信息'
       }
-    }
+    };
   },
   computed: {
     ...mapGetters(['token'])
@@ -102,23 +102,23 @@ export default {
   methods: {
     // 获取事件信息
     getData(obj) {
-      this.event.time = obj.create_date
-      this.event.content = obj.content
-      this.event.imgurl = obj.pic_url[0]
-      this.event.title = obj.title
-      this.event.user_type = obj.user_type
-      this.dialogVisible = true
+      this.event.time = obj.create_date;
+      this.event.content = obj.content;
+      this.event.imgurl = obj.pic_url[0];
+      this.event.title = obj.title;
+      this.event.user_type = obj.user_type;
+      this.dialogVisible = true;
     }
   },
   mounted() {
     getEvent().then(data => {
       if (data.code === 200) {
-        this.list = data.data.repairList
+        this.list = data.data.repairList;
       }
-    })
+    });
   },
   components: { PartyBox, vuescroll }
-}
+};
 </script>
 
 <style scoped lang="scss">

@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import PartyBox from '@/components/party-box'
-import vuescroll from 'vuescroll'
+import PartyBox from '@/components/party-box';
+import vuescroll from 'vuescroll';
 export default {
   name: 'mediate',
   data() {
@@ -83,31 +83,31 @@ export default {
           opacity: 0
         }
       }
-    }
+    };
   },
   computed: {
     length() {
-      return (this.imgList.length + 1) * 2.94 - 1 + 'rem'
+      return (this.imgList.length + 1) * 2.94 - 1 + 'rem';
     }
   },
   watch: {},
   methods: {},
   mounted() {
     this.$nextTick(() => {
-      let width = getComputedStyle(this.$refs['length']).width.split('px')[0]
+      let width = getComputedStyle(this.$refs['length']).width.split('px')[0];
       this.$refs['vs'].scrollTo(
         {
           x: width
         },
         1000 * 50
-      )
-    })
+      );
+    });
   },
   components: {
     PartyBox,
     vuescroll
   }
-}
+};
 </script>
 
 <style scoped>

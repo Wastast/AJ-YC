@@ -35,22 +35,24 @@
     <el-dialog
       :title="gongkai.title"
       :visible.sync="dialogVisible"
-      width="32%"
+      width="50%"
       :modal="false"
       :destroy-on-close="true"
     >
       <div class="popbox">
-        <p></p>
+        <vuescroll>
+          <div class="block" v-html="gongkai.content"></div>
+        </vuescroll>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import PartyBox from '@/components/party-box'
-import { getEconomics, getOpenValue } from '@/api/incorruptible'
-import vuescroll from 'vuescroll'
-import { TipsPop } from '@/utils/el_ui'
+import PartyBox from '@/components/party-box';
+import { getEconomics, getOpenValue } from '@/api/incorruptible';
+import vuescroll from 'vuescroll';
+import { TipsPop } from '@/utils/el_ui';
 export default {
   name: 'open',
   data() {
@@ -65,17 +67,17 @@ export default {
         content: ''
       },
       dialogVisible: false
-    }
+    };
   },
   computed: {},
   watch: {
     type() {
       let arr = this.typeList.filter(item => {
         if (item.text === this.type) {
-          return item
+          return item;
         }
-      })
-      this.getData(arr[0])
+      });
+      this.getData(arr[0]);
     }
   },
   methods: {
@@ -85,27 +87,30 @@ export default {
         TipsPop({
           message: '正在请求数据,请勿再次点击',
           type: 'error'
-        })
-        return
+        });
+        return;
       }
-      this.type = obj.text
+      this.type = obj.text;
     },
     // 展示详情数据
     showDesc(obj) {
-      console.log(obj)
+      console.log(obj);
+      this.gongkai.title = obj.title;
+      this.gongkai.content = obj.contents;
+      this.dialogVisible = true;
     },
     // 请求并渲染数据
     async getData(obj) {
       // let arr = []
-      this.loading = true
-      this.eventList = []
+      this.loading = true;
+      this.eventList = [];
       for (let item of obj.node) {
-        let b = await this.getValue(item.text, item.node_code)
-        this.eventList.push(...b)
+        let b = await this.getValue(item.text, item.node_code);
+        this.eventList.push(...b);
         // arr.push(...b)
       }
       // this.eventList = arr
-      this.loading = false
+      this.loading = false;
     },
     // 获取公开数据
     getValue(type, id) {
@@ -116,31 +121,31 @@ export default {
         }).then(data => {
           if (data.code === 200) {
             let arr = data.data.map(item => {
-              item.type = type
-              return item
-            })
-            resolve(arr)
+              item.type = type;
+              return item;
+            });
+            resolve(arr);
           }
-        })
-      })
+        });
+      });
     }
   },
   mounted() {
     getEconomics().then(data => {
       let arr = data.data.filter(item => {
         if (this.textList.includes(item.text)) {
-          return item
+          return item;
         }
-      })
-      this.typeList = arr
-      this.type = '党务公开'
-    })
+      });
+      this.typeList = arr;
+      this.type = '党务公开';
+    });
   },
   components: {
     PartyBox,
     vuescroll
   }
-}
+};
 </script>
 
 <style scoped lang="scss">
@@ -148,7 +153,7 @@ export default {
   position: absolute;
   top: px2rem(746rem);
   left: px2rem(587rem);
-  z-index: 100;
+  z-index: 1050;
   .div-top {
     width: px2rem(224rem);
     height: px2rem(44rem);
@@ -214,6 +219,17 @@ export default {
     font-size: px2rem(48rem);
     color: #fff;
     margin-top: px2rem(30rem);
+  }
+  .popbox {
+    height: px2rem(500rem);
+    overflow: hidden;
+    line-height: px2rem(24rem);
+    content {
+      width: px2rem(500rem);
+      img {
+        width: 100%;
+      }
+    }
   }
 }
 </style>

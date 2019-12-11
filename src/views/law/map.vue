@@ -29,9 +29,9 @@
 </template>
 
 <script>
-import { getVideoData } from '@/api/analysis'
-import { getVideoSmoke } from '@/api/mapapi'
-import { TipsPop } from '@/utils/el_ui'
+import { getVideoData } from '@/api/analysis';
+import { getVideoSmoke } from '@/api/mapapi';
+import { TipsPop } from '@/utils/el_ui';
 export default {
   name: 'maps',
   data() {
@@ -41,7 +41,7 @@ export default {
       videoValue: 'ReqType:PlayReal;wndcount:1',
       dialogVisible: false,
       videoCode: null
-    }
+    };
   },
   computed: {},
   watch: {},
@@ -49,55 +49,55 @@ export default {
     // 添加点位
     addPoint(item) {
       // console.log(item)
-      let iconValue = item
-      let sLonLat = new SLonLat(iconValue.lon, iconValue.lat)
-      let iconPath = this.imgRep + '/upload/icon/' + iconValue.img
+      let iconValue = item;
+      let sLonLat = new SLonLat(iconValue.lon, iconValue.lat);
+      let iconPath = this.imgRep + '/upload/icon/' + iconValue.img;
       // 在地图内添加图标
       let sIcon = new SIcon(
         iconPath,
         new SSize(iconValue.width, iconValue.height),
         new SPixel(-iconValue.width / 2, -iconValue.height)
-      )
-      let sMarker = new SMarker(sLonLat, sIcon, iconValue.typeId)
-      TMapAPI.markerLayer.AddMarker(sMarker)
+      );
+      let sMarker = new SMarker(sLonLat, sIcon, iconValue.typeId);
+      TMapAPI.markerLayer.AddMarker(sMarker);
       if (item.typeId === '001001001') {
         sMarker.AddEventListener('click', iconValue, () => {
-          this.popVideo(iconValue.id)
-        })
+          this.popVideo(iconValue.id);
+        });
       }
       sMarker.AddEventListener('mousemove', iconValue, () => {
-        TMapAPI.map.ShowLabelsByTag('default' + item.id)
-      })
+        TMapAPI.map.ShowLabelsByTag('default' + item.id);
+      });
       sMarker.AddEventListener('mouseout', iconValue, () => {
-        TMapAPI.map.HideLabelsByTag('default' + item.id)
-      })
+        TMapAPI.map.HideLabelsByTag('default' + item.id);
+      });
     },
     // 弹出视频
     popVideo(type) {
-      this.videoCode = type
+      this.videoCode = type;
       // 这里弹出
       // this.getVideo(),
-      this.dialogVisible = true
+      this.dialogVisible = true;
     },
     play_ocx_do(param) {
-      let OCXobj = document.getElementById('PlayViewOCX')
-      OCXobj.ContainOCX_Do(param)
+      let OCXobj = document.getElementById('PlayViewOCX');
+      OCXobj.ContainOCX_Do(param);
     },
     // 初始化
     init() {
       return new Promise((resolve, reject) => {
-        let OCXobj = document.getElementById('PlayViewOCX')
-        let txtInit = this.videoValue
-        OCXobj.ContainOCX_Init(txtInit)
-        resolve()
-      })
+        let OCXobj = document.getElementById('PlayViewOCX');
+        let txtInit = this.videoValue;
+        OCXobj.ContainOCX_Init(txtInit);
+        resolve();
+      });
     },
     // 获取视频
     getVideo() {
       getVideoData({
         indexcode: this.videoCode
       }).then(data => {
-        let { CamList, appSecret, appkey, time, timeSecret } = data
+        let { CamList, appSecret, appkey, time, timeSecret } = data;
         // hikvideoclient://ReqType:PlayReal;VersionTag:artemis;
         // ReqType:PlayReal;WndCount: 1;
         this.init()
@@ -121,30 +121,30 @@ export default {
               'httpsflag: 1;' +
               'CamList:' +
               CamList +
-              ';'
+              ';';
             setTimeout(() => {
-              this.play_ocx_do(param)
-            }, 2000)
+              this.play_ocx_do(param);
+            }, 2000);
           })
-          .catch(data => {
+          .catch(() => {
             TipsPop({
               message: '请使用IE浏览器,该浏览器不支持该控件',
               type: 'error'
-            })
-          })
-      })
+            });
+          });
+      });
     }
   },
   mounted() {
     getVideoSmoke().then(data => {
       if (data.code === 0) {
         data.data.forEach(item => {
-          this.addPoint(item)
-          TMapAPI.drawRangeLableDefault(item)
-        })
-        TMapAPI.map.HideLabels()
+          this.addPoint(item);
+          TMapAPI.drawRangeLableDefault(item);
+        });
+        TMapAPI.map.HideLabels();
       }
-    })
+    });
     // for (let item of this.pointList) {
     //   getResourseType({
     //     typeid: item
@@ -156,10 +156,10 @@ export default {
     //     }
     //   })
     // }
-    TMapAPI.InitMap('maps')
-    TMapAPI.map.SetCenter(new SLonLat(1500, 1010), 1)
+    TMapAPI.InitMap('maps');
+    TMapAPI.map.SetCenter(new SLonLat(1500, 1010), 1);
   }
-}
+};
 </script>
 <style scoped>
 .video >>> .el-dialog__body {

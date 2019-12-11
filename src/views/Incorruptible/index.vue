@@ -12,19 +12,19 @@
 </template>
 
 <script>
-import RHeader from '@/components/Header'
-import IActivity from './activity'
-import IFinance from './finance'
-import IMediate from './mediate'
-import IPractice from './practice'
+import RHeader from '@/components/Header';
+import IActivity from './activity';
+import IFinance from './finance';
+import IMediate from './mediate';
+import IPractice from './practice';
 // import IVolunteer from './volunteer'
-import IZhiyuan from './zhiyuan'
-import IMap from './map'
-import { resize } from '@/mixin'
+import IZhiyuan from './zhiyuan';
+import IMap from './map';
+import { resize } from '@/mixin';
 export default {
   name: 'home',
   data() {
-    return {}
+    return {};
   },
   computed: {},
   watch: {},
@@ -41,7 +41,7 @@ export default {
     IZhiyuan
   },
   mixins: [resize]
-}
+};
 </script>
 
 <style scoped lang="scss">

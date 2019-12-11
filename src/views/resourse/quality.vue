@@ -5,9 +5,13 @@
         <div class="box">
           <div class="list">
             <ul class="ul">
-              <li class="li" v-for="(item,index) of list" :key="index">
+              <li class="li" v-for="(item, index) of list" :key="index">
                 <span class="span span-block" :style="{ background: item.color }"></span>
-                <span class="span span-type" :style="{ color: item.type === '用电安全' || '消防水压' ? item.color :''  }">{{ item.type }}</span>
+                <span
+                  class="span span-type"
+                  :style="{ color: item.type === '用电安全' || '消防水压' ? item.color : '' }"
+                  >{{ item.type }}</span
+                >
                 <!-- <span class="span span-value">{{ (item.value / 53 * 100).toFixed(1)}}%</span> -->
               </li>
             </ul>
@@ -19,8 +23,8 @@
   </div>
 </template>
 <script>
-import PartyBox from '@/components/party-box'
-import { EleResize } from '@/utils/esresize'
+import PartyBox from '@/components/party-box';
+import { EleResize } from '@/utils/esresize';
 export default {
   name: 'quality',
   data() {
@@ -70,18 +74,18 @@ export default {
         }
       ],
       qiyeTimer: null
-    }
+    };
   },
   computed: {},
   watch: {},
   methods: {
     echarts_kakou() {
-      let myChart = this.$echarts.init(document.getElementById('echarts'))
-      let resizeDiv = document.getElementById('echarts')
+      let myChart = this.$echarts.init(document.getElementById('echarts'));
+      let resizeDiv = document.getElementById('echarts');
       let listener = () => {
-        myChart.resize()
-      }
-      EleResize.on(resizeDiv, listener)
+        myChart.resize();
+      };
+      EleResize.on(resizeDiv, listener);
       let option = {
         color: [
           '#00E5A2',
@@ -151,41 +155,41 @@ export default {
             ]
           }
         ]
-      }
-      let index = 0
+      };
+      let index = 0;
       this.qiyeTimer = setInterval(() => {
-        var dataLen = option.series[0].data.length
+        var dataLen = option.series[0].data.length;
         // 取消之前高亮的图形
         myChart.dispatchAction({
           type: 'downplay',
           seriesIndex: 0,
           dataIndex: index
-        })
-        index = (index + 1) % dataLen
+        });
+        index = (index + 1) % dataLen;
         // 高亮当前图形
         myChart.dispatchAction({
           type: 'highlight',
           seriesIndex: 0,
           dataIndex: index
-        })
+        });
         // 显示 tooltip
         myChart.dispatchAction({
           type: 'showTip',
           seriesIndex: 0,
           dataIndex: index
-        })
-      }, 1000)
-      myChart.setOption(option)
+        });
+      }, 1000);
+      myChart.setOption(option);
     }
   },
   beforeDestroy() {
-    clearInterval(this.qiyeTimer)
+    clearInterval(this.qiyeTimer);
   },
   mounted() {
-    this.echarts_kakou()
+    this.echarts_kakou();
   },
   components: { PartyBox }
-}
+};
 </script>
 
 <style scoped lang="scss">

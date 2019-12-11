@@ -55,10 +55,10 @@
 </template>
 
 <script>
-import PartyBox from '@/components/party-box'
-import { getEconomics, getOpenValue } from '@/api/incorruptible'
-import vuescroll from 'vuescroll'
-import { mapGetters } from 'vuex'
+import PartyBox from '@/components/party-box';
+import { getEconomics, getOpenValue } from '@/api/incorruptible';
+import vuescroll from 'vuescroll';
+import { mapGetters } from 'vuex';
 export default {
   name: 'finance',
   data() {
@@ -73,7 +73,7 @@ export default {
       imgList: [],
       dialogVisible: false,
       req
-    }
+    };
   },
   computed: {
     ...mapGetters(['token'])
@@ -81,29 +81,26 @@ export default {
   watch: {},
   methods: {
     getData(item) {
-      this.imgList = item.imglists
-      this.dialogVisible = true
+      this.imgList = item.imglists;
+      this.dialogVisible = true;
     }
   },
-  mounted() {
-    // 获取报表数据
-    getEconomics().then(data => {
-      let id = data.data[4].node[1].node_code
-      getOpenValue({
-        region_code: '330523108204',
-        node_id: id
-      }).then(data => {
-        if (data.code === 200) {
-          this.list = data.data
-        }
-      })
-    })
+  async mounted() {
+    let code = await getEconomics();
+    getOpenValue({
+      region_code: '330523108204',
+      node_id: code.data[4].node[1].node_code
+    }).then(data => {
+      if (data.code === 200) {
+        this.list = data.data;
+      }
+    });
   },
   components: {
     PartyBox,
     vuescroll
   }
-}
+};
 </script>
 
 <style scoped lang="scss">
