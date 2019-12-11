@@ -2,17 +2,6 @@
   <div class="bayonet">
     <party-box title="车辆监测" width="592" height="323">
       <template slot="content">
-        <div class="div-top">
-          <!-- <el-select v-model="value" placeholder="请选择卡口位置">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select> -->
-        </div>
         <div class="div-center">
           <div class="div-in">
             <p class="p-title">
@@ -41,7 +30,7 @@
         </div>
         <div class="div-bottom">
           <div class="echarts">
-            <div id="kakou"></div>
+            <car-bar></car-bar>
           </div>
           <div class="list">
             <p>
@@ -69,37 +58,14 @@
 
 <script>
 import PartyBox from '@/components/party-box';
-import { EleResize } from '@/utils/esresize';
 import { getBayonet, getOrign } from '@/api/analysis';
 import countTo from 'vue-count-to';
+import carBar from './echarts/car_bar';
 export default {
   name: 'bayonet',
   data() {
     return {
-      options: [
-        {
-          value: '选项1',
-          label: '黄金糕'
-        },
-        {
-          value: '选项2',
-          label: '双皮奶'
-        },
-        {
-          value: '选项3',
-          label: '蚵仔煎'
-        },
-        {
-          value: '选项4',
-          label: '龙须面'
-        },
-        {
-          value: '选项5',
-          label: '北京烤鸭'
-        }
-      ],
       value: '',
-      qiyeTimer: null,
       list: [],
       provinceIn: {
         name: '省内',
@@ -113,78 +79,14 @@ export default {
   },
   computed: {},
   watch: {},
-  methods: {
-    // 卡口数据
-    echarts_kakou(data) {
-      let myChart = this.$echarts.init(document.getElementById('kakou'));
-      let resizeDiv = document.getElementById('kakou');
-      let listener = () => {
-        myChart.resize();
-      };
-      EleResize.on(resizeDiv, listener);
-      let option = {
-        color: ['#1398F7', '#EC8213'],
-        tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b}: {c} ({d}%)'
-        },
-        backgroundColor: 'rgba(0,0,0,.3)',
-        series: [
-          {
-            name: '省内外车辆',
-            type: 'pie',
-            radius: ['50%', '60%'],
-            center: ['50%', '50%'],
-            avoidLabelOverlap: false,
-            label: {
-              normal: {
-                show: false,
-                position: 'center'
-              },
-              emphasis: {
-                show: true,
-                textStyle: {
-                  fontSize: '14',
-                  fontWeight: 'bold'
-                }
-              }
-            },
-            labelLine: {
-              normal: {
-                show: false
-              }
-            },
-            data: data
-          }
-        ]
-      };
-      let index = 0;
-      this.qiyeTimer = setInterval(() => {
-        var dataLen = option.series[0].data.length;
-        // 取消之前高亮的图形
-        myChart.dispatchAction({
-          type: 'downplay',
-          seriesIndex: 0,
-          dataIndex: index
-        });
-        index = (index + 1) % dataLen;
-        // 高亮当前图形
-        myChart.dispatchAction({
-          type: 'highlight',
-          seriesIndex: 0,
-          dataIndex: index
-        });
-        // 显示 tooltip
-        myChart.dispatchAction({
-          type: 'showTip',
-          seriesIndex: 0,
-          dataIndex: index
-        });
-      }, 1000);
-      myChart.setOption(option);
-    }
-  },
+  methods: {},
   mounted() {
+    // 获取来源地数据
+    getOrign().then(data => {
+      if (data.code === 200) {
+        this.list = data.day.slice(0, 4);
+      }
+    });
     // 获取车辆卡口数据
     getBayonet().then(data => {
       if (data.code === 200) {
@@ -196,20 +98,10 @@ export default {
             this.provinceOut = item;
           }
         });
-        this.echarts_kakou(data.dataProvince);
-      }
-    });
-    // 获取来源地数据
-    getOrign().then(data => {
-      if (data.code === 200) {
-        this.list = data.day.slice(0, 4);
       }
     });
   },
-  beforeDestroy() {
-    clearInterval(this.qiyeTimer);
-  },
-  components: { PartyBox, countTo }
+  components: { PartyBox, countTo, carBar }
 };
 </script>
 

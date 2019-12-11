@@ -4,11 +4,11 @@ import { initPlugin, initVideo, videoPlay, uninit, Resize } from '@/utils/playVi
 const VideoPlay = {
   // 指令绑定到 DOM 元素上时触发
   async inserted(el, binding, vnode) {
-    let { code, layout } = binding.value;
-    let height = getComputedStyle(el).height.split('px')[0];
-    let width = getComputedStyle(el).width.split('px')[0];
-    let html = `<div id="playWnd" style="width: 100%;height: 100%;"></div>`;
-    el.innerHTML = html;
+    // let { code, layout } = binding.value;
+    // let height = getComputedStyle(el).height.split('px')[0];
+    // let width = getComputedStyle(el).width.split('px')[0];
+    // let html = `<div id="playWnd" style="width: 100%;height: 100%;"></div>`;
+    // el.innerHTML = html;
     // await initPlugin({
     //   width,
     //   height

@@ -1,68 +1,11 @@
 <template>
   <div class="sightseeing">
-    <party-box title="公共区域" width="592" height="184">
+    <party-box title="公共区域" width="592" height="400">
       <template slot="content">
-        <ul class="ul">
-          <li class="li">
-            <dl>
-              <!-- <dt>
-                <el-select v-model="value" placeholder="请选择视频检测位置">
-                  <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  >
-                  </el-option>
-                </el-select>
-              </dt> -->
-              <dd>
-                <img
-                  src="@/assets/img/16村委会对面绿化带球机_20191116080003_11948_14D9FA50_15739004381.jpg"
-                  width="100%"
-                  height="100%"
-                  @click="popVideo('d2102790e235441cbefaf6b244c82dea')"
-                  alt=""
-                />
-              </dd>
-            </dl>
-            <!-- <img
-              src='@/assets/img/16村委会对面绿化带球机_20191116080003_11948_14D9FA50_15739004381.jpg' width="100%" height="100%"
-              alt=""
-            /> -->
-          </li>
-          <li class="li">
-            <dl>
-              <!-- <dt>
-                <el-select v-model="value" placeholder="请选择视频检测位置">
-                  <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  >
-                  </el-option>
-                </el-select>
-              </!-->
-              <dd>
-                <img
-                  src="@/assets/img/21余村进村卡口_20191116080008_11948_14D9FA50_15739004841.jpg"
-                  width="100%"
-                  height="100%"
-                  @click="popVideo('e2a6e080fe00496386aff52b0b0b6017')"
-                  alt=""
-                />
-              </dd>
-            </dl>
-            <!-- <img
-              src='@/assets/img/21余村进村卡口_20191116080008_11948_14D9FA50_15739004841.jpg' width="100%" height="100%"
-              alt=""
-            /> -->
-          </li>
-        </ul>
+        <div class="video-box" v-video-play="video"></div>
       </template>
     </party-box>
-    <el-dialog
+    <!-- <el-dialog
       :modal="false"
       title="提示"
       @opened="getVideo"
@@ -78,7 +21,7 @@
           style="width:100%;height:100%;"
         ></object>
       </div>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -90,33 +33,20 @@ export default {
   name: 'sightseeing',
   data() {
     return {
-      options: [
-        {
-          value: '选项1',
-          label: '黄金糕'
-        },
-        {
-          value: '选项2',
-          label: '双皮奶'
-        },
-        {
-          value: '选项3',
-          label: '蚵仔煎'
-        },
-        {
-          value: '选项4',
-          label: '龙须面'
-        },
-        {
-          value: '选项5',
-          label: '北京烤鸭'
-        }
-      ],
       value: '',
       imgRep: req.slice(0, -3),
       videoValue: 'ReqType:PlayReal;wndcount:1',
       dialogVisible: false,
-      videoCode: null
+      videoCode: null,
+      video: {
+        layout: '2x2',
+        code: [
+          '33052358001320515288',
+          '33052358001320515288',
+          '33052358001320515288',
+          '33052358001320515288'
+        ]
+      }
     };
   },
   computed: {},
@@ -126,7 +56,6 @@ export default {
     popVideo(type) {
       this.videoCode = type;
       // 这里弹出
-      // this.getVideo(),
       this.dialogVisible = true;
     },
     play_ocx_do(param) {
@@ -207,32 +136,12 @@ export default {
 <style scoped lang="scss">
 .sightseeing {
   position: absolute;
-  top: px2rem(804rem);
+  top: px2rem(586rem);
   left: px2rem(41rem);
   z-index: 1050;
-  .ul {
+  .video-box {
     display: flow-root;
-    .li {
-      box-sizing: border-box;
-      padding-top: px2rem(5rem);
-      margin-left: px2rem(35rem);
-      float: left;
-      dt {
-        width: px2rem(240rem);
-        height: px2rem(40rem);
-        background: rgba(49, 129, 191, 0.26);
-        border: 1px solid rgba(45, 126, 182, 1);
-        opacity: 0.8;
-        border-radius: 6px;
-        box-sizing: border-box;
-      }
-      dd {
-        width: px2rem(240rem);
-        height: px2rem(170rem);
-        background: rgba(2, 7, 26, 1);
-        border-radius: 4px;
-      }
-    }
+    height: 100%;
   }
 }
 </style>

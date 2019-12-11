@@ -28,7 +28,7 @@
           </div>
         </div>
         <div class="box statistics-box">
-          <div id="statistics"></div>
+          <eventBar></eventBar>
           <p class="p">
             政务办事事项
           </p>
@@ -52,8 +52,9 @@
 
 <script>
 import PartyBox from '@/components/party-box';
+import eventBar from '../analysis/echarts/event_bar';
 import { EleResize } from '@/utils/esresize';
-import { getonWeek, getSatisfied, getGovernment, getFrequency } from '@/api/law';
+import { getonWeek, getSatisfied, getFrequency } from '@/api/law';
 export default {
   name: 'apprun',
   data() {
@@ -147,123 +148,6 @@ export default {
       };
       let index = 0;
       this.manyiTimer = setInterval(() => {
-        var dataLen = option.series[0].data.length;
-        // 取消之前高亮的图形
-        myChart.dispatchAction({
-          type: 'downplay',
-          seriesIndex: 0,
-          dataIndex: index
-        });
-        index = (index + 1) % dataLen;
-        // 高亮当前图形
-        myChart.dispatchAction({
-          type: 'highlight',
-          seriesIndex: 0,
-          dataIndex: index
-        });
-        // 显示 tooltip
-        myChart.dispatchAction({
-          type: 'showTip',
-          seriesIndex: 0,
-          dataIndex: index
-        });
-      }, 1000);
-      myChart.setOption(option);
-    },
-    // 政府办事事项
-    echarts_statistics(typeArr, data) {
-      let myChart = this.$echarts.init(document.getElementById('statistics'));
-      let resizeDiv = document.getElementById('statistics');
-      let listener = () => {
-        myChart.resize();
-      };
-      EleResize.on(resizeDiv, listener);
-      let option = {
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-          }
-        },
-        backgroundColor: 'rgba(0,0,0,.1)',
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-        },
-        xAxis: [
-          {
-            type: 'category',
-            // data: ['人社局', '医保局', '税务', '民政', '残联', '村自有事'],
-            data: typeArr,
-            axisTick: {
-              show: false
-            },
-            axisLine: {
-              show: false
-            },
-            axisLabel: {
-              color: 'rgba(131,178,255,1)'
-            },
-            show: true
-          }
-        ],
-        yAxis: [
-          {
-            type: 'value',
-            show: true,
-            axisTick: {
-              show: false
-            },
-            axisLine: {
-              show: false
-            },
-            axisLabel: {
-              color: 'rgba(131,178,255,1)'
-            },
-            splitLine: {
-              lineStyle: {
-                color: 'rgba(8,65,107,1)'
-              }
-            }
-          }
-        ],
-        series: [
-          {
-            name: '代办事项',
-            type: 'bar',
-            barWidth: 20,
-            data: data,
-            label: {
-              normal: {
-                show: true,
-                position: 'top',
-                textStyle: {
-                  color: '#fff'
-                }
-              }
-            },
-            itemStyle: {
-              normal: {
-                color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                  {
-                    offset: 0,
-                    color: 'rgba(100,211,243,1)'
-                  },
-                  {
-                    offset: 1,
-                    color: 'rgba(54,132,247,1)'
-                  }
-                ])
-              }
-            }
-          }
-        ]
-      };
-      let index = 0;
-      this.zhengfuTimer = setInterval(() => {
         var dataLen = option.series[0].data.length;
         // 取消之前高亮的图形
         myChart.dispatchAction({
@@ -490,13 +374,6 @@ export default {
         this.echarts_satisfied(typeArr, data.data);
       }
     });
-    // 政府办事事项
-    getGovernment().then(data => {
-      if (data.code === 200) {
-        let typeArr = data.type;
-        this.echarts_statistics(typeArr, data.data);
-      }
-    });
     // 高频事项代办数量
     getFrequency().then(data => {
       if (data.code === 200) {
@@ -507,7 +384,7 @@ export default {
       }
     });
   },
-  components: { PartyBox },
+  components: { PartyBox, eventBar },
   beforeDestroy() {
     clearInterval(this.manyiTimer);
     clearInterval(this.zhengfuTimer);

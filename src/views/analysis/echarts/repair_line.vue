@@ -1,78 +1,25 @@
 <template>
-  <div class="level">
-    <party-box title="水位监测" width="592" height="392">
-      <template slot="content">
-        <div class="div-top">
-          <div class="left">
-            <p class="top">实时水位监测</p>
-            <p class="value">
-              {{ value[new Date().getHours()] }} <span style="font-size: 20px;">米</span>
-            </p>
-          </div>
-          <div class="right">
-            <p class="top">本月水位峰值</p>
-            <p class="value">11.2 <span style="font-size: 20px;">米</span></p>
-          </div>
-        </div>
-        <div class="echarts">
-          <p class="p-title">
-            24h水位监测: 米
-          </p>
-          <div id="water"></div>
-        </div>
-      </template>
-    </party-box>
-  </div>
+  <div class="repair_line" ref="echarts"></div>
 </template>
 
 <script>
-import PartyBox from '@/components/party-box';
-import { EleResize } from '@/utils/esresize';
+import { getRepair } from '@/api/analysis';
+import { EchatsMixin } from '@/mixin/echarts';
 export default {
-  name: 'level',
+  mixins: [EchatsMixin],
+  name: 'repair_line',
   data() {
     return {
-      timer: null,
-      hours: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
-      value: [
-        11.03,
-        11.04,
-        11.04,
-        11.1,
-        11.06,
-        11.1,
-        11.13,
-        11.04,
-        11.15,
-        11.14,
-        11.11,
-        11.09,
-        11.11,
-        11.12,
-        11.2,
-        11.1,
-        11.13,
-        11.08,
-        11.12,
-        11.04,
-        11.09,
-        11.12,
-        11.08,
-        11.09
-      ]
+      timer: null
     };
   },
   computed: {},
   watch: {},
   methods: {
     // 事件柱状图
-    echarts_evnet() {
-      let myChart = this.$echarts.init(document.getElementById('water'));
-      let resizeDiv = document.getElementById('water');
-      let listener = () => {
-        myChart.resize();
-      };
-      EleResize.on(resizeDiv, listener);
+    echarts_evnet(data) {
+      // 混入方法
+      let myChart = this.resizeEcharts();
       let option = {
         tooltip: {
           trigger: 'axis',
@@ -91,8 +38,7 @@ export default {
           {
             type: 'category',
             // data: ['人社局', '医保局', '税务', '民政', '残联', '村自有事'],
-            // data: data.hours,
-            data: this.hours.slice(0, new Date().getHours() + 1),
+            data: data.hours,
             axisTick: {
               show: true
             },
@@ -100,8 +46,7 @@ export default {
               show: false
             },
             axisLabel: {
-              color: 'rgba(131,178,255,1)',
-              fontSize: 14
+              color: 'rgba(131,178,255,1)'
             },
             show: true
           }
@@ -128,7 +73,7 @@ export default {
         ],
         series: [
           {
-            name: '水位监测',
+            name: '游客小时数据',
             type: 'line',
             smooth: true,
             //  symbol: "none", //去掉折线点
@@ -170,13 +115,13 @@ export default {
             areaStyle: {
               normal: {}
             },
-            // data: data.number
-            data: this.value.slice(0, new Date().getHours() + 1)
+            data: data.number
           }
         ]
       };
+
       let index = 0;
-      this.qiyeTimer = setInterval(() => {
+      this.echartsTimer = setInterval(() => {
         var dataLen = option.series[0].data.length;
         // 取消之前高亮的图形
         myChart.dispatchAction({
@@ -198,82 +143,39 @@ export default {
           dataIndex: index
         });
       }, 1000);
+
       myChart.clear();
       myChart.setOption(option, true);
+    },
+    // 定时请求数据
+    STI_getValue() {
+      // 请求小时旅游数据
+      getRepair().then(data => {
+        if (data.code === 200) {
+          this.echarts_evnet(data);
+        }
+      });
+      this.timer = setInterval(() => {
+        clearInterval(this.echartsTimer);
+        getRepair().then(data => {
+          if (data.code === 200) {
+            this.echarts_evnet(data);
+          }
+        });
+      }, 1000 * 30);
     }
   },
   mounted() {
-    this.echarts_evnet();
+    this.STI_getValue();
   },
   beforeDestroy() {
-    clearInterval(this.qiyeTimer);
-  },
-  components: { PartyBox }
+    clearInterval(this.timer);
+  }
 };
 </script>
 
-<style scoped>
-.level >>> .content {
-  padding: 0.38rem 0.36rem 0 0.52rem;
-  box-sizing: border-box;
-}
-</style>
-
 <style scoped lang="scss">
-.level {
-  position: absolute;
-  top: px2rem(134rem);
-  left: px2rem(662rem);
-  z-index: 100;
-  .div-top {
-    height: px2rem(88rem);
-    background: rgba(3, 12, 44, 0.7);
-    border-radius: 4px;
-    color: rgba(255, 255, 255, 1);
-    > div {
-      float: left;
-      position: absolute;
-      display: flow-root;
-      top: px2rem(30rem);
-      .top {
-        color: rgba(255, 255, 255, 1);
-      }
-      .value {
-        margin-top: px2rem(10rem);
-        font-size: px2rem(44rem);
-        font-family: 'DS-DIGII';
-      }
-    }
-    .left {
-      left: px2rem(50rem);
-      .value {
-        color: #00f0ff;
-      }
-    }
-    .right {
-      left: px2rem(329rem);
-      .value {
-        color: #bb500f;
-      }
-    }
-  }
-  .echarts {
-    position: relative;
-    width: px2rem(548rem);
-    height: px2rem(249rem);
-    margin-top: px2rem(13rem);
-    .p-title {
-      position: absolute;
-      text-align: center;
-      line-height: px2rem(49rem);
-      width: px2rem(130rem);
-      color: #187ed5;
-      background: rgba(3, 12, 44, 0.7);
-      border-radius: 4px;
-    }
-    #water {
-      height: 100%;
-    }
-  }
+.repair_line {
+  height: 100%;
 }
 </style>

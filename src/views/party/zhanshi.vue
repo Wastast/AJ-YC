@@ -4,16 +4,15 @@
       <template slot="content">
         <div class="div">
           <p class="p-title">
-            村集体经济总收入: 万元
+            {{ typeValue[moduleType] }}
           </p>
-          <div id="shouru"></div>
+          <div class="div-btn" @click="checkModule()">
+            {{ moduleType == 'collective' ? '人均收入' : '集体收入' }}
+          </div>
+          <collective-bar v-if="moduleType === 'collective'"></collective-bar>
+          <average-bar v-if="moduleType === 'average'"></average-bar>
         </div>
-        <div class="div">
-          <p class="p-title">
-            村人均收入: 万元
-          </p>
-          <div id="tongji"></div>
-        </div>
+
         <ul class="ul">
           <li class="li" v-for="(item, index) of list" :key="index">
             <p class="p-title">
@@ -41,10 +40,10 @@
 
 <script>
 import PartyBox from '@/components/party-box';
-import { EleResize } from '@/utils/esresize';
-import { getCollective, getAverage } from '@/api/party';
 import { getDesc } from '@/api/analysis';
 import countTo from 'vue-count-to';
+import collectiveBar from './echarts/collective_bar';
+import averageBar from './echarts/average_bar';
 export default {
   name: 'zhanshi',
   data() {
@@ -75,260 +74,29 @@ export default {
           value: 37
         }
       ],
-      jitiTimer: null,
-      gerenTimer: null
+      moduleType: null,
+      typeValue: {
+        collective: '村集体经济总收入: 万元',
+        average: '村人均收入: 万元'
+      }
     };
   },
   computed: {},
   watch: {},
   methods: {
-    // 收入柱状图
-    echarts_shouru(value) {
-      let myChart = this.$echarts.init(document.getElementById('shouru'));
-      let resizeDiv = document.getElementById('shouru');
-      let listener = () => {
-        myChart.resize();
-      };
-      EleResize.on(resizeDiv, listener);
-      let option = {
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-          }
-        },
-        backgroundColor: 'rgba(0,0,0,.1)',
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-        },
-        xAxis: [
-          {
-            type: 'category',
-            data: value.year,
-            axisTick: {
-              show: false
-            },
-            axisLine: {
-              show: false
-            },
-            axisLabel: {
-              color: 'rgba(131,178,255,1)'
-            },
-            show: true
-          }
-        ],
-        yAxis: [
-          {
-            type: 'value',
-            show: true,
-            axisTick: {
-              show: false
-            },
-            axisLine: {
-              show: false
-            },
-            axisLabel: {
-              color: 'rgba(131,178,255,1)'
-            },
-            splitLine: {
-              lineStyle: {
-                color: 'rgba(8,65,107,1)'
-              }
-            }
-          }
-        ],
-        series: [
-          {
-            name: '集体收入',
-            type: 'bar',
-            barWidth: 20,
-            data: value.data,
-            label: {
-              normal: {
-                show: true,
-                position: 'top',
-                textStyle: {
-                  color: '#fff'
-                }
-              }
-            },
-            // background:linear-gradient(0 deg,rgba(100,211,243,1) 0%,rgba(54,132,247,1) 100%);
-            itemStyle: {
-              normal: {
-                color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                  {
-                    offset: 0,
-                    color: 'rgba(100,211,243,1)'
-                  },
-                  {
-                    offset: 1,
-                    color: 'rgba(54,132,247,1)'
-                  }
-                ])
-              }
-            }
-          }
-        ]
-      };
-      let index = 0;
-      this.jitiTimer = setInterval(() => {
-        var dataLen = option.series[0].data.length;
-        // 取消之前高亮的图形
-        myChart.dispatchAction({
-          type: 'downplay',
-          seriesIndex: 0,
-          dataIndex: index
-        });
-        // 高亮当前图形
-        myChart.dispatchAction({
-          type: 'highlight',
-          seriesIndex: 0,
-          dataIndex: index
-        });
-        // 显示 tooltip
-        myChart.dispatchAction({
-          type: 'showTip',
-          seriesIndex: 0,
-          dataIndex: index
-        });
-        index = (index + 1) % dataLen;
-      }, 1000);
-      myChart.setOption(option);
-    },
-    // 人均收入柱状图
-    echarts_tongji(value) {
-      let myChart = this.$echarts.init(document.getElementById('tongji'));
-      let resizeDiv = document.getElementById('tongji');
-      let listener = () => {
-        myChart.resize();
-      };
-      EleResize.on(resizeDiv, listener);
-      let option = {
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-          }
-        },
-        backgroundColor: 'rgba(0,0,0,.1)',
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-        },
-        xAxis: [
-          {
-            type: 'category',
-            data: value.year,
-            axisTick: {
-              show: false
-            },
-            axisLine: {
-              show: false
-            },
-            axisLabel: {
-              color: 'rgba(131,178,255,1)'
-            },
-            show: true
-          }
-        ],
-        yAxis: [
-          {
-            type: 'value',
-            show: true,
-            axisTick: {
-              show: false
-            },
-            axisLine: {
-              show: false
-            },
-            axisLabel: {
-              color: 'rgba(131,178,255,1)'
-            },
-            splitLine: {
-              lineStyle: {
-                color: 'rgba(8,65,107,1)'
-              }
-            }
-          }
-        ],
-        series: [
-          {
-            name: '人均收入',
-            type: 'bar',
-            barWidth: 20,
-            data: value.data,
-            label: {
-              normal: {
-                show: true,
-                position: 'top',
-                textStyle: {
-                  color: '#fff'
-                }
-              }
-            },
-            itemStyle: {
-              normal: {
-                color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                  {
-                    offset: 0,
-                    color: 'rgba(245,156,0,1)'
-                  },
-                  {
-                    offset: 1,
-                    color: 'rgba(225,95,0,1)'
-                  }
-                ])
-              }
-            }
-          }
-        ]
-      };
-      let index = 0;
-      this.gerenTimer = setInterval(() => {
-        var dataLen = option.series[0].data.length;
-        // 取消之前高亮的图形
-        myChart.dispatchAction({
-          type: 'downplay',
-          seriesIndex: 0,
-          dataIndex: index
-        });
-        // 高亮当前图形
-        myChart.dispatchAction({
-          type: 'highlight',
-          seriesIndex: 0,
-          dataIndex: index
-        });
-        // 显示 tooltip
-        myChart.dispatchAction({
-          type: 'showTip',
-          seriesIndex: 0,
-          dataIndex: index
-        });
-        index = (index + 1) % dataLen;
-      }, 1000);
-      myChart.setOption(option);
+    // 切换type
+    checkModule() {
+      let type;
+      if (this.moduleType === 'collective') {
+        type = 'average';
+      } else {
+        type = 'collective';
+      }
+      this.moduleType = type;
     }
   },
   mounted() {
-    // 集体总收入
-    getCollective().then(data => {
-      if (data.code === 200) {
-        this.echarts_shouru(data);
-      }
-    });
-    // 村个人平均收入
-    getAverage().then(data => {
-      if (data.code === 200) {
-        this.echarts_tongji(data);
-      }
-    });
+    this.moduleType = 'collective';
     getDesc().then(data => {
       if (data.code === 200) {
         this.list.forEach((item, index) => {
@@ -342,13 +110,11 @@ export default {
       }
     });
   },
-  beforeDestroy() {
-    clearInterval(this.jitiTimer);
-    clearInterval(this.gerenTimer);
-  },
   components: {
     PartyBox,
-    countTo
+    countTo,
+    collectiveBar,
+    averageBar
   }
 };
 </script>
@@ -379,9 +145,23 @@ export default {
       padding: 0 0.32rem;
       color: #80a5ce;
     }
-    div {
-      width: 100%;
-      height: 100%;
+    .div-btn {
+      position: absolute;
+      top: px2rem(5rem);
+      right: px2rem(35rem);
+      z-index: 1050;
+      padding: px2rem(10rem);
+      color: rgba(131, 178, 255, 1);
+      text-align: center;
+      background: rgba(97, 206, 243, 0);
+      border: 1px solid rgba(57, 114, 154, 1);
+      box-shadow: 0 0 5px rgba(31, 61, 139, 1);
+      border-radius: 2px;
+      font-size: px2rem(18rem);
+      cursor: pointer;
+      &:hover {
+        filter: brightness(1.2);
+      }
     }
   }
   .ul {
