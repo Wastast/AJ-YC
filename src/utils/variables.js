@@ -2,7 +2,7 @@ import { getDataType } from '@/utils/currency';
 
 let globle = {
   req: process.env.VUE_APP_BASE_API,
-  url: ''
+  mapWorld: null
 };
 
 // 过滤数据

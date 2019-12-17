@@ -33,6 +33,28 @@
             </div>
           </li>
         </ul>
+
+        <div class="bottom">
+          <div class="title">
+            服务人群画像
+          </div>
+          <div class="top">
+            <ul class="ul">
+              <li
+                class="renqun"
+                v-for="(item, index) in typeList"
+                :key="index"
+                :class="item.type === type ? 'checked' : ''"
+                @click="checkType(item.type)"
+              >
+                {{ item.name }}
+              </li>
+            </ul>
+          </div>
+          <div class="echarts">
+            <renqun-pie :type="type"></renqun-pie>
+          </div>
+        </div>
       </template>
     </party-box>
   </div>
@@ -44,6 +66,8 @@ import { getDesc } from '@/api/analysis';
 import countTo from 'vue-count-to';
 import collectiveBar from './echarts/collective_bar';
 import averageBar from './echarts/average_bar';
+import renqunPie from '../analysis/echarts/renqun_pie';
+import { TipsPop } from '@/utils/el_ui';
 export default {
   name: 'zhanshi',
   data() {
@@ -78,7 +102,22 @@ export default {
       typeValue: {
         collective: '村集体经济总收入: 万元',
         average: '村人均收入: 万元'
-      }
+      },
+      typeList: [
+        {
+          name: '性别',
+          type: 'sex'
+        },
+        {
+          name: '年龄',
+          type: 'age'
+        },
+        {
+          name: '文化程度',
+          type: 'wenhua'
+        }
+      ],
+      type: ''
     };
   },
   computed: {},
@@ -93,6 +132,16 @@ export default {
         type = 'collective';
       }
       this.moduleType = type;
+    },
+    // 更改type值
+    checkType(type) {
+      if (type === 'wenhua') {
+        TipsPop({
+          message: '暂无数据',
+          type: 'info'
+        });
+      }
+      this.type = type;
     }
   },
   mounted() {
@@ -109,12 +158,14 @@ export default {
         });
       }
     });
+    this.type = 'sex';
   },
   components: {
     PartyBox,
     countTo,
     collectiveBar,
-    averageBar
+    averageBar,
+    renqunPie
   }
 };
 </script>
@@ -218,6 +269,68 @@ export default {
       &:nth-child(n + 3) {
         margin-top: px2rem(8rem);
       }
+    }
+  }
+  .bottom {
+    margin: 0 auto;
+    width: 100%;
+    background: rgba(2, 7, 26, 0.3);
+    width: px2rem(484rem);
+    height: px2rem(300rem);
+    margin-top: px2rem(10rem);
+    margin-left: px2rem(15rem);
+    overflow: hidden;
+    position: relative;
+    .title {
+      display: inline-block;
+      box-sizing: border-box;
+      margin: px2rem(10rem) 0 0 px2rem(10rem);
+      color: rgba(128, 165, 206, 1);
+    }
+    .top {
+      display: flex;
+      height: px2rem(60rem);
+      width: px2rem(520rem);
+      height: px2rem(35rem);
+      background: rgba(0, 36, 139, 0.2);
+      border-radius: 18px;
+      margin: px2rem(10rem) 0 0;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1999;
+      .ul {
+        display: flex;
+        margin: auto;
+        .renqun {
+          float: left;
+          width: px2rem(86rem);
+          height: px2rem(30rem);
+          border-radius: 5px;
+          line-height: px2rem(30rem);
+          transition: 0.5s;
+          text-align: center;
+          color: #fff;
+          margin: auto;
+          &:hover {
+            cursor: pointer;
+            background: rgba(0, 104, 220, 0.4);
+            border-radius: 50px;
+            color: #fff;
+            font-weight: bold;
+          }
+        }
+        .checked {
+          background: rgba(0, 104, 220, 0.4);
+          border-radius: 50px;
+          color: #fff;
+          font-weight: bold;
+        }
+      }
+    }
+    .echarts {
+      width: 100%;
+      height: px2rem(250rem);
     }
   }
 }

@@ -13,7 +13,7 @@
           </span>
         </div>
         <ul class="ul" v-if="eventList">
-          <vuescroll>
+          <vuescroll :ops="ops">
             <li class="li" v-for="(item, index) of eventList" :key="index" @click="showDesc(item)">
               <span class="span span-title ellipsis">
                 {{ item.type }}
@@ -22,7 +22,8 @@
                 {{ item.title }}
               </span>
               <span class="span span-time">
-                {{ (item.release_time + '').slice(0, 10) }}
+                <!-- {{ (item.release_time + '').slice(0, 10) }} -->
+                {{ item.release_time | fiterYMD}}
               </span>
             </li>
           </vuescroll>
@@ -66,7 +67,12 @@ export default {
         title: '',
         content: ''
       },
-      dialogVisible: false
+      dialogVisible: false,
+      ops: {
+        bar: {
+          background: 'rgba(0,0,0,0)'
+        }
+      }
     };
   },
   computed: {},

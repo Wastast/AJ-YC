@@ -2,20 +2,22 @@
   <div class="heart">
     <party-box title="党建心连心" width="517" height="235">
       <template slot="content">
-        <ul class="ul">
-          <li class="li" v-for="(item, index) of list" :key="index">
-            <span class="span span-title ellipsis">
-              {{ item.title }}
-            </span>
-            <span class="span span-event ellipsis">
-              {{ item.message }}
-            </span>
-            <span class="span span-time">
-              <!-- 2019/01/ -->
-              {{ item.createTime ? (item.createTime + '').slice(0, 10) : '未知' }}
-            </span>
-          </li>
-        </ul>
+        <vuescroll :ops="ops">
+          <ul class="ul">
+            <li class="li" v-for="(item, index) of list" :key="index">
+              <span class="span span-title ellipsis">
+                {{ item.title }}
+              </span>
+              <span class="span span-event ellipsis">
+                {{ item.message }}
+              </span>
+              <span class="span span-time">
+                <!-- {{ item.createTime ? (item.createTime + '').slice(0, 10) : '未知' }} -->
+                {{ item.createTime | fiterYMD }}
+              </span>
+            </li>
+          </ul>
+        </vuescroll>
       </template>
     </party-box>
   </div>
@@ -24,11 +26,17 @@
 <script>
 import PartyBox from '@/components/party-box';
 import { getHeart } from '@/api/party';
+import vuescroll from 'vuescroll';
 export default {
   name: 'heart',
   data() {
     return {
-      list: []
+      list: [],
+      ops: {
+        bar: {
+          background: 'rgab(0,0,0,0)'
+        }
+      }
     };
   },
   computed: {},
@@ -42,7 +50,8 @@ export default {
     });
   },
   components: {
-    PartyBox
+    PartyBox,
+    vuescroll
   }
 };
 </script>

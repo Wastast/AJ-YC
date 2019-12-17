@@ -21,12 +21,6 @@ export const constantRoutes = [
     component: () => import('../views/404'),
     meta: { title: '404' }
   },
-  // {
-  //   path: '/control',
-  //   name: 'control',
-  //   component: () => import('../views/control'),
-  //   meta: { title: 'control' }
-  // },
   {
     path: '/',
     name: 'analysis',

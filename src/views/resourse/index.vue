@@ -3,11 +3,13 @@
     <r-header title="生态美村 发展强村"></r-header>
     <r-trash></r-trash>
     <r-travel></r-travel>
-    <r-alarm></r-alarm>
     <r-atmosphere></r-atmosphere>
     <r-bayonet></r-bayonet>
     <r-level></r-level>
-    <r-quality></r-quality>
+    <r-park></r-park>
+    <r-fire></r-fire>
+    <r-fire></r-fire>
+    <r-hourse></r-hourse>
   </div>
 </template>
 
@@ -15,11 +17,12 @@
 import RHeader from '@/components/Header';
 import RTrash from './Trash';
 import RTravel from './Travel';
-import RAlarm from './alarm';
 import RAtmosphere from './atmosphere';
 import RBayonet from './bayonet';
 import RLevel from './level';
-import RQuality from './quality';
+import RPark from './park';
+import RFire from './fire';
+import RHourse from './hourse';
 import { resize } from '@/mixin';
 export default {
   name: 'home',
@@ -34,11 +37,12 @@ export default {
     RHeader,
     RTrash,
     RTravel,
-    RAlarm,
     RAtmosphere,
     RBayonet,
     RLevel,
-    RQuality
+    RPark,
+    RFire,
+    RHourse
   },
   mixins: [resize]
 };

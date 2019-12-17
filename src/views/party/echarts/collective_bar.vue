@@ -101,29 +101,7 @@ export default {
           }
         ]
       };
-      let index = 0;
-      this.echartsTimer = setInterval(() => {
-        var dataLen = option.series[0].data.length;
-        // 取消之前高亮的图形
-        myChart.dispatchAction({
-          type: 'downplay',
-          seriesIndex: 0,
-          dataIndex: index
-        });
-        // 高亮当前图形
-        myChart.dispatchAction({
-          type: 'highlight',
-          seriesIndex: 0,
-          dataIndex: index
-        });
-        // 显示 tooltip
-        myChart.dispatchAction({
-          type: 'showTip',
-          seriesIndex: 0,
-          dataIndex: index
-        });
-        index = (index + 1) % dataLen;
-      }, 1000);
+      this.autoMatic(myChart, option.series[0].data.length);
       myChart.setOption(option);
     }
   },

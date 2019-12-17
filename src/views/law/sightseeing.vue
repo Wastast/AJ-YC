@@ -1,27 +1,14 @@
 <template>
   <div class="sightseeing">
-    <party-box title="公共区域" width="592" height="400">
+    <party-box title="公共区域" width="592" height="380">
       <template slot="content">
-        <div class="video-box" v-video-play="video"></div>
+        <div class="video-box">
+          <div class="div" v-for="(item, index) of code" :key="index">
+            <video v-video-play="item" muted></video>
+          </div>
+        </div>
       </template>
     </party-box>
-    <!-- <el-dialog
-      :modal="false"
-      title="提示"
-      @opened="getVideo"
-      :destroy-on-close="true"
-      :visible.sync="dialogVisible"
-      width="40%"
-    >
-      <div style="height: 500px;">
-        <object
-          classid="CLSID:7E393848-7238-4CE3-82EE-44AF444B240A"
-          wmode="opaque"
-          id="PlayViewOCX"
-          style="width:100%;height:100%;"
-        ></object>
-      </div>
-    </el-dialog> -->
   </div>
 </template>
 
@@ -35,85 +22,17 @@ export default {
     return {
       value: '',
       imgRep: req.slice(0, -3),
-      videoValue: 'ReqType:PlayReal;wndcount:1',
-      dialogVisible: false,
-      videoCode: null,
-      video: {
-        layout: '2x2',
-        code: [
-          '33052358001320515288',
-          '33052358001320515288',
-          '33052358001320515288',
-          '33052358001320515288'
-        ]
-      }
+      code: [
+        '5bc6b7dd26e34f83a5091bf5b6a8420a',
+        '7e61ca0ed015445db18d5cb44902e6a3',
+        'd2102790e235441cbefaf6b244c82dea',
+        '61e626767df34eeab79f4f67509f26d2'
+      ]
     };
   },
   computed: {},
   watch: {},
-  methods: {
-    // 弹出视频
-    popVideo(type) {
-      this.videoCode = type;
-      // 这里弹出
-      this.dialogVisible = true;
-    },
-    play_ocx_do(param) {
-      let OCXobj = document.getElementById('PlayViewOCX');
-      OCXobj.ContainOCX_Do(param);
-    },
-    // 初始化
-    init() {
-      return new Promise((resolve, reject) => {
-        let OCXobj = document.getElementById('PlayViewOCX');
-        let txtInit = this.videoValue;
-        OCXobj.ContainOCX_Init(txtInit);
-        resolve();
-      });
-    },
-    // 获取视频
-    getVideo() {
-      getVideoData({
-        indexcode: this.videoCode
-      }).then(data => {
-        let { CamList, appSecret, appkey, time, timeSecret } = data;
-        // hikvideoclient://ReqType:PlayReal;VersionTag:artemis;
-        // ReqType:PlayReal;WndCount: 1;
-        this.init()
-          .then(() => {
-            // let param = `hikvideoclient://ReqType:PlayReal;VersionTag:artemis;SvrIp:33.155.144.50;SvrPort:443;Appkey:${appkey};AppSecret:${appSecret};time:${time};timesecret:${timeSecret};httpsflag:1;CamList:${CamList};`
-            // let param = `ReqType:PlayReal;WndCount: 1;SvrIp:33.155.144.50;SvrPort:443;Appkey:${appkey};AppSecret:${appSecret};time:${time};timesecret:${timeSecret};httpsflag: 1;CamList:${CamList};`
-            let param =
-              'ReqType:PlayReal;WndCount: 1;SvrIp:33.155.144.50;SvrPort:443;' +
-              'Appkey:' +
-              appkey +
-              ';' +
-              'AppSecret:' +
-              appSecret +
-              ';' +
-              'time:' +
-              time +
-              ';' +
-              'timesecret:' +
-              timeSecret +
-              ';' +
-              'httpsflag: 1;' +
-              'CamList:' +
-              CamList +
-              ';';
-            setTimeout(() => {
-              this.play_ocx_do(param);
-            }, 2000);
-          })
-          .catch(() => {
-            TipsPop({
-              message: '请使用IE浏览器,该浏览器不支持该控件',
-              type: 'error'
-            });
-          });
-      });
-    }
-  },
+  methods: {},
   mounted() {},
   components: { PartyBox }
 };
@@ -136,12 +55,24 @@ export default {
 <style scoped lang="scss">
 .sightseeing {
   position: absolute;
-  top: px2rem(586rem);
+  top: px2rem(602rem);
   left: px2rem(41rem);
   z-index: 1050;
   .video-box {
-    display: flow-root;
-    height: 100%;
+    margin-top: px2rem(10rem);
+    .div {
+      width: px2rem(280rem);
+      height: px2rem(175rem);
+      float: left;
+      margin-left: px2rem(10rem);
+      &:nth-child(n + 3) {
+        margin-top: px2rem(10rem);
+      }
+      video {
+        width: 100%;
+        height: 100%;
+      }
+    }
   }
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="level">
-    <party-box title="水位监测" width="592" height="392">
+    <party-box title="水位监测" width="592" height="141">
       <template slot="content">
         <div class="div-top">
           <div class="left">
@@ -14,12 +14,12 @@
             <p class="value">11.2 <span style="font-size: 20px;">米</span></p>
           </div>
         </div>
-        <div class="echarts">
+        <!-- <div class="echarts">
           <p class="p-title">
             24h水位监测: 米
           </p>
           <div id="water"></div>
-        </div>
+        </div> -->
       </template>
     </party-box>
   </div>
@@ -203,7 +203,7 @@ export default {
     }
   },
   mounted() {
-    this.echarts_evnet();
+    // this.echarts_evnet();
   },
   beforeDestroy() {
     clearInterval(this.qiyeTimer);
@@ -222,11 +222,11 @@ export default {
 <style scoped lang="scss">
 .level {
   position: absolute;
-  top: px2rem(134rem);
+  top: px2rem(845rem);
   left: px2rem(662rem);
   z-index: 100;
   .div-top {
-    height: px2rem(88rem);
+    height: px2rem(100rem);
     background: rgba(3, 12, 44, 0.7);
     border-radius: 4px;
     color: rgba(255, 255, 255, 1);

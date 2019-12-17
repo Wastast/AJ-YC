@@ -1,26 +1,6 @@
 <template>
   <div class="finance">
-    <party-box title="财务公开" width="592" height="392">
-      <!-- <template slot="content">
-        <ul class="ul">
-          <li class="li" v-for="(item, index) of [1, 2, 3]" :key="index">
-            <div class="div-imgbox"></div>
-            <div class="div-text">
-              <p class="p-title">
-                2019收入状况
-              </p>
-              <div class="div-status">
-                <span class="span span-in">收入</span>
-                <span class="span span-out">支出</span>
-              </div>
-              <div class="div-money">
-                <p class="p p-in">281202 <span>.92</span></p>
-                <p class="p p-out">281202<span>.92</span></p>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </template> -->
+    <party-box title="财务公开" width="592" height="255">
       <template slot="content">
         <ul class="ul">
           <vuescroll :ops="ops" ref="vs">
@@ -111,7 +91,7 @@ export default {
   z-index: 1052;
   display: flow-root;
   .ul {
-    height: px2rem(392rem);
+    height: px2rem(250rem);
     .li {
       height: px2rem(40rem);
       line-height: px2rem(40rem);

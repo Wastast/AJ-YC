@@ -1,30 +1,13 @@
 <template>
   <div class="map">
     <div id="maps"></div>
-    <el-dialog
-      :modal="false"
-      title="实时预览"
-      @opened="getVideo"
-      :destroy-on-close="true"
-      :visible.sync="dialogVisible"
-      width="40%"
-    >
-      <div style="height: 500px;">
-        <object
-          classid="CLSID:7E393848-7238-4CE3-82EE-44AF444B240A"
-          wmode="opaque"
-          id="PlayViewOCX"
-          style="width:100%;height:100%;"
-        ></object>
-      </div>
-    </el-dialog>
-    <!-- 添加预览控件（需要先在windows下注册） -->
-    <object
-      classid="CLSID:7E393848-7238-4CE3-82EE-44AF444B240A"
-      wmode="opaque"
-      id="PlayViewOCX"
-      style="width:0;heght:0;"
-    ></object>
+    <pop-box title="视频播放" :width="600" :height="350" :isPop.sync="isPop">
+      <template slot="content">
+        <div class="vide-box">
+          <video v-video-play="videoCode"></video>
+        </div>
+      </template>
+    </pop-box>
   </div>
 </template>
 
@@ -32,15 +15,15 @@
 import { getVideoData } from '@/api/analysis';
 import { getVideoSmoke } from '@/api/mapapi';
 import { TipsPop } from '@/utils/el_ui';
+import PopBox from '@/components/PopBox';
 export default {
   name: 'maps',
   data() {
     return {
-      pointList: ['001001001', '001001005', '001001006'],
       imgRep: req.slice(0, -3),
-      videoValue: 'ReqType:PlayReal;wndcount:1',
       dialogVisible: false,
-      videoCode: null
+      videoCode: null,
+      isPop: false
     };
   },
   computed: {},
@@ -48,7 +31,6 @@ export default {
   methods: {
     // 添加点位
     addPoint(item) {
-      // console.log(item)
       let iconValue = item;
       let sLonLat = new SLonLat(iconValue.lon, iconValue.lat);
       let iconPath = this.imgRep + '/upload/icon/' + iconValue.img;
@@ -72,67 +54,10 @@ export default {
         TMapAPI.map.HideLabelsByTag('default' + item.id);
       });
     },
-    // 弹出视频
-    popVideo(type) {
-      this.videoCode = type;
-      // 这里弹出
-      // this.getVideo(),
-      this.dialogVisible = true;
-    },
-    play_ocx_do(param) {
-      let OCXobj = document.getElementById('PlayViewOCX');
-      OCXobj.ContainOCX_Do(param);
-    },
-    // 初始化
-    init() {
-      return new Promise((resolve, reject) => {
-        let OCXobj = document.getElementById('PlayViewOCX');
-        let txtInit = this.videoValue;
-        OCXobj.ContainOCX_Init(txtInit);
-        resolve();
-      });
-    },
-    // 获取视频
-    getVideo() {
-      getVideoData({
-        indexcode: this.videoCode
-      }).then(data => {
-        let { CamList, appSecret, appkey, time, timeSecret } = data;
-        // hikvideoclient://ReqType:PlayReal;VersionTag:artemis;
-        // ReqType:PlayReal;WndCount: 1;
-        this.init()
-          .then(() => {
-            // let param = `hikvideoclient://ReqType:PlayReal;VersionTag:artemis;SvrIp:33.155.144.50;SvrPort:443;Appkey:${appkey};AppSecret:${appSecret};time:${time};timesecret:${timeSecret};httpsflag:1;CamList:${CamList};`
-            // let param = `ReqType:PlayReal;WndCount: 1;SvrIp:33.155.144.50;SvrPort:443;Appkey:${appkey};AppSecret:${appSecret};time:${time};timesecret:${timeSecret};httpsflag: 1;CamList:${CamList};`
-            let param =
-              'ReqType:PlayReal;WndCount: 1;SvrIp:33.155.144.50;SvrPort:443;' +
-              'Appkey:' +
-              appkey +
-              ';' +
-              'AppSecret:' +
-              appSecret +
-              ';' +
-              'time:' +
-              time +
-              ';' +
-              'timesecret:' +
-              timeSecret +
-              ';' +
-              'httpsflag: 1;' +
-              'CamList:' +
-              CamList +
-              ';';
-            setTimeout(() => {
-              this.play_ocx_do(param);
-            }, 2000);
-          })
-          .catch(() => {
-            TipsPop({
-              message: '请使用IE浏览器,该浏览器不支持该控件',
-              type: 'error'
-            });
-          });
-      });
+    // 播放视频
+    popVideo(id) {
+      this.videoCode = id;
+      this.isPop = true;
     }
   },
   mounted() {
@@ -145,19 +70,11 @@ export default {
         TMapAPI.map.HideLabels();
       }
     });
-    // for (let item of this.pointList) {
-    //   getResourseType({
-    //     typeid: item
-    //   }).then(data => {
-    //     if (data.code === 200) {
-    //       data.data.forEach(item => {
-    //         this.addPoint(item)
-    //       })
-    //     }
-    //   })
-    // }
     TMapAPI.InitMap('maps');
     TMapAPI.map.SetCenter(new SLonLat(1500, 1010), 1);
+  },
+  components: {
+    PopBox
   }
 };
 </script>
@@ -202,6 +119,16 @@ export default {
     z-index: 1050;
     top: 0;
     left: 0;
+  }
+}
+.vide-box {
+  box-sizing: border-box;
+  padding-left: px2rem(10rem);
+  height: px2rem(270rem);
+  padding-right: px2rem(10rem);
+  video {
+    width: 100%;
+    height: 100%;
   }
 }
 </style>

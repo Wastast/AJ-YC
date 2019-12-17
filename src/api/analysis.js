@@ -23,3 +23,15 @@ export const getPicUrl = data => get('/dwdTourEventInfo/getImg', data);
 
 // 环境数据接口
 export const getEnvironmental = data => get('/dwsTourWeatherMonitorRt', data);
+
+// 获取环境下属数据接口
+export const getEsunValue = data => get('/dwsTourWeatherMonitorH/weatherHistory', data);
+
+// 获取年龄
+export const getAge = data => post('/dimTourBasResidentInfo/api/analysisAge', data);
+
+// 获取性别人群画像
+export const getSex = data => post('/dimTourBasResidentInfo/api/analysisSex', data);
+
+// 获取视频url
+export const getVideoUrl = data => get('/dimTourDevcVideoSurveillance/findByResourceId', data);

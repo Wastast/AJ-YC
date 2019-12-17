@@ -55,6 +55,7 @@ export default {
   }
   .div-content {
     height: 100%;
+    overflow: hidden;
   }
 }
 </style>

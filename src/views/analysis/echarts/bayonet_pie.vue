@@ -101,7 +101,6 @@ export default {
                 show: false
               }
             },
-            // data: [{ value: 679, name: '市内' }, { value: 1548, name: '市外' }]
             data: city
           }
         ]

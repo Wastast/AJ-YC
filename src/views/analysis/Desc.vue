@@ -1,32 +1,56 @@
 <template>
-  <div class="event">
-    <module-box title="村情简介">
+  <div>
+    <div class="event">
+      <module-box title="村情简介">
+        <template slot="content">
+          <ul class="ul">
+            <li
+              class="li"
+              v-for="(item, index) of list"
+              :key="index"
+              @click="getType(item.type || '')"
+            >
+              <img :src="item.imgUrl" alt="" />
+              <dl :style="{ color: item.color }">
+                <dt>
+                  {{ item.name }}
+                </dt>
+                <dd>
+                  <countTo
+                    :startVal="parseInt(0)"
+                    :endVal="parseFloat(item.value)"
+                    :duration="4000"
+                  ></countTo>
+                  {{ item.unit }}
+                </dd>
+              </dl>
+            </li>
+          </ul>
+        </template>
+      </module-box>
+    </div>
+    <pop-box :isPop.sync="isPop" :title="'人群画像分析'">
       <template slot="content">
-        <ul class="ul">
-          <li
-            class="li"
-            v-for="(item, index) of list"
-            :key="index"
-            @click="getType(item.type || '')"
-          >
-            <img :src="item.imgUrl" alt="" />
-            <dl :style="{ color: item.color }">
-              <dt>
+        <div class="pop-content">
+          <div class="top">
+            <ul class="ul">
+              <li
+                class="li"
+                v-for="(item, index) in typeList"
+                :key="index"
+                :class="item.type === type ? 'checked' : ''"
+                @click="checkType(item.type)"
+              >
                 {{ item.name }}
-              </dt>
-              <dd>
-                <countTo
-                  :startVal="parseInt(0)"
-                  :endVal="parseFloat(item.value)"
-                  :duration="4000"
-                ></countTo>
-                {{ item.unit }}
-              </dd>
-            </dl>
-          </li>
-        </ul>
+              </li>
+            </ul>
+          </div>
+          <div class="echarts">
+            <renqun-pie :type="type"></renqun-pie>
+          </div>
+        </div>
       </template>
-    </module-box>
+    </pop-box>
   </div>
 </template>
 
@@ -34,6 +58,9 @@
 import ModuleBox from '@/components/analys-box';
 import { getDesc } from '@/api/analysis';
 import countTo from 'vue-count-to';
+import PopBox from '@/components/PopBox';
+import { TipsPop } from '@/utils/el_ui';
+import RenqunPie from './echarts/renqun_pie';
 export default {
   name: 'event',
   data() {
@@ -44,14 +71,16 @@ export default {
           name: '总户数',
           value: '0',
           unit: '户',
-          color: 'rgba(131,178,255,1)'
+          color: 'rgba(131,178,255,1)',
+          type: 'renqun'
         },
         {
           imgUrl: require('@/assets/analysis/hushu-2@2x.png'),
           name: '总人数',
           value: '0',
           unit: '人',
-          color: 'rgba(250,174,27,1)'
+          color: 'rgba(250,174,27,1)',
+          type: 'renqun'
         },
         {
           imgUrl: require('@/assets/analysis/renjunshouru@2x.png'),
@@ -88,11 +117,33 @@ export default {
       typeValue: {
         dyzj: true,
         wxzj: true
-      }
+      },
+      isPop: false,
+      typeList: [
+        {
+          name: '性别',
+          type: 'sex'
+        },
+        {
+          name: '年龄',
+          type: 'age'
+        },
+        {
+          name: '文化程度',
+          type: 'wenhua'
+        }
+      ],
+      type: ''
     };
   },
   computed: {},
-  watch: {},
+  watch: {
+    isPop() {
+      if (!this.isPop) {
+        this.type = '';
+      }
+    }
+  },
   methods: {
     // 获取村情数据
     getValue() {
@@ -116,14 +167,27 @@ export default {
     },
     // 获取type
     getType(type) {
-      if (type) {
+      if (typeof this.typeValue[type] !== 'undefined') {
         if (this.typeValue[type]) {
           TMapAPI.ShowMarkersByTag(type);
         } else {
           TMapAPI.HideMarkersByTag(type);
         }
         this.typeValue[type] = !this.typeValue[type];
+      } else if (type === 'renqun') {
+        this.isPop = true;
+        this.type = 'age';
       }
+    },
+    // 更改type值
+    checkType(type) {
+      if (type === 'wenhua') {
+        TipsPop({
+          message: '暂无数据',
+          type: 'info'
+        });
+      }
+      this.type = type;
     }
   },
   mounted() {
@@ -137,7 +201,9 @@ export default {
   },
   components: {
     ModuleBox,
-    countTo
+    countTo,
+    PopBox,
+    RenqunPie
   }
 };
 </script>
@@ -189,6 +255,39 @@ export default {
         }
       }
     }
+  }
+}
+.pop-content {
+  .top {
+    display: flex;
+    height: px2rem(60rem);
+    background: rgba(7, 14, 38, 1);
+    .ul {
+      display: flex;
+      margin: auto;
+      .li {
+        float: left;
+        width: px2rem(86rem);
+        height: px2rem(30rem);
+        border-radius: 5px;
+        line-height: px2rem(30rem);
+        transition: 0.5s;
+        text-align: center;
+        color: #fff;
+        &:hover {
+          background: rgba(12, 18, 43, 1);
+          cursor: pointer;
+          color: rgba(0, 241, 251, 1);
+        }
+      }
+      .checked {
+        background: rgba(12, 18, 43, 1);
+        color: rgba(0, 241, 251, 1);
+      }
+    }
+  }
+  .echarts {
+    height: px2rem(155rem);
   }
 }
 </style>

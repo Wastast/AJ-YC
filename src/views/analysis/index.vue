@@ -12,6 +12,9 @@
     <a-video></a-video>
     <div class="box div-left"></div>
     <div class="box div-right"></div>
+    <div class="div-btn" @click="jump">
+      余村环境
+    </div>
   </div>
 </template>
 
@@ -34,7 +37,11 @@ export default {
   },
   computed: {},
   watch: {},
-  methods: {},
+  methods: {
+    jump() {
+      window.location.href = 'http://180.76.236.56:8118/MyMix.html';
+    }
+  },
   mounted() {
     // let websocket = new WebSocket('ws://192.168.8.107:8083/websocket/eventInfo')
     // websocket.onopen = function(event) {
@@ -96,6 +103,24 @@ export default {
     z-index: 1050;
     background: url('~@/assets/analysis/右下角点缀@2x.png');
     background-size: 100% 100%;
+  }
+  .div-btn {
+    position: absolute;
+    top: px2rem(90rem);
+    right: px2rem(35rem);
+    z-index: 1050;
+    padding: px2rem(10rem);
+    color: rgba(131, 178, 255, 1);
+    text-align: center;
+    background: rgba(97, 206, 243, 0);
+    border: 1px solid rgba(57, 114, 154, 1);
+    box-shadow: 0 0 5px rgba(31, 61, 139, 1);
+    border-radius: 2px;
+    font-size: px2rem(18rem);
+    cursor: pointer;
+    &:hover {
+      filter: brightness(1.2);
+    }
   }
 }
 </style>

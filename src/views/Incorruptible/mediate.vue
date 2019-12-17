@@ -4,7 +4,7 @@
       <template slot="content">
         <div class="box div-shi">
           <div class="box wrapper" ref="wrapper">
-            <vuescroll ref="vs" :ops="ops">
+            <vuescroll ref="vs" :ops="ops" @handle-scroll="handleScroll">
               <ul class="ul content" ref="length" :style="{ width: length }">
                 <li class="li" v-for="item of imgList" :key="item.imgUrl">
                   <img :src="item.imgUrl" alt="" />
@@ -81,6 +81,10 @@ export default {
       ops: {
         bar: {
           opacity: 0
+        },
+        scrollPanel: {
+          initialScrollX: '100%',
+          speed: 1000 * 10
         }
       }
     };
@@ -91,18 +95,21 @@ export default {
     }
   },
   watch: {},
-  methods: {},
-  mounted() {
-    this.$nextTick(() => {
-      let width = getComputedStyle(this.$refs['length']).width.split('px')[0];
-      this.$refs['vs'].scrollTo(
-        {
-          x: width
-        },
-        1000 * 50
-      );
-    });
+  methods: {
+    // 正常滚动的触发函数
+    handleScroll(vertical, horizontal, nativeEvent) {
+      let process = vertical.process;
+      if (process === 0) {
+        // 到顶部时触发函数
+        // this.$emit('handleTop');
+      }
+      if (process === 1) {
+        // 到底部时触发函数
+        // this.$emit('handleBottom');
+      }
+    }
   },
+  mounted() {},
   components: {
     PartyBox,
     vuescroll

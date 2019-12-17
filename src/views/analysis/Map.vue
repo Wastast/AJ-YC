@@ -1,11 +1,31 @@
 <template>
   <div class="map">
-    <div class="" id="map"></div>
+    <div id="map" :class="map !== '2D' ? 'left' : ''"></div>
+    <div id="mapDiv" :class="map !== '2.5D' ? 'left' : ''"></div>
+    <div class="div-btn">
+      <div class="div" @click="checkMap('2.5D')">
+        <dl>
+          <dt>
+            <img src="@/assets/popbox/2.5d.png" alt="" />
+          </dt>
+          <dd>天地图</dd>
+        </dl>
+      </div>
+      <div class="div" @click="checkMap('2D')">
+        <dl>
+          <dt>
+            <img src="@/assets/popbox/2d.png" alt="" />
+          </dt>
+          <dd>平面图</dd>
+        </dl>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { getHouse, getShouye } from '@/api/mapapi';
+import { TipsPop } from '@/utils/el_ui';
 export default {
   name: 'Map',
   data() {
@@ -13,8 +33,22 @@ export default {
       list: [],
       timer: null,
       imgRep: req.slice(0, -3),
-      isDraw: false
+      isDraw: false,
+      map: null
     };
+  },
+  watch: {
+    map() {
+      this.$nextTick(() => {
+        if (this.map === '2D') {
+          // 初始化平面图
+          this.init2D();
+        } else {
+          // 初始化天地图
+          this.init25D();
+        }
+      });
+    }
   },
   methods: {
     addPoint(item) {
@@ -98,64 +132,80 @@ export default {
         this.isDraw = false;
         TMapAPI.ClearFeatures();
       }
+    },
+    // 切换地图
+    checkMap(code) {
+      if (this.map === 'code') {
+        TipsPop({
+          message: '当前地图已经存在...',
+          type: 'info'
+        });
+        return;
+      }
+      this.map = code;
+    },
+    // 初始化2D
+    init2D() {
+      TMapAPI.map.SetCenter(new SLonLat(1500, 1010), 1);
+      getShouye().then(data => {
+        if (data.code === 200) {
+          data.data.forEach(item => {
+            if (item.typeId !== '001111') {
+              this.addPoint(item);
+              if (item.typeId === '001003') {
+                TMapAPI.drawRangeLableMs(item);
+              } else {
+                TMapAPI.drawRangeLableDefault(item);
+              }
+            }
+          });
+          TMapAPI.map.HideLabels();
+        }
+      });
+      getHouse().then(data => {
+        if (data.code === 200) {
+          this.list = data.data;
+          this.list.forEach(e => {
+            TMapAPI.drawRangeLable_house(e);
+            if (e.partyMemberNum > 0) {
+              // 党员之家
+              this.addPointWxzjDyzj(e, e.img2, e.width2, e.height2, 999);
+              TMapAPI.drawRangeLable_dyzj(e);
+            }
+            if (e.houseTip === 5) {
+              // 五星之家
+              this.addPointWxzjDyzj(e, e.img, e.width, e.height);
+              TMapAPI.drawRangeLable_wxzj(e);
+            }
+          });
+          TMapAPI.map.HideLabels();
+          TMapAPI.HideMarkersByTag('dyzj');
+          TMapAPI.HideMarkersByTag('wxzj');
+        }
+      });
+      TMapAPI.GetMap().AddEventListener('zoomend', () => {
+        TMapAPI.map.HideLabels();
+        this.getZoom();
+      });
+    },
+    // 初始化2.5D
+    init25D() {
+      mapWorld.centerAndZoom(new T.LngLat(119.61, 30.526), 18);
+      // 创建图片对象
+      var icon = new T.Icon({
+        iconUrl: 'http://api.tianditu.gov.cn/img/map/markerA.png',
+        iconSize: new T.Point(19, 27),
+        iconAnchor: new T.Point(10, 25)
+      });
+      // 向地图上添加自定义标注
+      var marker = new T.Marker(new T.LngLat(119.61, 30.526), { icon: icon });
+      mapWorld.addOverLay(marker);
     }
   },
   mounted() {
     TMapAPI.InitMap('map');
-    TMapAPI.map.SetCenter(new SLonLat(1500, 1010), 1);
-    getShouye().then(data => {
-      if (data.code === 200) {
-        data.data.forEach(item => {
-          if (item.typeId !== '001111') {
-            this.addPoint(item);
-            if (item.typeId === '001003') {
-              TMapAPI.drawRangeLableMs(item);
-            } else {
-              TMapAPI.drawRangeLableDefault(item);
-            }
-          }
-        });
-        TMapAPI.map.HideLabels();
-      }
-    });
-    // getFire().then(data => {
-    //   if (data.code === 200) {
-    //     data.data.forEach(item => {
-    //       if (item.img === '20191116dangjianguanli2x.png') {
-    //         this.addPoint(item, 999)
-    //       } else {
-    //         this.addPoint(item)
-    //       }
-    //       TMapAPI.drawRangeLableFire(item)
-    //     })
-    //     TMapAPI.map.HideLabels()
-    //   }
-    // })
-    getHouse().then(data => {
-      if (data.code === 200) {
-        this.list = data.data;
-        this.list.forEach(e => {
-          TMapAPI.drawRangeLable_house(e);
-          if (e.partyMemberNum > 0) {
-            // 党员之家
-            this.addPointWxzjDyzj(e, e.img2, e.width2, e.height2, 999);
-            TMapAPI.drawRangeLable_dyzj(e);
-          }
-          if (e.houseTip === 5) {
-            // 五星之家
-            this.addPointWxzjDyzj(e, e.img, e.width, e.height);
-            TMapAPI.drawRangeLable_wxzj(e);
-          }
-        });
-        TMapAPI.map.HideLabels();
-        TMapAPI.HideMarkersByTag('dyzj');
-        TMapAPI.HideMarkersByTag('wxzj');
-      }
-    });
-    TMapAPI.GetMap().AddEventListener('zoomend', () => {
-      TMapAPI.map.HideLabels();
-      this.getZoom();
-    });
+    mapWorld = new T.Map('mapDiv');
+    this.map = '2D';
   },
   beforeDestroy() {
     TMapAPI.GetMap().ReleaseEventListener('zoomend', this.getZoom());
@@ -171,9 +221,42 @@ export default {
   top: px2rem(125rem);
   left: px2rem(555rem);
   border: 1px solid #2fd2ef;
+  position: relative;
+  .left {
+    left: -10000px !important;
+  }
   #map {
     width: 100%;
     height: 100%;
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+  }
+  #mapDiv {
+    width: 100%;
+    height: 100%;
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+  }
+  .div-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1050;
+    > div {
+      float: left;
+      cursor: pointer;
+    }
+    .div {
+      margin-left: px2rem(10rem);
+      dd {
+        text-align: center;
+        color: #fff;
+      }
+    }
   }
 }
 </style>

@@ -1,49 +1,37 @@
 <template>
   <div class="practice">
-    <party-box title="文明实践" width="592" height="392">
+    <party-box title="文明实践" width="592" height="528">
       <template slot="content">
         <div class="box">
           <div class="div-top">
-            <div id="wenming"></div>
+            <shijian-pie></shijian-pie>
           </div>
           <div class="list-box">
             <div class="div" v-for="(item, index) of valueList" :key="index">
               <p class="p-title">{{ item.name }}</p>
               <p class="p-value">{{ item.value }} {{ item.unit }}</p>
             </div>
-            <!-- <div class="div-top">
-              <div class="div-in">
-                <p class="p-title">
-                  本日游客总数
-                </p>
-                <span class="span-value">
-                  <countTo :startVal="parseInt(0)" :endVal="nowSum" :duration="3000"></countTo>
-                </span>
-              </div>
-              <div class="div-out">
-                <p class="p-title">
-                  实时游客数
-                </p>
-                <span class="span-value">
-                  <countTo :startVal="parseInt(0)" :endVal="TourData" :duration="3000"></countTo>
-                </span>
-              </div>
+          </div>
+          <div class="bottom">
+            <div class="title">
+              服务人群画像
             </div>
-            <p>年服务对象人次:</p>
-            <p>年参与服务:</p>
-            <p>年志愿活动次数:</p> -->
-            <!-- <ul class="ul">
-              <li class="li" v-for="(item, index) of list" :key="index">
-                <div class="div-imgbox">
-                  <img src="@/assets/img/露营基地.jpg" />
-                </div>
-                <p class="p-title">
-                  {{ item.title }}
-                </p>
-                <p class="p-time">时间：{{ (item.createTime + '').slice(0, 10) }}</p>
-                <p class="p-people">人员：{{ item.author }}</p>
-              </li>
-            </ul> -->
+            <div class="top">
+              <ul class="ul">
+                <li
+                  class="li"
+                  v-for="(item, index) in typeList"
+                  :key="index"
+                  :class="item.type === type ? 'checked' : ''"
+                  @click="checkType(item.type)"
+                >
+                  {{ item.name }}
+                </li>
+              </ul>
+            </div>
+            <div class="echarts">
+              <renqun-pie :type="type"></renqun-pie>
+            </div>
           </div>
         </div>
       </template>
@@ -54,7 +42,9 @@
 <script>
 import PartyBox from '@/components/party-box';
 import { getPracticeInfo } from '@/api/incorruptible';
-import { EleResize } from '@/utils/esresize';
+import shijianPie from './echarts/shijian_pie';
+import renqunPie from '../analysis/echarts/renqun_pie';
+import { TipsPop } from '@/utils/el_ui';
 export default {
   name: 'practice',
   data() {
@@ -78,154 +68,39 @@ export default {
           value: '187',
           unit: '次'
         }
-      ]
+      ],
+      typeList: [
+        {
+          name: '性别',
+          type: 'sex'
+        },
+        {
+          name: '年龄',
+          type: 'age'
+        },
+        {
+          name: '文化程度',
+          type: 'wenhua'
+        }
+      ],
+      type: ''
     };
   },
   computed: {},
   watch: {},
   methods: {
-    // 文明实践模块
-    echart_frequency() {
-      let myChart = this.$echarts.init(document.getElementById('wenming'));
-      let resizeDiv = document.getElementById('wenming');
-      let listener = () => {
-        myChart.resize();
-      };
-      EleResize.on(resizeDiv, listener);
-      let option = {
-        color: [
-          '#FF0000 ',
-          '#FF7F00',
-          '#FFFF00',
-          '#00FF00',
-          '#00FFFF',
-          '#0000FF',
-          '#8B00FF',
-          '#F0F8FF',
-          '#EED2EE'
-        ],
-        tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b}: {c} ({d}%)'
-        },
-        legend: {
-          orient: 'vertical',
-          right: '20%',
-          y: 'center',
-          data: [
-            '理论宣讲、政策宣传',
-            '文明生活、健康人生',
-            '文化服务、体育综合',
-            '科学普及、法律服务',
-            '健康养生、心灵关爱',
-            '职业培训、农技指导',
-            '家政服务、房屋维修',
-            '水电检修、家具养护',
-            '配送服务'
-          ],
-          textStyle: {
-            color: '#fff',
-            fontSize: 14
-          },
-          icon: 'circle'
-        },
-        backgroundColor: 'rgba(0,0,0,.1)',
-        series: [
-          {
-            name: '服务类型',
-            type: 'pie',
-            // radius: ['40%', '60%'],
-            radius: ['40%', '60%'],
-            center: ['30%', '55%'],
-            avoidLabelOverlap: false,
-            label: {
-              normal: {
-                show: false,
-                position: 'center'
-              },
-              emphasis: {
-                show: false,
-                textStyle: {
-                  fontSize: '14',
-                  fontWeight: 'bold'
-                }
-              }
-            },
-            labelLine: {
-              normal: {
-                show: false
-              }
-            },
-            data: [
-              {
-                name: '理论宣讲、政策宣传',
-                value: 8
-              },
-              {
-                name: '文明生活、健康人生',
-                value: 17
-              },
-              {
-                name: '文化服务、体育综合',
-                value: 11
-              },
-              {
-                name: '科学普及、法律服务',
-                value: 26
-              },
-              {
-                name: '健康养生、心灵关爱',
-                value: 12
-              },
-              {
-                name: '职业培训、农技指导',
-                value: 2
-              },
-              {
-                name: '家政服务、房屋维修',
-                value: 7
-              },
-              {
-                name: '水电检修、家具养护',
-                value: 8
-              },
-              {
-                name: '配送服务',
-                value: 9
-              }
-            ]
-          }
-        ]
-      };
-      let index = 0;
-      this.gaopinTimer = setInterval(() => {
-        var dataLen = option.series[0].data.length;
-        // 取消之前高亮的图形
-        myChart.dispatchAction({
-          type: 'downplay',
-          seriesIndex: 0,
-          dataIndex: index
+    // 更改type值
+    checkType(type) {
+      if (type === 'wenhua') {
+        TipsPop({
+          message: '暂无数据',
+          type: 'info'
         });
-        index = (index + 1) % dataLen;
-        // 高亮当前图形
-        myChart.dispatchAction({
-          type: 'highlight',
-          seriesIndex: 0,
-          dataIndex: index
-        });
-        // 显示 tooltip
-        myChart.dispatchAction({
-          type: 'showTip',
-          seriesIndex: 0,
-          dataIndex: index
-        });
-      }, 1000);
-      myChart.clear();
-      myChart.setOption(option, true);
+      }
+      this.type = type;
     }
   },
   mounted() {
-    this.echart_frequency();
     getPracticeInfo().then(data => {
       if (data.code === 0) {
         this.list = data.data.slice(0, 2);
@@ -235,12 +110,14 @@ export default {
       clearInterval(this.gaopinTimer);
       this.echart_frequency();
     }, 1000 * 60);
+    this.type = 'sex';
   },
   components: {
-    PartyBox
+    PartyBox,
+    shijianPie,
+    renqunPie
   },
   beforeDestroy() {
-    clearInterval(this.gaopinTimer);
     clearInterval(this.timer);
   }
 };
@@ -249,7 +126,7 @@ export default {
 <style scoped lang="scss">
 .practice {
   position: absolute;
-  top: px2rem(594rem);
+  top: px2rem(459rem);
   left: px2rem(41rem);
   z-index: 1050;
   display: flow-root;
@@ -259,7 +136,7 @@ export default {
       float: left;
     }
     .div-top {
-      height: 5.5rem;
+      height: px2rem(230rem);
       background: rgba(3, 12, 35, 0.3);
       display: flow-root;
       width: 100%;
@@ -269,10 +146,10 @@ export default {
       }
     }
     .list-box {
-      margin-top: px2rem(20rem);
+      margin-top: px2rem(10rem);
       .div {
         width: 3.5rem;
-        height: 1.44rem;
+        height: 1.25rem;
         background: rgba(2, 7, 26, 0.6);
         padding: 0.25rem 0 0 0.4rem;
         float: left;
@@ -330,6 +207,70 @@ export default {
             margin-top: px2rem(16rem);
           }
         }
+      }
+    }
+    .bottom {
+      margin: 0 auto;
+      width: 100%;
+      background: rgba(2, 7, 26, 0.3);
+      width: px2rem(556rem);
+      height: px2rem(200rem);
+      margin-top: px2rem(10rem);
+      margin-left: px2rem(15rem);
+      overflow: hidden;
+      position: relative;
+      .title {
+        display: inline-block;
+        box-sizing: border-box;
+        margin: px2rem(10rem) 0 0 px2rem(10rem);
+        color: rgba(128, 165, 206, 1);
+      }
+      .top {
+        display: flex;
+        height: px2rem(60rem);
+        width: px2rem(520rem);
+        height: px2rem(35rem);
+        background: rgba(0, 36, 139, 0.2);
+        border-radius: 18px;
+        margin: px2rem(10rem) 0 0;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1999;
+        .ul {
+          display: flex;
+          margin: auto;
+          .li {
+            float: left;
+            width: px2rem(86rem);
+            height: px2rem(30rem);
+            border-radius: 5px;
+            line-height: px2rem(30rem);
+            transition: 0.5s;
+            text-align: center;
+            color: #fff;
+            &:hover {
+              cursor: pointer;
+              background: rgba(0, 104, 220, 0.4);
+              border-radius: 50px;
+              color: #fff;
+              font-weight: bold;
+            }
+          }
+          .checked {
+            background: rgba(0, 104, 220, 0.4);
+            border-radius: 50px;
+            color: #fff;
+            font-weight: bold;
+          }
+        }
+      }
+      .echarts {
+        position: absolute;
+        top: px2rem(20rem);
+        left: 0;
+        width: 100%;
+        height: px2rem(200rem);
       }
     }
   }

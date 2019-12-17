@@ -1,14 +1,10 @@
 <template>
   <div class="map">
     <div id="maps"></div>
-    <!-- <div class="img-box">
-
-    </div> -->
   </div>
 </template>
 
 <script>
-// import { getHouse } from '@/api/mapapi'
 import { getShouye } from '@/api/mapapi';
 export default {
   name: 'Map',

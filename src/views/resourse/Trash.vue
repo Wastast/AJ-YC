@@ -1,6 +1,6 @@
 <template>
   <div class="Trash">
-    <party-box title="果壳箱监测" width="592" height="392">
+    <party-box title="果壳箱监测" width="592" height="200">
       <template slot="content">
         <ul class="ul">
           <li class="li" v-for="(item, index) of list" :key="index">
@@ -15,21 +15,8 @@
                   </p>
                   <p class="p-value">
                     {{ item.rongliang }}
-                    <!-- <countTo
-                      :startVal="parseInt(0)"
-                      :endVal="parseFloat(item.rongliang)"
-                      :duration="4000"
-                    ></countTo> -->
                   </p>
                 </div>
-                <!-- <div class="righ">
-                  <p class="p-type">
-                    湿度监测
-                  </p>
-                  <p class="p-value">
-                    36%
-                  </p>
-                </div> -->
               </dd>
             </dl>
           </li>
@@ -58,36 +45,6 @@ export default {
         },
         {
           type: '两山绿道3',
-          rongliang: '未满',
-          shidu: '20'
-        },
-        {
-          type: '两山绿道4',
-          rongliang: '未满',
-          shidu: '20'
-        },
-        {
-          type: '篮球场',
-          rongliang: '未满',
-          shidu: '20'
-        },
-        {
-          type: '门球场',
-          rongliang: '未满',
-          shidu: '20'
-        },
-        {
-          type: '停车场',
-          rongliang: '未满',
-          shidu: '20'
-        },
-        {
-          type: '村委',
-          rongliang: '未满',
-          shidu: '20'
-        },
-        {
-          type: '大石碑',
           rongliang: '未满',
           shidu: '20'
         }
@@ -119,8 +76,8 @@ export default {
 <style scoped lang="scss">
 .Trash {
   position: absolute;
-  top: px2rem(594rem);
-  left: px2rem(662rem);
+  top: px2rem(523rem);
+  left: px2rem(41rem);
   z-index: 100;
   .ul {
     display: flow-root;

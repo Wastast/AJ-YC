@@ -1,28 +1,8 @@
 <template>
   <div class="video">
-    <ul class="ul" v-video-play="video">
-      <!-- <li class="li" v-for="item of list" :key="item.type" @click="popVideo(item.type)">
-        <img :src="item.img" alt="" />
-      </li> -->
-    </ul>
-
-    <!-- <el-dialog
-      :modal="false"
-      title="提示"
-      @opened="getVideo"
-      :destroy-on-close="true"
-      :visible.sync="dialogVisible"
-      width="40%"
-    >
-      <div style="height: 500px;">
-        <object
-          classid="CLSID:7E393848-7238-4CE3-82EE-44AF444B240A"
-          wmode="opaque"
-          id="PlayViewOCX"
-          style="width:100%;height:100%;"
-        ></object>
-      </div>
-    </el-dialog> -->
+    <div class="div" v-for="(item, index) of code" :key="index">
+      <video v-video-play="item" muted></video>
+    </div>
   </div>
 </template>
 
@@ -33,15 +13,12 @@ export default {
   name: 'Video',
   data() {
     return {
-      video: {
-        layout: '1x4',
-        code: [
-          '33052358001320515288',
-          '33052358001320515288',
-          '33052358001320515288',
-          '33052358001320515288'
-        ]
-      }
+      code: [
+        '5bc6b7dd26e34f83a5091bf5b6a8420a',
+        '7e61ca0ed015445db18d5cb44902e6a3',
+        'd2102790e235441cbefaf6b244c82dea',
+        '61e626767df34eeab79f4f67509f26d2'
+      ]
     };
   },
   computed: {},
@@ -65,6 +42,19 @@ export default {
   z-index: 1050;
   width: px2rem(820rem);
   height: px2rem(105rem);
+  .div {
+    float: left;
+    width: px2rem(200rem);
+    height: px2rem(100rem);
+    float: left;
+    &:nth-child(n + 2) {
+      margin-left: px2rem(6rem);
+    }
+    video {
+      width: 100%;
+      height: 100%;
+    }
+  }
   .ul {
     width: 100%;
     height: 100%;
@@ -81,8 +71,5 @@ export default {
       }
     }
   }
-  // #PlayViewOCX {
-  //   height: 100%;
-  // }
 }
 </style>

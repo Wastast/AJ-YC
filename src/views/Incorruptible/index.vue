@@ -5,7 +5,6 @@
     <i-finance></i-finance>
     <i-mediate></i-mediate>
     <i-practice></i-practice>
-    <!-- <i-volunteer></i-volunteer> -->
     <i-zhiyuan></i-zhiyuan>
     <i-map></i-map>
   </div>
@@ -17,7 +16,6 @@ import IActivity from './activity';
 import IFinance from './finance';
 import IMediate from './mediate';
 import IPractice from './practice';
-// import IVolunteer from './volunteer'
 import IZhiyuan from './zhiyuan';
 import IMap from './map';
 import { resize } from '@/mixin';
@@ -36,7 +34,6 @@ export default {
     IFinance,
     IMediate,
     IPractice,
-    // IVolunteer,
     IMap,
     IZhiyuan
   },

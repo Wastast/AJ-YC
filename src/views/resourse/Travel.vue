@@ -262,8 +262,12 @@ export default {
     this.realTime();
     getRepair().then(data => {
       if (data.code === 200) {
-        let sum = data.number.reduce((a, b) => a + b);
-        this.nowSum = sum;
+        if (data.number.length > 0) {
+          let sum = data.number.reduce((a, b) => a + b);
+          this.nowSum = sum;
+        } else {
+          this.nowSum = 0;
+        }
       }
     });
   },

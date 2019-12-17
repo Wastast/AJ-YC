@@ -45,6 +45,8 @@ export default {
   methods: {
     // 正常滚动的触发函数
     handleScroll(vertical, horizontal, nativeEvent) {
+      // vertical Y 轴滚动 滚动条
+      // horizontal X 轴滚动 滚动条
       let process = vertical.process;
       if (process === 0) {
         // 到顶部时触发函数

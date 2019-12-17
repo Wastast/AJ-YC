@@ -1,66 +1,71 @@
 <template>
-  <div class="event">
-    <party-box title="村情直通车" width="652" height="242">
+  <div>
+    <div class="event">
+      <party-box title="村情直通车" width="652" height="242">
+        <template slot="content">
+          <div class="div-top">
+            <span class="span span-text">
+              标题
+            </span>
+            <span class="span span-event">
+              详情
+            </span>
+            <span class="span span-time">
+              时间
+            </span>
+            <span class="span img">
+              配图
+            </span>
+          </div>
+          <ul class="ul">
+            <vuescroll :ops="ops">
+              <li class="li" v-for="item of list" :key="item.id" @click="getData(item)">
+                <span class="span span-block"> </span>
+                <span class="span span-text ellipsis">
+                  {{ item.title }}
+                </span>
+                <span class="span span-event ellipsis">
+                  {{ item.content }}
+                </span>
+                <span class="span span-time">
+                  {{ item.createDate | fiterYMD }}
+                </span>
+                <img
+                  v-if="item.picUrl[0]"
+                  class="img"
+                  :src="
+                    `${req}/dwdTourEventInfo/getImg?access_token=${token}&imgUrl=${item.picUrl[0]}`
+                  "
+                  alt=""
+                />
+              </li>
+            </vuescroll>
+          </ul>
+        </template>
+      </party-box>
+    </div>
+    <pop-box :title="'村情直通车'" :width="600" :height="350" :isPop.sync="isPop">
       <template slot="content">
-        <div class="div-top">
-          <span class="span span-text">
-            标题
-          </span>
-          <span class="span span-event">
-            详情
-          </span>
-          <span class="span span-time">
-            时间
-          </span>
-          <span class="span img">
-            配图
-          </span>
+        <div class="event-box">
+          <div class="top">
+            <span class="span span-title">
+              {{ event.title }}
+            </span>
+            <span class="span span-time">
+              {{ event.createDate | fiterYMD }}
+            </span>
+          </div>
+          <div class="event-content">
+            <div class="div div-left">
+              <img :src="event.imgurl" alt="暂无图片" />
+            </div>
+            <div class="div div-right">
+              {{ event.content }}
+            </div>
+          </div>
         </div>
-        <ul class="ul">
-          <vuescroll :ops="ops">
-            <li class="li" v-for="item of list" :key="item.id" @click="getData(item)">
-              <span class="span span-block"> </span>
-              <span class="span span-text ellipsis">
-                {{ item.title }}
-              </span>
-              <span class="span span-event ellipsis">
-                {{ item.content }}
-              </span>
-              <span class="span span-time">
-                {{ item.create_date.slice(0, 10) }}
-              </span>
-              <img
-                v-if="item.pic_url[0]"
-                class="img"
-                :src="
-                  `${req}/dwdTourEventInfo/getImg?access_token=${token}&imgUrl=${item.pic_url[0]}`
-                "
-                alt=""
-              />
-            </li>
-          </vuescroll>
-        </ul>
       </template>
-    </party-box>
-    <el-dialog
-      :title="event.title"
-      :visible.sync="dialogVisible"
-      width="30%"
-      :destroy-on-close="true"
-      :modal="false"
-    >
-      <div class="poptext">
-        <p class="p">事件发生时间: {{ event.time }}</p>
-        <p class="p">事件内容: {{ event.content }}</p>
-        <p class="p">事件来源: {{ textValue[event.user_type] }}</p>
-        <div class="div-imgbox" v-if="event.imgurl">
-          <img
-            :src="`${req}/dwdTourEventInfo/getImg?access_token=${token}&imgUrl=${event.imgurl}`"
-            alt=""
-          />
-        </div>
-      </div>
-    </el-dialog>
+    </pop-box>
   </div>
 </template>
 
@@ -69,6 +74,7 @@ import PartyBox from '@/components/party-box';
 import { getEvent } from '@/api/analysis';
 import vuescroll from 'vuescroll';
 import { mapGetters } from 'vuex';
+import PopBox from '@/components/PopBox';
 export default {
   name: 'event',
   data() {
@@ -92,7 +98,8 @@ export default {
       textValue: {
         1: '村民上报信息',
         0: '家园卫队成员上报信息'
-      }
+      },
+      isPop: false
     };
   },
   computed: {
@@ -102,22 +109,19 @@ export default {
   methods: {
     // 获取事件信息
     getData(obj) {
-      this.event.time = obj.create_date;
-      this.event.content = obj.content;
-      this.event.imgurl = obj.pic_url[0];
-      this.event.title = obj.title;
-      this.event.user_type = obj.user_type;
-      this.dialogVisible = true;
+      this.isPop = true;
+      let { content, createDate, title } = obj;
+      this.event = { content, createDate, title, imgurl: obj.picUrl[0] };
     }
   },
   mounted() {
     getEvent().then(data => {
       if (data.code === 200) {
-        this.list = data.data.repairList;
+        this.list = data.data;
       }
     });
   },
-  components: { PartyBox, vuescroll }
+  components: { PartyBox, vuescroll, PopBox }
 };
 </script>
 
@@ -128,8 +132,6 @@ export default {
   left: px2rem(663rem);
   z-index: 1050;
   .div-top {
-    // margin-bottom: px2rem(28rem);
-    // margin-top: px2rem(20rem);
     position: relative;
     display: flow-root;
     height: 0.96rem;
@@ -204,7 +206,7 @@ export default {
         width: px2rem(180rem);
       }
       .span-time {
-        left: px2rem(420rem);
+        left: px2rem(400rem);
         color: rgba(255, 255, 255, 0.6);
       }
       .img {
@@ -217,19 +219,57 @@ export default {
       }
     }
   }
-  .poptext {
-    .p {
-      line-height: px2rem(35rem);
+}
+.event-box {
+  .top {
+    height: px2rem(45rem);
+    background: rgba(7, 13, 37, 1);
+    position: relative;
+    line-height: px2rem(45rem);
+    color: #fff;
+    .span {
+      position: absolute;
     }
-    .div-imgbox {
-      width: px2rem(500rem);
-      height: px2rem(400rem);
-      border-radius: 5px;
-      overflow: hidden;
+    .span-title {
+      left: px2rem(25rem);
+      font-size: px2rem(18rem);
+      &::before {
+        content: '';
+        display: inline-block;
+        width: 5px;
+        height: 5px;
+        background: rgba(0, 246, 255, 1);
+        vertical-align: middle;
+        margin-right: px2rem(5rem);
+      }
+    }
+    .span-time {
+      right: px2rem(20rem);
+    }
+  }
+  .event-content {
+    box-sizing: border-box;
+    padding-top: px2rem(20rem);
+    height: px2rem(200rem);
+    color: #fff;
+    .div {
+      float: left;
+    }
+    .div-left {
+      width: px2rem(300rem);
+      height: px2rem(200rem);
       img {
         width: 100%;
         height: 100%;
       }
+    }
+    .div-right {
+      margin-left: px2rem(10rem);
+      height: 100%;
+      color: #fff;
+      width: px2rem(250rem);
+      letter-spacing: 1px;
+      line-height: px2rem(20rem);
     }
   }
 }
