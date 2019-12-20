@@ -7,8 +7,6 @@
 </template>
 
 <script>
-import { getVideoData } from '@/api/analysis';
-import { TipsPop } from '@/utils/el_ui';
 export default {
   name: 'Video',
   data() {

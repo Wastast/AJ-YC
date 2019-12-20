@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import { getEsunValue } from '@/api/analysis';
 import { EchatsMixin } from '@/mixin/echarts';
 export default {
   mixins: [EchatsMixin],

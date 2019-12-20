@@ -8,7 +8,6 @@
     <r-level></r-level>
     <r-park></r-park>
     <r-fire></r-fire>
-    <r-fire></r-fire>
     <r-hourse></r-hourse>
   </div>
 </template>

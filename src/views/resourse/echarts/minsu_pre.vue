@@ -1,13 +1,13 @@
 <template>
-  <div class="manyi_pie" ref="echarts"></div>
+  <div class="minsu_pre" ref="echarts"></div>
 </template>
 
 <script>
 import { EchatsMixin } from '@/mixin/echarts';
-import { getSatisfied } from '@/api/law';
+import { getHourse } from '@/api/resourse';
 export default {
   mixins: [EchatsMixin],
-  name: 'manyi_pie',
+  name: 'minsu_pre',
   data() {
     return {};
   },
@@ -35,7 +35,7 @@ export default {
         },
         series: [
           {
-            name: '满意度调查',
+            name: '接待人数比例',
             type: 'pie',
             radius: ['40%', '60%'],
             center: ['30%', '55%'],
@@ -62,7 +62,6 @@ export default {
           }
         ]
       };
-
       this.autoMatic(myChart, option.series[0].data.length);
 
       myChart.clear();
@@ -70,13 +69,12 @@ export default {
     }
   },
   mounted() {
-    // 请求满意度调查数据
-    getSatisfied().then(data => {
+    getHourse().then(data => {
       if (data.code === 200) {
-        let typeArr = data.data.map(item => {
+        let type = data.data.obj.map(item => {
           return item.name;
         });
-        this.ecahrt_manyi(typeArr, data.data);
+        this.ecahrt_manyi(type, data.data.obj);
       }
     });
   }
@@ -84,7 +82,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.manyi_pie {
+.minsu_pre {
+  width: 100%;
   height: 100%;
 }
 </style>

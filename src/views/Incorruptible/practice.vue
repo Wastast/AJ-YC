@@ -77,10 +77,6 @@ export default {
         {
           name: '年龄',
           type: 'age'
-        },
-        {
-          name: '文化程度',
-          type: 'wenhua'
         }
       ],
       type: ''

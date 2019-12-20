@@ -12,9 +12,12 @@
     <a-video></a-video>
     <div class="box div-left"></div>
     <div class="box div-right"></div>
-    <div class="div-btn" @click="jump">
-      余村环境
+    <div class="logo">
+      <img src="@/assets/resouse/wenlan.png" alt="" />
     </div>
+    <!-- <div class="div-btn" @click="jump">
+      余村环境
+    </div> -->
   </div>
 </template>
 
@@ -103,6 +106,16 @@ export default {
     z-index: 1050;
     background: url('~@/assets/analysis/右下角点缀@2x.png');
     background-size: 100% 100%;
+  }
+  .logo {
+    position: absolute;
+    top: 0;
+    right: px2rem(10rem);
+    z-index: 9999;
+    width: px2rem(60rem);
+    img {
+      width: 100%;
+    }
   }
   .div-btn {
     position: absolute;

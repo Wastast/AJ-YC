@@ -3,20 +3,20 @@
     <div id="map" :class="map !== '2D' ? 'left' : ''"></div>
     <div id="mapDiv" :class="map !== '2.5D' ? 'left' : ''"></div>
     <div class="div-btn">
-      <div class="div" @click="checkMap('2.5D')">
+      <div class="div" @click="checkMap('2D')">
         <dl>
           <dt>
             <img src="@/assets/popbox/2.5d.png" alt="" />
           </dt>
-          <dd>天地图</dd>
+          <dd>倾斜图</dd>
         </dl>
       </div>
-      <div class="div" @click="checkMap('2D')">
+      <div class="div" @click="checkMap('2.5D')">
         <dl>
           <dt>
             <img src="@/assets/popbox/2d.png" alt="" />
           </dt>
-          <dd>平面图</dd>
+          <dd>天地图</dd>
         </dl>
       </div>
     </div>
@@ -26,13 +26,13 @@
 <script>
 import { getHouse, getShouye } from '@/api/mapapi';
 import { TipsPop } from '@/utils/el_ui';
+import TDmap from '@/utils/TDmap';
 export default {
   name: 'Map',
   data() {
     return {
       list: [],
       timer: null,
-      imgRep: req.slice(0, -3),
       isDraw: false,
       map: null
     };
@@ -54,7 +54,8 @@ export default {
     addPoint(item) {
       let iconValue = item;
       let sLonLat = new SLonLat(iconValue.lon, iconValue.lat);
-      let iconPath = this.imgRep + '/upload/icon/' + iconValue.img;
+      let iconPath = imgRep + '/upload/icon/' + iconValue.img;
+      // let iconPath = 'http://api.tianditu.gov.cn/img/map/markerA.png';
       // 在地图内添加图标
       let sIcon = new SIcon(
         iconPath,
@@ -72,7 +73,7 @@ export default {
     },
     addPointWxzjDyzj(item, img, width, height, zIndex) {
       let sLonLat = new SLonLat(item.centerX, item.centerY);
-      let iconPath = this.imgRep + '/upload/icon/' + img;
+      let iconPath = imgRep + '/upload/icon/' + img;
       // 在地图内添加图标
       let sIcon;
       let sMarker;
@@ -147,6 +148,9 @@ export default {
     // 初始化2D
     init2D() {
       TMapAPI.map.SetCenter(new SLonLat(1500, 1010), 1);
+      if (!TMapAPI.map) {
+        return;
+      }
       getShouye().then(data => {
         if (data.code === 200) {
           data.data.forEach(item => {
@@ -191,15 +195,19 @@ export default {
     // 初始化2.5D
     init25D() {
       mapWorld.centerAndZoom(new T.LngLat(119.61, 30.526), 18);
-      // 创建图片对象
-      var icon = new T.Icon({
-        iconUrl: 'http://api.tianditu.gov.cn/img/map/markerA.png',
-        iconSize: new T.Point(19, 27),
-        iconAnchor: new T.Point(10, 25)
+      if (!mapWorld) {
+        return;
+      }
+      getShouye().then(data => {
+        if (data.code === 200) {
+          data.data.forEach(item => {
+            if (item.typeId !== '001111') {
+              TDmap.addPoint(item);
+              TDmap.addLable(item);
+            }
+          });
+        }
       });
-      // 向地图上添加自定义标注
-      var marker = new T.Marker(new T.LngLat(119.61, 30.526), { icon: icon });
-      mapWorld.addOverLay(marker);
     }
   },
   mounted() {
@@ -208,6 +216,7 @@ export default {
     this.map = '2D';
   },
   beforeDestroy() {
+    mapWorld = null;
     TMapAPI.GetMap().ReleaseEventListener('zoomend', this.getZoom());
   }
 };

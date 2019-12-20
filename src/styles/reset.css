@@ -29,3 +29,46 @@ a:hover {color: #25a4bb;text-decoration: none;}
 .show {display: block;} /* 显示 */
 .ellipsis {white-space: nowrap;overflow: hidden;text-overflow: ellipsis;} /* 字体溢出显示省略号 */
 .SPanZoomBar {display: none !important;}
+.tmapWindow {
+  background: #00678a;
+  border-radius: 20px;
+  padding: 10px;
+  border: 3px solid #61cdf3;
+  color: white; 
+  font-weight: 600;
+}
+.tmapWindow p {
+  line-height: 22px;
+  overflow: hidden;
+  width: 230px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.tmapWindowDefault {
+  background: #00678a;
+  border-radius: 20px;
+  padding: 10px;
+  border: 3px solid #61cdf3;
+  color: white; 
+  font-weight: 600;
+}
+.tmapWindowDefault p {
+  line-height: 22px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.tmapWindowFire {
+  background: #00678a;
+  border-radius: 20px;
+  padding: 10px;
+  border: 3px solid #61cdf3;
+  color: white; 
+  font-weight: 600;
+}
+.tmapWindowFire p {
+  line-height: 22px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

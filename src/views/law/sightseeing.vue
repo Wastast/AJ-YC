@@ -14,8 +14,6 @@
 
 <script>
 import PartyBox from '@/components/party-box';
-import { TipsPop } from '@/utils/el_ui';
-import { getVideoData } from '@/api/analysis';
 export default {
   name: 'sightseeing',
   data() {

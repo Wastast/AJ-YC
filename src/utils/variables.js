@@ -2,7 +2,8 @@ import { getDataType } from '@/utils/currency';
 
 let globle = {
   req: process.env.VUE_APP_BASE_API,
-  mapWorld: null
+  mapWorld: null,
+  imgRep: process.env.VUE_APP_BASE_API.slice(0, -3)
 };
 
 // 过滤数据

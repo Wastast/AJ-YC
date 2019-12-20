@@ -24,7 +24,7 @@
                     {{ item.createDate | fiterYMD }}
                   </span>
                   <img
-                    v-if="item.picUrl[0]"
+                    v-if="item.picUrl.length > 0"
                     class="img"
                     :src="
                       `${req}/dwdTourEventInfo/getImg?access_token=${token}&imgUrl=${item.picUrl[0]}`
@@ -163,9 +163,9 @@ export default {
   mounted() {
     this.getEvent();
 
-    this.websocket = new WebSocket('ws://192.168.8.107:8083/websocket/eventInfo');
+    this.websocket = new WebSocket('ws://220.189.235.230:8083/websocket/eventInfo');
     this.websocket.onopen = event => {
-      console.log(event);
+      console.log('成功连接');
     };
     // 连接发生错误的回调方法
     this.websocket.onerror = () => {

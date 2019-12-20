@@ -27,17 +27,7 @@ export default {
       let myChart = this.resizeEcharts();
 
       let option = {
-        color: [
-          '#FF0000 ',
-          '#FF7F00',
-          '#FFFF00',
-          '#00FF00',
-          '#00FFFF',
-          '#0000FF',
-          '#8B00FF',
-          '#F0F8FF',
-          '#EED2EE'
-        ],
+        color: ['#54b7f5', '#FF7F00', '#e58dc2', '#fbb8a1'],
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b}: {c} ({d}%)'

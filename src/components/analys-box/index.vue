@@ -1,6 +1,6 @@
 <template>
   <div class="index">
-    <div class="div-header">
+    <div class="div-header" @click="hanlerclick">
       {{ title }}
     </div>
     <div class="div-content">
@@ -23,7 +23,11 @@ export default {
   },
   computed: {},
   watch: {},
-  methods: {},
+  methods: {
+    hanlerclick() {
+      this.$emit('jump');
+    }
+  },
   mounted() {}
 };
 </script>
@@ -52,6 +56,7 @@ export default {
     left: 50%;
     top: px2rem(-5rem);
     transform: translateX(-50%);
+    cursor: pointer;
   }
   .div-content {
     height: 100%;

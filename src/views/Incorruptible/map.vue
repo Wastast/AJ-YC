@@ -1,24 +1,56 @@
 <template>
   <div class="map">
-    <div id="maps"></div>
+    <div id="maps" :class="map !== '2D' ? 'left' : ''"></div>
+    <div id="mapDiv" :class="map !== '2.5D' ? 'left' : ''"></div>
+    <div class="div-btn">
+      <div class="div" @click="checkMap('2D')">
+        <dl>
+          <dt>
+            <img src="@/assets/popbox/2.5d.png" alt="" />
+          </dt>
+          <dd>倾斜图</dd>
+        </dl>
+      </div>
+      <div class="div" @click="checkMap('2.5D')">
+        <dl>
+          <dt>
+            <img src="@/assets/popbox/2d.png" alt="" />
+          </dt>
+          <dd>天地图</dd>
+        </dl>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { getShouye } from '@/api/mapapi';
+import TDmap from '@/utils/TDmap';
 export default {
   name: 'Map',
   data() {
     return {
-      imgRep: req.slice(0, -3)
+      map: null
     };
   },
   computed: {},
-  watch: {},
+  watch: {
+    map() {
+      this.$nextTick(() => {
+        if (this.map === '2D') {
+          // 初始化平面图
+          this.init2D();
+        } else {
+          // 初始化天地图
+          this.init25D();
+        }
+      });
+    }
+  },
   methods: {
     addPointWxzjDyzj(item, img, width, height, zIndex) {
       let sLonLat = new SLonLat(item.centerX, item.centerY);
-      let iconPath = this.imgRep + '/upload/icon/' + img;
+      let iconPath = imgRep + '/upload/icon/' + img;
       // 在地图内添加图标
       let sIcon;
       if (zIndex) {
@@ -56,7 +88,7 @@ export default {
     addPoint(item) {
       let iconValue = item;
       let sLonLat = new SLonLat(iconValue.lon, iconValue.lat);
-      let iconPath = this.imgRep + '/upload/icon/' + iconValue.img;
+      let iconPath = imgRep + '/upload/icon/' + iconValue.img;
       // 在地图内添加图标
       let sIcon = new SIcon(
         iconPath,
@@ -95,49 +127,65 @@ export default {
         this.isDraw = false;
         TMapAPI.ClearFeatures();
       }
+    },
+    // 初始化2D
+    init2D() {
+      TMapAPI.map.SetCenter(new SLonLat(1500, 1010), 1);
+      if (!TMapAPI.map) {
+        return;
+      }
+      getShouye().then(data => {
+        if (data.code === 200) {
+          data.data.forEach(item => {
+            if (item.typeId === '001111') {
+              this.addPoint(item);
+              if (item.typeId === '001003') {
+                TMapAPI.drawRangeLableMs(item);
+              } else {
+                TMapAPI.drawRangeLableDefault(item);
+              }
+            }
+          });
+          TMapAPI.map.HideLabels();
+        }
+      });
+    },
+    // 初始化2.5D
+    init25D() {
+      mapWorld.centerAndZoom(new T.LngLat(119.61, 30.526), 18);
+      if (!mapWorld) {
+        return;
+      }
+      getShouye().then(data => {
+        if (data.code === 200) {
+          data.data.forEach(item => {
+            if (item.typeId === '001111') {
+              TDmap.addPoint(item);
+            }
+          });
+        }
+      });
+    },
+    // 切换地图
+    checkMap(code) {
+      if (this.map === 'code') {
+        TipsPop({
+          message: '当前地图已经存在...',
+          type: 'info'
+        });
+        return;
+      }
+      this.map = code;
     }
   },
   mounted() {
     TMapAPI.InitMap('maps');
-    TMapAPI.map.SetCenter(new SLonLat(1500, 1010), 1);
-    // getHouse().then(data => {
-    //   if (data.code === 200) {
-    //     this.list = data.data
-    //     this.list.forEach(e => {
-    //       TMapAPI.drawRangeLable_house(e)
-    //       if (e.partyMemberNum > 0) {
-    //         // 党员之家
-    //         this.addPointWxzjDyzj(e, e.img2, e.width2, e.height2, 999)
-    //         TMapAPI.drawRangeLable_dyzj(e)
-    //       }
-    //       if (e.houseTip === 5) {
-    //         // 五星之家
-    //         this.addPointWxzjDyzj(e, e.img, e.width, e.height)
-    //         TMapAPI.drawRangeLable_wxzj(e)
-    //       }
-    //     })
-    //     TMapAPI.map.HideLabels()
-    //   }
-    // })
-    // TMapAPI.GetMap().AddEventListener('zoomend', () => {
-    //   TMapAPI.map.HideLabels()
-    //   this.getZoom()
-    // })
-    getShouye().then(data => {
-      if (data.code === 200) {
-        data.data.forEach(item => {
-          if (item.typeId === '001111') {
-            this.addPoint(item);
-            if (item.typeId === '001003') {
-              TMapAPI.drawRangeLableMs(item);
-            } else {
-              TMapAPI.drawRangeLableDefault(item);
-            }
-          }
-        });
-        TMapAPI.map.HideLabels();
-      }
-    });
+    mapWorld = new T.Map('mapDiv');
+    this.map = '2D';
+  },
+  beforeDestroy() {
+    mapWorld = null;
+    TMapAPI.GetMap().ReleaseEventListener('zoomend', this.getZoom());
   }
 };
 </script>
@@ -165,9 +213,41 @@ export default {
     left: 50%;
     transform: translateX(-50%);
   }
+  .left {
+    left: -10000px !important;
+  }
   #maps {
     width: 100%;
     height: 100%;
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+  }
+  #mapDiv {
+    width: 100%;
+    height: 100%;
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+  }
+  .div-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1050;
+    > div {
+      float: left;
+      cursor: pointer;
+    }
+    .div {
+      margin-left: px2rem(10rem);
+      dd {
+        text-align: center;
+        color: #fff;
+      }
+    }
   }
   .img-box {
     width: px2rem(864rem);

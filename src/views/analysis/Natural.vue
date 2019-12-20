@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="Natural">
-      <module-box title="乡村环境">
+      <module-box title="乡村环境" @jump="jump">
         <template slot="content">
           <ul class="ul">
             <li class="li" v-for="(item, index) of list" :key="index" @click="checkType(item.type)">
@@ -142,6 +142,9 @@ export default {
     },
     popClose() {
       this.isPop = false;
+    },
+    jump() {
+      window.location.href = 'http://180.76.236.56:8118/MyMix.html';
     }
   },
   mounted() {

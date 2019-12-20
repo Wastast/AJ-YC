@@ -1,6 +1,25 @@
 <template>
   <div class="map">
-    <div id="maps"></div>
+    <div id="map" :class="map !== '2D' ? 'left' : ''"></div>
+    <div id="mapDiv" :class="map !== '2.5D' ? 'left' : ''"></div>
+    <div class="div-btn">
+      <div class="div" @click="checkMap('2D')">
+        <dl>
+          <dt>
+            <img src="@/assets/popbox/2.5d.png" alt="" />
+          </dt>
+          <dd>倾斜图</dd>
+        </dl>
+      </div>
+      <div class="div" @click="checkMap('2.5D')">
+        <dl>
+          <dt>
+            <img src="@/assets/popbox/2d.png" alt="" />
+          </dt>
+          <dd>天地图</dd>
+        </dl>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -10,16 +29,28 @@ export default {
   name: 'maps',
   data() {
     return {
-      imgRep: req.slice(0, -3)
+      map: null
     };
   },
   computed: {},
-  watch: {},
+  watch: {
+    map() {
+      this.$nextTick(() => {
+        if (this.map === '2D') {
+          // 初始化平面图
+          this.init2D();
+        } else {
+          // 初始化天地图
+          this.init25D();
+        }
+      });
+    }
+  },
   methods: {
     addPoint(item) {
       let iconValue = item;
       let sLonLat = new SLonLat(iconValue.lon, iconValue.lat);
-      let iconPath = this.imgRep + '/upload/icon/' + iconValue.img;
+      let iconPath = imgRep + '/upload/icon/' + iconValue.img;
       // 在地图内添加图标
       let sIcon = new SIcon(
         iconPath,
@@ -32,7 +63,7 @@ export default {
     },
     addPointWxzjDyzj(item, img, width, height, zIndex) {
       let sLonLat = new SLonLat(item.centerX, item.centerY);
-      let iconPath = this.imgRep + '/upload/icon/' + img;
+      let iconPath = imgRep + '/upload/icon/' + img;
       // 在地图内添加图标
       let sIcon;
       if (zIndex) {
@@ -90,41 +121,106 @@ export default {
         this.isDraw = false;
         TMapAPI.ClearFeatures();
       }
+    },
+    // 初始化2D
+    init2D() {
+      TMapAPI.map.SetCenter(new SLonLat(1500, 1010), 1);
+      if (!TMapAPI.map) {
+        return;
+      }
+      getHouse().then(data => {
+        if (data.code === 200) {
+          this.list = data.data;
+          this.list.forEach(e => {
+            TMapAPI.drawRangeLable_house(e);
+            if (e.partyMemberNum > 0) {
+              // 党员之家
+              this.addPointWxzjDyzj(e, e.img2, e.width2, e.height2, 999);
+              TMapAPI.drawRangeLable_dyzj(e);
+            }
+            if (e.houseTip === 5) {
+              // 五星之家
+              this.addPointWxzjDyzj(e, e.img, e.width, e.height);
+              TMapAPI.drawRangeLable_wxzj(e);
+            }
+          });
+          TMapAPI.map.HideLabels();
+        }
+      });
+      TMapAPI.GetMap().AddEventListener('zoomend', () => {
+        TMapAPI.map.HideLabels();
+        this.getZoom();
+      });
+    },
+    // 切换地图
+    checkMap(code) {
+      if (this.map === 'code') {
+        TipsPop({
+          message: '当前地图已经存在...',
+          type: 'info'
+        });
+        return;
+      }
+      this.map = code;
+    },
+    // 初始化2.5D
+    init25D() {
+      mapWorld.centerAndZoom(new T.LngLat(119.61, 30.526), 18);
+      if (!mapWorld) {
+        return;
+      }
+      getHouse().then(data => {
+        if (data.code === 200) {
+          this.list = data.data;
+          this.list.forEach(e => {
+            let IconValue;
+            let icon;
+            if (e.partyMemberNum > 0) {
+              // 党员之家
+              IconValue = e;
+              let iconPath = imgRep + '/upload/icon/' + IconValue.img2;
+              icon = new T.Icon({
+                // 创建图片对象
+                iconUrl: iconPath,
+                iconSize: new T.Point(IconValue.width2, IconValue.height2),
+                iconAnchor: new T.Point(-IconValue.width2 / 2, -IconValue.height2 - 15)
+              });
+            }
+            if (e.houseTip === 5) {
+              // 五星之家
+              // 党员之家
+              IconValue = e;
+              let iconPath = imgRep + '/upload/icon/' + IconValue.img;
+              icon = new T.Icon({
+                // 创建图片对象
+                iconUrl: iconPath,
+                iconSize: new T.Point(IconValue.width, IconValue.height),
+                iconAnchor: new T.Point(-IconValue.width / 2, -IconValue.height - 15)
+              });
+            }
+            if (!IconValue && !icon) {
+              return;
+            }
+            let ptt = JZbConvert.GetGpsLonLatFromSw(
+              new SPoint(IconValue.centerX, IconValue.centerY)
+            );
+            let x = ptt.GetLon();
+            let y = ptt.GetLat();
+            // 向地图上添加自定义标注;
+            let marker = new T.Marker(new T.LngLat(x, y), { icon: icon });
+            mapWorld.addOverLay(marker);
+          });
+        }
+      });
     }
   },
   mounted() {
-    TMapAPI.InitMap('maps');
-    TMapAPI.map.SetCenter(new SLonLat(1450, 1010), 1);
-    // getFire().then(data => {
-    //   if (data.code === 200) {
-    //     data.data.forEach(item => {
-    //       this.addPoint(item)
-    //     })
-    //   }
-    // })
-    getHouse().then(data => {
-      if (data.code === 200) {
-        this.list = data.data;
-        this.list.forEach(e => {
-          TMapAPI.drawRangeLable_house(e);
-          if (e.partyMemberNum > 0) {
-            // 党员之家
-            this.addPointWxzjDyzj(e, e.img2, e.width2, e.height2, 999);
-            TMapAPI.drawRangeLable_dyzj(e);
-          }
-          if (e.houseTip === 5) {
-            // 五星之家
-            this.addPointWxzjDyzj(e, e.img, e.width, e.height);
-            TMapAPI.drawRangeLable_wxzj(e);
-          }
-        });
-        TMapAPI.map.HideLabels();
-      }
-    });
-    TMapAPI.GetMap().AddEventListener('zoomend', () => {
-      TMapAPI.map.HideLabels();
-      this.getZoom();
-    });
+    TMapAPI.InitMap('map');
+    mapWorld = new T.Map('mapDiv');
+    this.map = '2D';
+  },
+  beforeDestroy() {
+    mapWorld = null;
   }
 };
 </script>
@@ -153,9 +249,41 @@ export default {
     left: 50%;
     transform: translateX(-50%);
   }
-  #maps {
+  #map {
     width: 100%;
     height: 100%;
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+  }
+  #mapDiv {
+    width: 100%;
+    height: 100%;
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+  }
+  .left {
+    left: -10000px !important;
+  }
+  .div-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1050;
+    > div {
+      float: left;
+      cursor: pointer;
+    }
+    .div {
+      margin-left: px2rem(10rem);
+      dd {
+        text-align: center;
+        color: #fff;
+      }
+    }
   }
 }
 </style>

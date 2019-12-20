@@ -1,18 +1,28 @@
 <template>
-  <div class="manyi_pie" ref="echarts"></div>
+  <div class="hourse_pre" ref="echarts"></div>
 </template>
 
 <script>
 import { EchatsMixin } from '@/mixin/echarts';
-import { getSatisfied } from '@/api/law';
+import { getDataType } from '@/utils/currency';
 export default {
   mixins: [EchatsMixin],
-  name: 'manyi_pie',
+  props: ['obj'],
+  name: 'hourse_pre',
   data() {
     return {};
   },
   computed: {},
-  watch: {},
+  watch: {
+    obj(n, o) {
+      if (getDataType(n) === 'array') {
+        let type = n.map(item => {
+          return item.name;
+        });
+        this.ecahrt_manyi(type, n);
+      }
+    }
+  },
   methods: {
     // 满意度饼图
     ecahrt_manyi(typeArr, data) {
@@ -68,23 +78,13 @@ export default {
       myChart.clear();
       myChart.setOption(option, true);
     }
-  },
-  mounted() {
-    // 请求满意度调查数据
-    getSatisfied().then(data => {
-      if (data.code === 200) {
-        let typeArr = data.data.map(item => {
-          return item.name;
-        });
-        this.ecahrt_manyi(typeArr, data.data);
-      }
-    });
   }
 };
 </script>
 
 <style scoped lang="scss">
-.manyi_pie {
+.hourse_pre {
+  width: 100%;
   height: 100%;
 }
 </style>

@@ -40,7 +40,7 @@ export default {
         {
           name: '剩余小车车位',
           value: '20',
-          icon: require('@/assets/img/flow.png')
+          icon: require('@/assets/resouse/var111.png')
         }
       ]
     };

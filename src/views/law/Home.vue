@@ -253,7 +253,7 @@ export default {
   position: absolute;
   top: px2rem(221rem);
   left: px2rem(1230rem);
-  z-index: 1050;
+  z-index: 1099;
   .icon {
     width: px2rem(53rem);
     height: px2rem(66rem);
