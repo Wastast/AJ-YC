@@ -1,43 +1,27 @@
 <template>
   <div class="map">
-    <div id="maps" :class="map !== '2D' ? 'left' : ''"></div>
-    <div id="mapDiv" :class="map !== '2.5D' ? 'left' : ''"></div>
-    <div class="div-btn">
-      <div class="div" @click="checkMap('2D')">
-        <dl>
-          <dt>
-            <img src="@/assets/popbox/2.5d.png" alt="" />
-          </dt>
-          <dd>倾斜图</dd>
-        </dl>
-      </div>
-      <div class="div" @click="checkMap('2.5D')">
-        <dl>
-          <dt>
-            <img src="@/assets/popbox/2d.png" alt="" />
-          </dt>
-          <dd>天地图</dd>
-        </dl>
-      </div>
-    </div>
+    <div id="maps" :class="mapType !== '2D' ? 'left' : ''"></div>
+    <div id="mapDiv" :class="mapType !== '2.5D' ? 'left' : ''"></div>
+    <Mapbtn :mapType.sync="mapType"></Mapbtn>
   </div>
 </template>
 
 <script>
 import { getShouye } from '@/api/mapapi';
 import TDmap from '@/utils/TDmap';
+import Mapbtn from '@/components/Mapbtn';
 export default {
   name: 'Map',
   data() {
     return {
-      map: null
+      mapType: null
     };
   },
   computed: {},
   watch: {
-    map() {
+    mapType() {
       this.$nextTick(() => {
-        if (this.map === '2D') {
+        if (this.mapType === '2D') {
           // 初始化平面图
           this.init2D();
         } else {
@@ -165,27 +149,19 @@ export default {
           });
         }
       });
-    },
-    // 切换地图
-    checkMap(code) {
-      if (this.map === 'code') {
-        TipsPop({
-          message: '当前地图已经存在...',
-          type: 'info'
-        });
-        return;
-      }
-      this.map = code;
     }
   },
   mounted() {
     TMapAPI.InitMap('maps');
     mapWorld = new T.Map('mapDiv');
-    this.map = '2D';
+    this.mapType = '2D';
   },
   beforeDestroy() {
     mapWorld = null;
     TMapAPI.GetMap().ReleaseEventListener('zoomend', this.getZoom());
+  },
+  components: {
+    Mapbtn
   }
 };
 </script>
@@ -232,23 +208,7 @@ export default {
     left: 0;
     overflow: hidden;
   }
-  .div-btn {
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 1050;
-    > div {
-      float: left;
-      cursor: pointer;
-    }
-    .div {
-      margin-left: px2rem(10rem);
-      dd {
-        text-align: center;
-        color: #fff;
-      }
-    }
-  }
+
   .img-box {
     width: px2rem(864rem);
     height: px2rem(102rem);

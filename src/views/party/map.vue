@@ -1,42 +1,26 @@
 <template>
   <div class="map">
-    <div id="map" :class="map !== '2D' ? 'left' : ''"></div>
-    <div id="mapDiv" :class="map !== '2.5D' ? 'left' : ''"></div>
-    <div class="div-btn">
-      <div class="div" @click="checkMap('2D')">
-        <dl>
-          <dt>
-            <img src="@/assets/popbox/2.5d.png" alt="" />
-          </dt>
-          <dd>倾斜图</dd>
-        </dl>
-      </div>
-      <div class="div" @click="checkMap('2.5D')">
-        <dl>
-          <dt>
-            <img src="@/assets/popbox/2d.png" alt="" />
-          </dt>
-          <dd>天地图</dd>
-        </dl>
-      </div>
-    </div>
+    <div id="map" :class="mapType !== '2D' ? 'left' : ''"></div>
+    <div id="mapDiv" :class="mapType !== '2.5D' ? 'left' : ''"></div>
+    <Mapbtn :mapType.sync="mapType"></Mapbtn>
   </div>
 </template>
 
 <script>
 import { getHouse } from '@/api/mapapi';
+import Mapbtn from '@/components/Mapbtn';
 export default {
   name: 'maps',
   data() {
     return {
-      map: null
+      mapType: null
     };
   },
   computed: {},
   watch: {
-    map() {
+    mapType() {
       this.$nextTick(() => {
-        if (this.map === '2D') {
+        if (this.mapType === '2D') {
           // 初始化平面图
           this.init2D();
         } else {
@@ -152,17 +136,6 @@ export default {
         this.getZoom();
       });
     },
-    // 切换地图
-    checkMap(code) {
-      if (this.map === 'code') {
-        TipsPop({
-          message: '当前地图已经存在...',
-          type: 'info'
-        });
-        return;
-      }
-      this.map = code;
-    },
     // 初始化2.5D
     init25D() {
       mapWorld.centerAndZoom(new T.LngLat(119.61, 30.526), 18);
@@ -217,10 +190,13 @@ export default {
   mounted() {
     TMapAPI.InitMap('map');
     mapWorld = new T.Map('mapDiv');
-    this.map = '2D';
+    this.mapType = '2D';
   },
   beforeDestroy() {
     mapWorld = null;
+  },
+  components: {
+    Mapbtn
   }
 };
 </script>

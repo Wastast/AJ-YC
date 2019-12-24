@@ -218,12 +218,14 @@ export default {
         this.value = arr[0].value;
       }
     });
+
     getMember().then(data => {
       if (data.code === 200) {
         let { used, memberNum, allnum } = data.data;
         this.jiance = { used, memberNum, allnum };
       }
     });
+
     this.type = 'bili';
   },
   components: { PartyBox, minsuPre, hoursePre, countTo, jinqiLine }

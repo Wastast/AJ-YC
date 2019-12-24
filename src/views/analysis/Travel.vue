@@ -120,7 +120,8 @@ export default {
         }
       },
       eventList: [],
-      websocket: null
+      eventwebsocket: null,
+      alertwebsocket: null
     };
   },
   computed: {
@@ -162,25 +163,44 @@ export default {
   },
   mounted() {
     this.getEvent();
-
-    this.websocket = new WebSocket('ws://220.189.235.230:8083/websocket/eventInfo');
-    this.websocket.onopen = event => {
-      console.log('成功连接');
+    // 事件 连接
+    this.eventwebsocket = new WebSocket('ws://220.189.235.230:8083/websocket/eventInfo');
+    this.eventwebsocket.onopen = event => {
+      console.log('事件报警成功连接');
     };
     // 连接发生错误的回调方法
-    this.websocket.onerror = () => {
+    this.eventwebsocket.onerror = () => {
       console.log('报错');
     };
-    this.websocket.onmessage = event => {
+    this.eventwebsocket.onmessage = event => {
       let arr = JSON.parse(event.data);
       arr.forEach(item => {
         console.log(item);
         this.eventList.unshift(item);
       });
     };
+
+    // 设备连接
+    this.alertwebsocket = new WebSocket('ws://220.189.235.230:8083/websocket/alarmInfo');
+    this.alertwebsocket.onopen = event => {
+      console.log('设备预警成功连接');
+    };
+    // 连接发生错误的回调方法
+    this.alertwebsocket.onerror = () => {
+      console.log('报错');
+    };
+    this.alertwebsocket.onmessage = event => {
+      let arr = JSON.parse(event.data);
+      arr.forEach(item => {
+        let { name, content, createTime } = item;
+        let obj = { title: name, content, createDate: createTime };
+        this.eventList.unshift(obj);
+      });
+    };
   },
   beforeDestroy() {
-    this.websocket.close();
+    this.eventwebsocket.close();
+    this.alertwebsocket.close();
     clearInterval(this.timer);
   },
   components: {
@@ -391,14 +411,14 @@ export default {
         }
         .span-text {
           left: px2rem(40rem);
-          width: px2rem(75rem);
+          width: px2rem(60rem);
         }
         .span-event {
-          left: px2rem(130rem);
+          left: px2rem(110rem);
           width: px2rem(145rem);
         }
         .span-time {
-          left: px2rem(290rem);
+          left: px2rem(270rem);
         }
       }
     }

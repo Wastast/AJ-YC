@@ -9,7 +9,7 @@
                 {{ item.name }}
               </p>
               <p class="value">
-                <countTo :startVal="parseInt(0)" :endVal="item.value" :duration="3000"></countTo>
+                {{ item.value }}
               </p>
             </div>
             <div class="right">
@@ -24,7 +24,6 @@
 
 <script>
 import PartyBox from '@/components/party-box';
-import countTo from 'vue-count-to';
 export default {
   name: 'fire',
   data() {
@@ -33,12 +32,12 @@ export default {
         {
           icon: require('@/assets/resouse/fire.png'),
           name: '电子火花',
-          value: 10
+          value: '正常'
         },
         {
           icon: require('@/assets/resouse/smoke.png'),
           name: '烟感',
-          value: 10
+          value: '正常'
         }
       ]
     };
@@ -47,7 +46,7 @@ export default {
   watch: {},
   methods: {},
   mounted() {},
-  components: { PartyBox, countTo }
+  components: { PartyBox }
 };
 </script>
 
@@ -77,9 +76,8 @@ export default {
           color: #506d8f;
         }
         .value {
-          font-family: 'DS-DIGII';
-          font-size: px2rem(36rem);
-          margin-top: px2rem(5rem);
+          font-size: px2rem(24rem);
+          margin-top: px2rem(10rem);
           color: #fff;
         }
       }

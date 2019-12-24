@@ -168,10 +168,10 @@ export default {
   z-index: 100;
   .box {
     display: flex;
+    background: rgba(2, 7, 26, 0.6);
     .div-top {
       line-height: px2rem(48rem);
       margin: 0 auto;
-      background: rgba(2, 7, 26, 0.6);
       color: rgba(59, 157, 225, 1);
       display: inline-block;
       box-sizing: border-box;

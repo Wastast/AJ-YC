@@ -29,6 +29,7 @@
         </template>
       </module-box>
     </div>
+
     <pop-box :isPop.sync="isPop" :title="'人群画像分析'">
       <template slot="content">
         <div class="pop-content">
@@ -48,6 +49,22 @@
           <div class="echarts">
             <renqun-pie :type="type"></renqun-pie>
           </div>
+        </div>
+      </template>
+    </pop-box>
+
+    <pop-box :isPop.sync="renjun" :title="'人均收入分析'" :width="526" :height="430">
+      <template slot="content">
+        <div class="pop-content">
+          <img class="img" src="@/assets/analysis/renjun.png" alt="" />
+        </div>
+      </template>
+    </pop-box>
+
+    <pop-box :isPop.sync="jiti" :title="'集体经济分析'" :width="526" :height="430">
+      <template slot="content">
+        <div class="pop-content">
+          <img class="img" src="@/assets/analysis/jiti.png" alt="" />
         </div>
       </template>
     </pop-box>
@@ -87,14 +104,16 @@ export default {
           name: '人均收入',
           value: '0',
           unit: '元',
-          color: 'rgba(24,186,197,1)'
+          color: 'rgba(24,186,197,1)',
+          type: 'renjun'
         },
         {
           imgUrl: require('@/assets/analysis/zichan@2x.png'),
           name: '集体经济收入',
           value: '0',
           unit: '万元',
-          color: 'rgba(168,83,233,1)'
+          color: 'rgba(168,83,233,1)',
+          type: 'jiti'
         },
         {
           imgUrl: require('@/assets/analysis/dangyuan@2x.png'),
@@ -127,9 +146,15 @@ export default {
         {
           name: '年龄',
           type: 'age'
+        },
+        {
+          name: '文化程度',
+          type: 'wen'
         }
       ],
-      type: ''
+      type: '',
+      renjun: false,
+      jiti: false
     };
   },
   computed: {},
@@ -173,6 +198,10 @@ export default {
       } else if (type === 'renqun') {
         this.isPop = true;
         this.type = 'age';
+      } else if (type === 'renjun') {
+        this.renjun = true;
+      } else if (type === 'jiti') {
+        this.jiti = true;
       }
     },
     // 更改type值
@@ -254,6 +283,11 @@ export default {
   }
 }
 .pop-content {
+  .img {
+    display: block;
+    width: 95%;
+    margin: 0 auto;
+  }
   .top {
     display: flex;
     height: px2rem(60rem);

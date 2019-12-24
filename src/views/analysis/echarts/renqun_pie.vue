@@ -14,11 +14,13 @@ export default {
   },
   computed: {},
   watch: {
-    type() {
-      if (this.type === 'sex') {
+    type(n, o) {
+      if (n === 'sex') {
         this.getsex();
-      } else if (this.type === 'age') {
+      } else if (n === 'age') {
         this.getage();
+      } else if (n === 'wen') {
+        this.getwen();
       }
     }
   },
@@ -78,7 +80,7 @@ export default {
         ]
       };
 
-      this.autoMatic(myChart, option.series[0].data.length);
+      this.autoMatic(myChart, option.series[0].data.length, 2000);
 
       myChart.clear();
       myChart.setOption(option, true);
@@ -101,6 +103,27 @@ export default {
           this.echarts_renqun(data.data);
         }
       });
+    },
+    // 获取文化数据
+    getwen() {
+      let obj = {
+        legend: ['初中及以下', '高中', '高中以上'],
+        series: [
+          {
+            name: '初中及以下',
+            value: 20
+          },
+          {
+            name: '高中',
+            value: 65
+          },
+          {
+            name: '高中以上',
+            value: 15
+          }
+        ]
+      };
+      this.echarts_renqun(obj);
     }
   },
   mounted() {

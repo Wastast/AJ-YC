@@ -1,25 +1,10 @@
 <template>
   <div class="map">
-    <div id="maps" :class="map !== '2D' ? 'left' : ''"></div>
-    <div id="mapDiv" :class="map !== '2.5D' ? 'left' : ''"></div>
-    <div class="div-btn">
-      <div class="div" @click="checkMap('2D')">
-        <dl>
-          <dt>
-            <img src="@/assets/popbox/2.5d.png" alt="" />
-          </dt>
-          <dd>倾斜图</dd>
-        </dl>
-      </div>
-      <div class="div" @click="checkMap('2.5D')">
-        <dl>
-          <dt>
-            <img src="@/assets/popbox/2d.png" alt="" />
-          </dt>
-          <dd>天地图</dd>
-        </dl>
-      </div>
-    </div>
+    <div id="maps" :class="mapType !== '2D' ? 'left' : ''"></div>
+    <div id="mapDiv" :class="mapType !== '2.5D' ? 'left' : ''"></div>
+
+    <Mapbtn :mapType.sync="mapType"></Mapbtn>
+
     <pop-box title="视频播放" :width="600" :height="350" :isPop.sync="isPop">
       <template slot="content">
         <div class="vide-box">
@@ -31,25 +16,26 @@
 </template>
 
 <script>
-import { getVideoData } from '@/api/analysis';
+import { getVideoUrl } from '@/api/analysis';
 import { getVideoSmoke } from '@/api/mapapi';
 import { TipsPop } from '@/utils/el_ui';
 import PopBox from '@/components/PopBox';
 import TDmap from '@/utils/TDmap';
+import Mapbtn from '@/components/Mapbtn';
 export default {
   name: 'maps',
   data() {
     return {
       videoCode: null,
       isPop: false,
-      map: null
+      mapType: null
     };
   },
   computed: {},
   watch: {
-    map() {
+    mapType() {
       this.$nextTick(() => {
-        if (this.map === '2D') {
+        if (this.mapType === '2D') {
           // 初始化平面图
           this.init2D();
         } else {
@@ -85,22 +71,24 @@ export default {
         TMapAPI.map.HideLabelsByTag('default' + item.id);
       });
     },
+
     // 播放视频
     popVideo(id) {
-      this.videoCode = id;
-      this.isPop = true;
+      getVideoUrl({ id }).then(data => {
+        if (data.code === 200) {
+          if (!data.data) {
+            TipsPop({
+              message: '该监控暂时无法查看...',
+              type: 'error'
+            });
+            return;
+          }
+          this.videoCode = id;
+          this.isPop = true;
+        }
+      });
     },
-    // 切换地图
-    checkMap(code) {
-      if (this.map === 'code') {
-        TipsPop({
-          message: '当前地图已经存在...',
-          type: 'info'
-        });
-        return;
-      }
-      this.map = code;
-    },
+
     // 初始化2D
     init2D() {
       TMapAPI.map.SetCenter(new SLonLat(1500, 1010), 1);
@@ -118,6 +106,7 @@ export default {
       });
       TMapAPI.map.SetCenter(new SLonLat(1500, 1010), 1);
     },
+
     // 初始化2.5D
     init25D() {
       mapWorld.centerAndZoom(new T.LngLat(119.61, 30.526), 18);
@@ -136,10 +125,11 @@ export default {
   mounted() {
     TMapAPI.InitMap('maps');
     mapWorld = new T.Map('mapDiv');
-    this.map = '2D';
+    this.mapType = '2D';
   },
   components: {
-    PopBox
+    PopBox,
+    Mapbtn
   },
   beforeDestroy() {
     mapWorld = null;
@@ -192,23 +182,6 @@ export default {
   }
   .left {
     left: -10000px !important;
-  }
-  .div-btn {
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 1050;
-    > div {
-      float: left;
-      cursor: pointer;
-    }
-    .div {
-      margin-left: px2rem(10rem);
-      dd {
-        text-align: center;
-        color: #fff;
-      }
-    }
   }
   .img-box {
     width: px2rem(864rem);

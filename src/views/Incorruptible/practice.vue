@@ -41,7 +41,6 @@
 
 <script>
 import PartyBox from '@/components/party-box';
-import { getPracticeInfo } from '@/api/incorruptible';
 import shijianPie from './echarts/shijian_pie';
 import renqunPie from '../analysis/echarts/renqun_pie';
 import { TipsPop } from '@/utils/el_ui';
@@ -49,9 +48,6 @@ export default {
   name: 'practice',
   data() {
     return {
-      list: [],
-      gaopinTimer: null,
-      timer: null,
       valueList: [
         {
           name: '年服务对象人次',
@@ -97,24 +93,12 @@ export default {
     }
   },
   mounted() {
-    getPracticeInfo().then(data => {
-      if (data.code === 0) {
-        this.list = data.data.slice(0, 2);
-      }
-    });
-    this.timer = setInterval(() => {
-      clearInterval(this.gaopinTimer);
-      this.echart_frequency();
-    }, 1000 * 60);
     this.type = 'sex';
   },
   components: {
     PartyBox,
     shijianPie,
     renqunPie
-  },
-  beforeDestroy() {
-    clearInterval(this.timer);
   }
 };
 </script>

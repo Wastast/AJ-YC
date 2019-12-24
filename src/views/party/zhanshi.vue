@@ -36,7 +36,7 @@
 
         <div class="bottom">
           <div class="title">
-            服务人群画像
+            村情人群画像
           </div>
           <div class="top">
             <ul class="ul">
