@@ -9,7 +9,9 @@ export default {
   mixins: [EchatsMixin],
   name: 'jinqi_line',
   data() {
-    return {};
+    return {
+      timer: null
+    };
   },
   computed: {},
   watch: {},
@@ -130,6 +132,16 @@ export default {
         this.echarts_evnet(data.data);
       }
     });
+    this.timer = setInterval(() => {
+      getNear().then(data => {
+        if (data.code === 200) {
+          this.echarts_evnet(data.data);
+        }
+      });
+    }, 1000 * 60);
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
   }
 };
 </script>

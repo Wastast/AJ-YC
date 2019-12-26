@@ -8,7 +8,6 @@
 
 <script>
 import { getHouse, getShouye } from '@/api/mapapi';
-import { TipsPop } from '@/utils/el_ui';
 import TDmap from '@/utils/TDmap';
 import Mapbtn from '@/components/Mapbtn';
 export default {

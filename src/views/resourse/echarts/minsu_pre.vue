@@ -9,7 +9,9 @@ export default {
   mixins: [EchatsMixin],
   name: 'minsu_pre',
   data() {
-    return {};
+    return {
+      timer: null
+    };
   },
   computed: {},
   watch: {},
@@ -77,6 +79,19 @@ export default {
         this.ecahrt_manyi(type, data.data.obj);
       }
     });
+    this.timer = setInterval(() => {
+      getHourse().then(data => {
+        if (data.code === 200) {
+          let type = data.data.obj.map(item => {
+            return item.name;
+          });
+          this.ecahrt_manyi(type, data.data.obj);
+        }
+      });
+    }, 60 * 1000);
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
   }
 };
 </script>

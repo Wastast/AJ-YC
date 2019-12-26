@@ -12,9 +12,6 @@ export const getDesc = data => post('/dimTourBasResidentInfo/api/analysis', data
 // 车辆卡口数据
 export const getBayonet = data => get('/tBayonetReal/find', data);
 
-// 视频接口
-export const getVideoData = data => post('/hikocx', data);
-
 // 来源地数据
 export const getOrign = data => get('/dwsTourSelfDriveTouristsFromCityD/getCityData', data);
 

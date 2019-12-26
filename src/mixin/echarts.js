@@ -3,7 +3,8 @@ import { EleResize } from '@/utils/esresize';
 export const EchatsMixin = {
   data() {
     return {
-      echartsTimer: null
+      echartsTimer: null,
+      index: -1
     };
   },
   methods: {
@@ -18,39 +19,68 @@ export const EchatsMixin = {
       EleResize.on(resizeDiv, listener);
       return myChart; // 将初始化的 DOM 返回
     },
-    // echarts 自动选择效果
-    autoMatic(myChart, length, time = 1000) {
-      if (this.echartsTimer) {
-        clearInterval(this.echartsTimer);
-      }
-      let index = 0;
+    // 动画效果
+    animation(myChart, length, time) {
       this.echartsTimer = setInterval(() => {
-        var dataLen = length;
+        let dataLen = length;
         // 取消之前高亮的图形
         myChart.dispatchAction({
           type: 'downplay',
           seriesIndex: 0,
-          dataIndex: index
+          dataIndex: this.index
         });
-        index = (index + 1) % dataLen;
+        this.index = (this.index + 1) % dataLen;
         // 高亮当前图形
         myChart.dispatchAction({
           type: 'highlight',
           seriesIndex: 0,
-          dataIndex: index
+          dataIndex: this.index
         });
         // 显示 tooltip
         myChart.dispatchAction({
           type: 'showTip',
           seriesIndex: 0,
-          dataIndex: index
+          dataIndex: this.index
         });
       }, time);
+    },
+    // echarts 自动选择效果
+    autoMatic(myChart, length, time = 2000) {
+      if (this.echartsTimer) {
+        clearInterval(this.echartsTimer);
+      }
+      this.$refs['echarts'].onmouseover = () => {
+        if (this.echartsTimer) {
+          clearInterval(this.echartsTimer);
+        }
+        myChart.dispatchAction({
+          type: 'downplay',
+          seriesIndex: 0,
+          dataIndex: this.index
+        });
+      };
+
+      this.$refs['echarts'].onmouseout = () => {
+        this.animation(myChart, length, time);
+      };
+
+      myChart.on('mouseover', a => {
+        let { dataIndex } = a;
+        this.index = dataIndex - 1;
+      });
+
+      this.animation(myChart, length, time);
     }
   },
   beforeDestroy() {
     if (this.echartsTimer) {
       clearInterval(this.echartsTimer);
+    }
+    if (this.$refs['echarts'].onmouseover) {
+      this.$refs['echarts'].onmouseover = null;
+    }
+    if (this.$refs['echarts'].onmouseout) {
+      this.$refs['echarts'].onmouseout = null;
     }
   }
 };

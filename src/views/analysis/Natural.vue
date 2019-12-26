@@ -4,7 +4,7 @@
       <module-box title="乡村环境" @jump="jump">
         <template slot="content">
           <ul class="ul">
-            <li class="li" v-for="(item, index) of list" :key="index" @click="checkType(item.type)">
+            <li class="li" v-for="(item, index) of list" :key="index" @click="checkType(item)">
               <img :src="item.imgUrl" alt="" />
               <dl>
                 <dt>{{ item.name }}</dt>
@@ -18,32 +18,18 @@
       </module-box>
     </div>
 
-    <div class="mark" v-if="isPop">
-      <div class="pop-box">
+    <div class="mark" v-if="isPop" @click="popClose">
+      <div class="pop-box" @click.stop="() => {}">
         <div class="pop-box-title">
-          <h2 class="h2">
-            乡村环境详情
-          </h2>
+          <h2 class="h2">乡村环境详情: {{ titleName }}</h2>
         </div>
         <div class="close" @click="popClose"></div>
         <div class="content">
-          <div class="pop-content">
-            <div class="top">
-              <ul class="ul">
-                <li
-                  class="li"
-                  v-for="(item, index) in list"
-                  :key="index"
-                  :class="item.type === type ? 'checked' : ''"
-                  @click="checkType(item.type)"
-                >
-                  {{ item.name }}
-                </li>
-              </ul>
-            </div>
-            <div class="echarts">
-              <huanjing-line :type="type"></huanjing-line>
-            </div>
+          <div class="top">
+            <Timepicker></Timepicker>
+          </div>
+          <div class="ecahrts">
+            <huanjing-line :type="type"></huanjing-line>
           </div>
         </div>
       </div>
@@ -54,6 +40,7 @@
 <script>
 import ModuleBox from '@/components/analys-box';
 import { getEnvironmental } from '@/api/analysis';
+import Timepicker from '@/components/Timepicker';
 import huanjingLine from './echarts/huanjing_line';
 export default {
   name: 'Natural',
@@ -120,6 +107,7 @@ export default {
           danwei: ''
         }
       ],
+      titleName: '',
       type: '',
       isPop: false
     };
@@ -134,11 +122,10 @@ export default {
   },
   methods: {
     // 更换type值
-    checkType(type) {
-      this.type = type;
-      if (!this.isPop) {
-        this.isPop = true;
-      }
+    checkType(item) {
+      this.type = item.type;
+      this.titleName = item.name;
+      this.isPop = true;
     },
     popClose() {
       this.isPop = false;
@@ -159,6 +146,7 @@ export default {
   },
   components: {
     ModuleBox,
+    Timepicker,
     huanjingLine
   }
 };
@@ -272,38 +260,10 @@ export default {
       box-sizing: border-box;
       position: relative;
       padding: 0 px2rem(23rem) 0 px2rem(13rem);
-      .pop-content {
-        .top {
-          display: flex;
-          height: px2rem(60rem);
-          background: rgba(7, 14, 38, 1);
-          .ul {
-            display: flex;
-            margin: auto;
-            .li {
-              float: left;
-              width: px2rem(86rem);
-              height: px2rem(30rem);
-              border-radius: 5px;
-              line-height: px2rem(30rem);
-              transition: 0.5s;
-              text-align: center;
-              color: #fff;
-              &:hover {
-                background: rgba(12, 18, 43, 1);
-                cursor: pointer;
-                color: rgba(0, 241, 251, 1);
-              }
-            }
-            .checked {
-              background: rgba(12, 18, 43, 1);
-              color: rgba(0, 241, 251, 1);
-            }
-          }
-        }
-        .echarts {
-          height: px2rem(255rem);
-        }
+      .top {
+      }
+      .ecahrts {
+        height: px2rem(250rem);
       }
     }
   }

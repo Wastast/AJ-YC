@@ -73,7 +73,7 @@ export default {
         ]
       };
 
-      this.autoMatic(myChart, option.series[0].data.length);
+      this.autoMatic(myChart, option.series[0].data.length, 2000);
 
       myChart.clear();
       myChart.setOption(option, true);

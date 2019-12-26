@@ -5,6 +5,7 @@
 <script>
 import { getEsunValue } from '@/api/analysis';
 import { EchatsMixin } from '@/mixin/echarts';
+import { EventBus } from '@/utils/event-bus';
 export default {
   mixins: [EchatsMixin],
   props: ['type'],
@@ -20,6 +21,26 @@ export default {
         pcpn: '6',
         co2: '7',
         guoke: '8'
+      },
+      typename: {
+        pm25: 'PM2.5',
+        pres: '气压',
+        hum: '湿度',
+        anion: '负氧离子',
+        windSpd: '风速',
+        pcpn: '整点降雨量',
+        co2: '二氧化碳浓度',
+        guoke: '果壳箱告警'
+      },
+      danwei: {
+        pm25: 'μg/m³',
+        pres: 'hPa',
+        hum: '%',
+        anion: 'cm³',
+        windSpd: 'm/s',
+        pcpn: '',
+        co2: 'ppm',
+        guoke: ''
       }
     };
   },
@@ -27,7 +48,7 @@ export default {
   watch: {
     type() {
       if (this.type) {
-        this.gethuanjing(this.typeList[this.type]);
+        this.gethuanjing();
       }
     }
   },
@@ -53,7 +74,7 @@ export default {
           {
             type: 'category',
             // data: ['人社局', '医保局', '税务', '民政', '残联', '村自有事'],
-            data: data.hours,
+            data: data.times,
             axisTick: {
               show: true
             },
@@ -70,8 +91,14 @@ export default {
           {
             type: 'value',
             show: true,
+            name: `单位: ${this.danwei[this.type]}`,
             axisTick: {
               show: false
+            },
+            nameTextStyle: {
+              color: '#fff',
+              fontSize: 16,
+              padding: [0, 0, 0, 20]
             },
             axisLine: {
               show: false
@@ -88,7 +115,8 @@ export default {
         ],
         series: [
           {
-            name: '游客小时数据',
+            // name: '游客小时数据',
+            name: this.typename[this.type],
             type: 'line',
             smooth: true,
             //  symbol: "none", //去掉折线点
@@ -130,7 +158,7 @@ export default {
             areaStyle: {
               normal: {}
             },
-            data: data.datas
+            data: data.datas || []
             // data: [6, 1, 2, 3, 4, 5]
           }
         ]
@@ -142,9 +170,12 @@ export default {
       myChart.setOption(option, true);
     },
     // 获取环境数据
-    gethuanjing(code) {
+    gethuanjing(type = 1, startTime = '', endTime = '') {
       getEsunValue({
-        type: code
+        type: this.typeList[this.type],
+        timeType: type,
+        startTime: startTime,
+        endTime: endTime
       }).then(data => {
         if (data.code === 200) {
           this.echarts_evnet(data.result);
@@ -153,13 +184,22 @@ export default {
     }
   },
   mounted() {
-    this.gethuanjing(this.typeList[this.type]);
+    this.gethuanjing();
+  },
+  created() {
+    EventBus.$on('changeType', ({ type }) => {
+      this.gethuanjing(type);
+    });
+    EventBus.$on('changeTime', ({ type, startTime, endTime }) => {
+      this.gethuanjing(type, startTime, endTime);
+    });
   }
 };
 </script>
 
 <style scoped lang="scss">
 .huanjing_line {
+  width: 100%;
   height: 100%;
 }
 </style>

@@ -177,12 +177,17 @@ export default {
       },
       pre: null,
       minsuData: null,
-      type: ''
+      type: '',
+      houseTimer: null,
+      floatTimer: null
     };
   },
   computed: {},
   watch: {
     value(n, o) {
+      if (this.floatTimer) {
+        clearInterval(this.floatTimer);
+      }
       getMinData({
         resourceId: n
       }).then(data => {
@@ -192,6 +197,17 @@ export default {
           this.minsuData = obj;
         }
       });
+      this.floatTimer = setInterval(() => {
+        getMinData({
+          resourceId: n
+        }).then(data => {
+          if (data.code === 200) {
+            let { last, used, memberNum, obj } = data.data;
+            this.minsu = { last, used, memberNum };
+            this.minsuData = obj;
+          }
+        });
+      }, 60 * 1000);
     }
   },
   methods: {
@@ -225,10 +241,22 @@ export default {
         this.jiance = { used, memberNum, allnum };
       }
     });
+    this.houseTimer = setInterval(() => {
+      getMember().then(data => {
+        if (data.code === 200) {
+          let { used, memberNum, allnum } = data.data;
+          this.jiance = { used, memberNum, allnum };
+        }
+      });
+    }, 60 * 1000);
 
     this.type = 'bili';
   },
-  components: { PartyBox, minsuPre, hoursePre, countTo, jinqiLine }
+  components: { PartyBox, minsuPre, hoursePre, countTo, jinqiLine },
+  beforeDestroy() {
+    clearInterval(this.houseTimer);
+    clearInterval(this.floatTimer);
+  }
 };
 </script>
 
