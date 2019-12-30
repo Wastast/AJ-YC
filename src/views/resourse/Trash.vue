@@ -1,5 +1,8 @@
 <template>
   <div class="Trash">
+    <div class="div-btn" @click="jump()">
+      垃圾分类 >>>
+    </div>
     <party-box title="果壳箱监测" width="592" height="200">
       <template slot="content">
         <ul class="ul">
@@ -34,17 +37,17 @@ export default {
     return {
       list: [
         {
-          type: '两山绿道1',
+          type: '大石碑',
           rongliang: '未满',
           shidu: '20'
         },
         {
-          type: '两山绿道2',
+          type: '凉亭',
           rongliang: '未满',
           shidu: '20'
         },
         {
-          type: '两山绿道3',
+          type: '两山绿道',
           rongliang: '未满',
           shidu: '20'
         }
@@ -53,7 +56,11 @@ export default {
   },
   computed: {},
   watch: {},
-  methods: {},
+  methods: {
+    jump() {
+      window.location.href = 'http://app.hanziyi.cn/login.html?id=51';
+    }
+  },
   mounted() {},
   components: { PartyBox }
 };
@@ -79,6 +86,16 @@ export default {
   top: px2rem(523rem);
   left: px2rem(41rem);
   z-index: 100;
+  .div-btn {
+    position: absolute;
+    top: px2rem(3rem);
+    left: px2rem(200rem);
+    line-height: px2rem(40rem);
+    color: #0d7be1;
+    font-size: px2rem(24rem);
+    padding: px2rem(10rem);
+    cursor: pointer;
+  }
   .ul {
     display: flow-root;
     .li {

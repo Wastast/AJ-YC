@@ -4,14 +4,15 @@
       <div class="div" @click="checkMap('2D')">
         <dl>
           <dt>
-            <img src="@/assets/popbox/2.5d.png" alt="" />
+            <!-- <img src="@/assets/popbox/2.5d.png" alt="" /> -->
+            <img src="@/assets/popbox/20191227102849.jpg" alt="" />
           </dt>
         </dl>
       </div>
       <div class="div" @click="checkMap('2.5D')">
         <dl>
           <dt>
-            <img src="@/assets/popbox/2d.png" alt="" />
+            <img src="@/assets/popbox/20191227102858.jpg" alt="" />
           </dt>
         </dl>
       </div>

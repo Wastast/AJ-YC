@@ -29,7 +29,7 @@
                 <p class="value">
                   <countTo
                     :startVal="parseInt(0)"
-                    :endVal="jiance.memberNum"
+                    :endVal="jiance.used"
                     :duration="3000"
                   ></countTo>
                 </p>
@@ -44,7 +44,7 @@
                   实时入住人数
                 </p>
                 <p class="value">
-                  <countTo :startVal="parseInt(0)" :endVal="jiance.used" :duration="3000"></countTo>
+                  <countTo :startVal="parseInt(0)" :endVal="jiance.memberNum" :duration="3000"></countTo>
                 </p>
               </div>
               <div class="right">

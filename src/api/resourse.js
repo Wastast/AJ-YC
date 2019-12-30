@@ -29,3 +29,6 @@ export const getNear = data => get('/dwdTourHotelDataInfo/getWeekDate', data);
 
 // 获取总的住房人数
 export const getMember = data => get('/dwdTourHotelDataInfo/allData', data);
+
+// 获取停车场数据
+export const getPark = data => get('/dwdTourParkMonitorRt', data);

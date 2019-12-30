@@ -8,7 +8,7 @@
               {{ item.name }}
             </p>
             <p class="value">
-              {{ item.value }}
+              {{ typeValue[item.type] }}
             </p>
             <div class="icon">
               <img :src="item.icon" alt="" />
@@ -22,6 +22,7 @@
 
 <script>
 import PartyBox from '@/components/party-box';
+import { getPark } from '@/api/resourse';
 export default {
   name: 'park',
   data() {
@@ -30,25 +31,44 @@ export default {
         {
           name: '总车位',
           value: '200',
-          icon: require('@/assets/resouse/park.png')
+          icon: require('@/assets/resouse/park.png'),
+          type: 'all'
         },
         {
           name: '剩余大车车位',
           value: '30',
-          icon: require('@/assets/resouse/car.png')
+          icon: require('@/assets/resouse/car.png'),
+          type: 'small'
         },
         {
           name: '剩余小车车位',
           value: '20',
-          icon: require('@/assets/resouse/var111.png')
+          icon: require('@/assets/resouse/var111.png'),
+          type: 'big'
         }
-      ]
+      ],
+      typeValue: {
+        big: '',
+        small: '',
+        all: ''
+      }
     };
   },
   computed: {},
   watch: {},
   methods: {},
-  mounted() {},
+  mounted() {
+    getPark().then(data => {
+      if (data.code === 0) {
+        let { allnum, residualSmall, residualNumber } = data.data[0];
+        this.typeValue = {
+          big: residualNumber,
+          small: residualSmall,
+          all: allnum
+        };
+      }
+    });
+  },
   components: { PartyBox }
 };
 </script>

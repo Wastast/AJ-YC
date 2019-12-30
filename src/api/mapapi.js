@@ -20,3 +20,6 @@ export const getVideoSmoke = data => get('/dimTourBasResource/findVideo', data);
 
 // 获取五星之家，党员点位
 export const getFire = data => get('/dimTourBasResource/findFamily', data);
+
+// 获取天地图的余村范围
+export const getYuRagne = data => get('/dimTourBasArea/findAll', data);

@@ -31,17 +31,17 @@
     <div class="event-box" v-if="memberId">
       <div class="icon" @click="checkEvent"></div>
       <div class="event-list" v-if="isEvent">
-        <vuescroll>
+        <vuescroll :ops="ops">
           <ul class="ul">
             <li class="li" v-for="(item, index) in eventList" :key="index">
-              <span class="span span-title">
+              <span class="span span-title ellipsis">
                 {{ item.title }}
               </span>
               <span class="span span-desc ellipsis">
                 {{ item.content }}
               </span>
               <span class="span span-time">
-                {{ item.time }}
+                {{ item.createDate | fiterYMD }}
               </span>
             </li>
           </ul>
@@ -53,7 +53,7 @@
 
 <script>
 import PartyBox from '@/components/party-box';
-import { getHome } from '@/api/law';
+import { getHome, getHomeEvent } from '@/api/law';
 import { TipsPop } from '@/utils/el_ui';
 import vuescroll from 'vuescroll';
 export default {
@@ -63,17 +63,26 @@ export default {
       list: [],
       memberId: null,
       isEvent: false,
-      eventList: [
-        {
-          title: '事件标题',
-          content: '事件内容',
-          time: '2019-01-01'
+      eventList: [],
+      ops: {
+        bar: {
+          background: 'rgba(0,0,0,0)'
         }
-      ]
+      }
     };
   },
   computed: {},
-  watch: {},
+  watch: {
+    isEvent(n, o) {
+      if (n) {
+        getHomeEvent().then(data => {
+          if (data.code === 200) {
+            this.eventList = data.data;
+          }
+        });
+      }
+    }
+  },
   methods: {
     // 绘制圆圈
     async drawCircle(item) {
@@ -285,6 +294,7 @@ export default {
         }
         .span-title {
           left: px2rem(25rem);
+          width: px2rem(80rem);
           &::before {
             content: '';
             display: inline-block;

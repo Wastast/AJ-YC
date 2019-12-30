@@ -14,3 +14,6 @@ export const getFrequency = data => get('/dwdTourEventAgencyInfo/find', data);
 
 // 高频事项代办数量
 export const getHome = data => get('/dwdTourHomeGuardAreaInfo/findArea', data);
+
+// 获取家园卫队事件
+export const getHomeEvent = data => get('/dwdTourEventInfo/getInfoByType', data);

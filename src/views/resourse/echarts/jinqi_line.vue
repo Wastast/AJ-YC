@@ -73,7 +73,7 @@ export default {
         ],
         series: [
           {
-            name: '游客小时数据',
+            name: '近期接待人数数据',
             type: 'line',
             smooth: true,
             //  symbol: "none", //去掉折线点

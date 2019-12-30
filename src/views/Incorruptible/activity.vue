@@ -45,6 +45,7 @@ import PartyBox from '@/components/party-box';
 import { getActivity } from '@/api/incorruptible';
 import vuescroll from 'vuescroll';
 import PopBox from '@/components/PopBox';
+import { EventBus } from '@/utils/event-bus';
 export default {
   name: 'activity',
   data() {
@@ -106,6 +107,11 @@ export default {
     PartyBox,
     vuescroll,
     PopBox
+  },
+  created() {
+    EventBus.$on('popActivity', ({ item }) => {
+      this.getData(item);
+    });
   }
 };
 </script>

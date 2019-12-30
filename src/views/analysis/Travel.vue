@@ -45,6 +45,9 @@
             <span class="span span-title">
               {{ event.title }}
             </span>
+            <span class="span span-type">
+              {{ textValue[event.userType] }}
+            </span>
             <span class="span span-time">
               {{ event.createDate | fiterYMD }}
             </span>
@@ -106,7 +109,7 @@ export default {
         content: '',
         imgurl: '',
         title: '',
-        user_type: ''
+        userType: 0
       },
       isPop: false,
       textValue: {
@@ -131,9 +134,10 @@ export default {
   methods: {
     // 获取事件信息
     getData(obj) {
+      console.log(obj);
+      let { content, createDate, title, userType } = obj;
+      this.event = { content, createDate, title, imgurl: obj.picUrl[0], userType };
       this.isPop = true;
-      let { content, createDate, title } = obj;
-      this.event = { content, createDate, title, imgurl: obj.picUrl[0] };
     },
     // 请求事件
     requestEvent() {
@@ -300,6 +304,9 @@ export default {
         vertical-align: middle;
         margin-right: px2rem(5rem);
       }
+    }
+    .span-type {
+      left: px2rem(300rem);
     }
     .span-time {
       right: px2rem(20rem);

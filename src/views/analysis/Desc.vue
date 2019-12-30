@@ -30,7 +30,7 @@
       </module-box>
     </div>
 
-    <pop-box :isPop.sync="isPop" :title="'人群画像分析'">
+    <pop-box :isPop.sync="isPop" :title="'村民画像分析'">
       <template slot="content">
         <div class="pop-content">
           <div class="top">

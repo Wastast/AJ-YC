@@ -17,8 +17,8 @@
 
 <script>
 import { getVideoUrl } from '@/api/analysis';
-import { getVideoSmoke } from '@/api/mapapi';
-import { TipsPop } from '@/utils/el_ui';
+import { getVideoSmoke, getYuRagne } from '@/api/mapapi';
+// import { TipsPop } from '@/utils/el_ui';
 import PopBox from '@/components/PopBox';
 import TDmap from '@/utils/TDmap';
 import Mapbtn from '@/components/Mapbtn';
@@ -77,10 +77,10 @@ export default {
       getVideoUrl({ id }).then(data => {
         if (data.code === 200) {
           if (!data.data) {
-            TipsPop({
-              message: '该监控暂时无法查看...',
-              type: 'error'
-            });
+            // TipsPop({
+            //   message: '该监控暂时无法查看...',
+            //   type: 'error'
+            // });
             return;
           }
           this.videoCode = id;
@@ -125,6 +125,26 @@ export default {
   mounted() {
     TMapAPI.InitMap('maps');
     mapWorld = new T.Map('mapDiv');
+
+    getYuRagne().then(data => {
+      var points = [];
+      let list = data.data[0].fShape.split(',');
+      list.forEach(item => {
+        let LonLat = item.split(' ');
+        points.push(new T.LngLat(LonLat[0], LonLat[1]));
+      });
+      // 创建面对象
+      var polygon = new T.Polygon(points, {
+        color: 'blue', // 线条颜色
+        weight: 3, // 线条宽度
+        opacity: 0.5, // 线条透明度
+        fillColor: '#FFFFFF', // 覆盖物颜色
+        fillOpacity: 0.5 // 覆盖物透明度
+      });
+      // 向地图上添加面
+      mapWorld.addOverLay(polygon);
+    });
+
     this.mapType = '2D';
   },
   components: {

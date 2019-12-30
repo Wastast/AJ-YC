@@ -21,5 +21,14 @@ export const getVolunteer = data => get('/dwdTourVolunteerOrganizationInfo', dat
 // 获取志愿者队伍信息
 export const getTeam = data => get('/dwdTourVolunteerTeamInfo', data);
 
-// 获取单个志愿者队伍信息
-export const getFloatTeam = data => get('/dwdTourVolunteerOrganizationInfo/findListByTeamNo', data);
+// 获取单个志愿队伍信息
+export const getFloatTeam = data => get('/dwdTourVolunteerTeamInfo/findTimeInfoById', data);
+
+// 获取文明实践服务数据
+export const getService = data => get('/dwdTourVolunteerServiceInfo/getAllDate', data);
+
+// 获取今日志愿人员
+export const getDayPeople = data => get('/dwdTourVolunteerOrganizationInfo/getActivityName', data);
+
+// 获取今日志愿活动
+export const getDayHuodong = data => get('/dwdTourVolunteerActivityInfo/showTdayInfo', data);

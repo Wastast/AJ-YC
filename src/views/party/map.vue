@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { getHouse } from '@/api/mapapi';
+import { getHouse, getYuRagne } from '@/api/mapapi';
 import Mapbtn from '@/components/Mapbtn';
 export default {
   name: 'maps',
@@ -190,6 +190,26 @@ export default {
   mounted() {
     TMapAPI.InitMap('map');
     mapWorld = new T.Map('mapDiv');
+
+    getYuRagne().then(data => {
+      var points = [];
+      let list = data.data[0].fShape.split(',');
+      list.forEach(item => {
+        let LonLat = item.split(' ');
+        points.push(new T.LngLat(LonLat[0], LonLat[1]));
+      });
+      // 创建面对象
+      var polygon = new T.Polygon(points, {
+        color: 'blue', // 线条颜色
+        weight: 3, // 线条宽度
+        opacity: 0.5, // 线条透明度
+        fillColor: '#FFFFFF', // 覆盖物颜色
+        fillOpacity: 0.5 // 覆盖物透明度
+      });
+      // 向地图上添加面
+      mapWorld.addOverLay(polygon);
+    });
+
     this.mapType = '2D';
   },
   beforeDestroy() {

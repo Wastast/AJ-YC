@@ -8,7 +8,7 @@
               <li class="li" v-for="(item, index) of peopleList" :key="index">
                 <span class="span span-icon"> </span>
                 <span class="span span-name ellipsis">
-                  {{ item.name }}
+                  {{ item.teamName }}
                 </span>
                 <span class="span span-btn" @click="getValue(item)">
                   详情
@@ -16,42 +16,42 @@
               </li>
             </ul>
           </div>
-          <div class="center">
-            今日志愿者
+          <div class="center" @click="checkTyep()">
+            {{ type === 'huodong' ? '今日志愿活动' : '今日志愿者' }}
           </div>
           <div class="bottom">
-            <ul class="ul">
-              <li class="li" v-for="(item, index) of typeValue['zhiyuan']" :key="index">
-                <span class="span span-name">{{ item.name }}</span>
-                <span class="span span-number">{{ item.time }}</span>
-              </li>
-            </ul>
-          </div>
-          <!-- <div class="div-center">
-          <ul class="ul">
-            <div class="li-title" @click="checkTyep()">
-              {{ type === 'huodong' ? '今日志愿活动' : '今日志愿者' }}
+            <div class="zy" v-if="type === 'zhiyuan'">
+              <vuescroll>
+                <ul class="ul">
+                  <li class="li" v-for="(item, index) of nowPeople" :key="index">
+                    <span class="span span-name">{{ item.name }}</span>
+                    <span class="span span-number">{{ item.phone }}</span>
+                  </li>
+                </ul>
+              </vuescroll>
             </div>
-            <li class="li" v-for="(item, index) of valueList" :key="index">
-              <span
-                class="span span-huodong ellipsis"
-                :style="{ left: type === 'zhiyuan' ? '2rem' : '' }"
-                :title="item.name"
-              >
-                {{ item.name }}
-              </span>
-              <span class="span span-time ellipsis" :title="item.time">
-                {{ item.time }}
-              </span>
-            </li>
-          </ul>
-        </div> -->
+            <div class="huodong" v-if="type === 'huodong'">
+              <vuescroll>
+                <ul class="ul">
+                  <li
+                    class="li"
+                    v-for="(item, index) of nowPeople"
+                    :key="index"
+                    @click="getDesc(item)"
+                  >
+                    <span class="span span-title ellipsis">{{ item.title }}</span>
+                    <span class="span span-message ellipsis">{{ item.message }}</span>
+                  </li>
+                </ul>
+              </vuescroll>
+            </div>
+          </div>
         </template>
       </party-box>
     </div>
 
-    <div class="mark" v-if="isPop">
-      <div class="pop-box">
+    <div class="mark" v-if="isPop" @click="popClose">
+      <div class="pop-box" @click.stop="() => {}">
         <div class="pop-box-title">
           <h2 class="h2">
             志愿队伍详情
@@ -62,32 +62,43 @@
           <div class="pop-content">
             <div class="top">
               <div class="img"></div>
-              <div class="name">
-                队伍名称
+              <div class="name ellipsis" :title="value.teamName">
+                {{ value.teamName }}
               </div>
               <div class="huodong cishu">
                 <p>本年度</p>
                 <p>活动次数</p>
               </div>
-              <div class="blue">
-                32
+              <div class="huodongblue">
+                {{ value.times }}
               </div>
               <div class="fuwu cishu">
                 <p>本年度</p>
                 <p>服务人数</p>
               </div>
-              <div class="blue">
-                420
+              <div class="fuwublue">
+                {{ value.num }}
               </div>
             </div>
             <div class="div-center">
               <p class="chengyuan">队伍成员 :</p>
               <div class="name">
-                成员名称
+                <span v-for="(item, index) of value.organize" :key="index">
+                  {{ item.name + '、' }}
+                </span>
               </div>
             </div>
             <div class="div-bottom">
               <p class="chengyuan">活动列表 :</p>
+              <ul class="ul">
+                <li class="li" v-for="(item, index) in value.activity" :key="index">
+                  <span class="span span-title ellipsis">
+                    {{ item.title }}
+                  </span>
+                  <span class="span span-sheng">-------------------------</span>
+                  <span class="span span-desc" @click="getDesc(item)">详情</span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -98,155 +109,98 @@
 
 <script>
 import PartyBox from '@/components/party-box';
+import { getTeam, getFloatTeam, getDayPeople, getDayHuodong } from '@/api/incorruptible';
+import { EventBus } from '@/utils/event-bus';
+import vuescroll from 'vuescroll';
 export default {
   name: 'zhiyuan',
   data() {
     return {
-      peopleList: [
-        {
-          name: '道德评议队',
-          number: '13567278553',
-          frequency: '1',
-          desc:
-            '居民道德评议会按照“为人正直、办事公道、威信较高、说理能力强”的要求由村民推荐、村两委审查确定评议会成员。针对村民思想道德方面存在的问题，列出评议要点，公正、客观、事实就是地进行评议。'
-        },
-        {
-          name: '巾帼志愿者队',
-          number: '13868283334',
-          frequency: '2',
-          desc:
-            '余村村积极组织巾帼志愿者发挥自生独特优势践行主流价值，在全国文明城市创建宣传、庭院美化、结对提升等工作上发挥力量，争做新时代的新女性。'
-        },
-        {
-          name: '两山文艺宣传队',
-          number: '15157255909',
-          frequency: '3',
-          desc:
-            '由余村村民自发组成的队伍，自行编排节目，定期开展形式多样、健康向上的文化活动。丰富农村文化生活，展现村庄精神面貌，宣传余村两山文化。在丰富村民业余生活的同时进一步深化村民的精神文明建设和人文素养。'
-        },
-        {
-          name: '青年志愿者队',
-          number: '13657221980',
-          desc:
-            '由余村年轻人自愿组成的队伍，在不为任何物质报酬的情况下，参与志愿工作，既是帮助他人、服务社会，同时也是传递爱心和传播文明。为余村做好强有力的后盾。',
-          frequency: '4'
-        },
-        {
-          name: '双禁劝导指挥队',
-          number: '13567970055',
-          desc:
-            '在村党支部、村委会的指导下开展工作，实行自我管理、自我约束、自我教育、自我服务。主动热情地为村民的喜事、丧事操办做好服务。坚持从简原则，大力宣传利用锣鼓表演的方式代替燃放烟花爆竹式。为余村建设贡献自己的一份微薄之力。',
-          frequency: '5'
-        },
-        {
-          name: '乡贤调解队伍',
-          number: '15157241398',
-          frequency: '6',
-          desc:
-            '由余村退休老干部自发组成的一个团队，化解村庄矛盾纠纷。进一步提高村民素质，有力促进村庄和谐稳定，打造三治融合示范村。'
-        }
-      ],
+      peopleList: [],
       dialogVisible: false,
       valueList: [],
       type: '',
-      typeValue: {
-        huodong: [
-          {
-            time: '智慧养老服务中心',
-            name: '健康义诊'
-          },
-          {
-            time: '智慧养老服务中心',
-            name: '免费理发'
-          },
-          {
-            time: '智慧养老服务中心',
-            name: '法律质询'
-          },
-          {
-            time: '清风廊',
-            name: '防电讯诈骗宣传'
-          },
-          {
-            time: '清风廊',
-            name: '小家电维修'
-          },
-          {
-            time: '清风廊',
-            name: '糖画,竹编'
-          }
-        ],
-        zhiyuan: [
-          {
-            name: '周洪法',
-            time: '13757272094'
-          },
-          {
-            name: '陈婷',
-            time: '13738226255'
-          },
-          {
-            name: '朱迪',
-            time: '15868253545'
-          },
-          {
-            name: '韦斌',
-            time: '13735126545'
-          },
-          {
-            name: '刘立扬',
-            time: '18768115015'
-          },
-          {
-            name: '诸一洲',
-            time: '13735176728'
-          },
-          {
-            name: '方擎',
-            time: '15372235018'
-          }
-        ]
-      },
       value: {
-        name: '',
-        number: '',
-        frequency: '',
-        desc: ''
+        teamName: '',
+        times: 0,
+        num: 0,
+        activity: [],
+        organize: []
       },
       timer: null,
-      isPop: false
+      isPop: false,
+      nowPeople: []
     };
   },
   computed: {},
   watch: {
-    type() {
-      this.valueList = this.typeValue[this.type];
+    type(n, o) {
+      if (n === 'huodong') {
+        // 活动
+        getDayHuodong().then(data => {
+          if (data.code === 200) {
+            this.nowPeople = data.data;
+          }
+        });
+      } else {
+        // 志愿者
+        getDayPeople().then(data => {
+          if (data.code === 200) {
+            this.nowPeople = data.data;
+          }
+        });
+      }
     }
   },
   methods: {
+    // 获取活动详情
+    getDesc(item) {
+      EventBus.$emit('popActivity', { item: item });
+    },
     checkTyep() {
       this.type = this.type === 'huodong' ? 'zhiyuan' : 'huodong';
+      this.clearTime();
     },
+    // 获取队伍
     getValue(obj) {
-      this.value = obj;
-      this.isPop = true;
+      let { id } = obj;
+      getFloatTeam({ id }).then(data => {
+        if (data.code === 200) {
+          this.value = data.data;
+          this.isPop = true;
+        }
+      });
     },
     // 关闭弹窗
     popClose() {
       this.isPop = false;
+    },
+    // 清除计时器
+    clearTime() {
+      if (this.timer) {
+        clearInterval(this.timer);
+      }
+      this.timer = setInterval(() => {
+        this.checkTyep();
+      }, 1000 * 5);
     }
   },
   mounted() {
-    this.type = 'huodong';
-    this.timer = setInterval(() => {
-      this.checkTyep();
-    }, 1000 * 5);
+    this.type = 'zhiyuan';
+    this.clearTime();
+
+    getTeam().then(data => {
+      if (data.code === 0) {
+        this.peopleList = data.data;
+      }
+    });
   },
   beforeDestroy() {
     clearInterval(this.timer);
   },
   components: {
-    PartyBox
+    PartyBox,
+    vuescroll
   }
 };
 </script>
@@ -383,43 +337,76 @@ export default {
     overflow: hidden;
     box-sizing: border-box;
     padding-top: px2rem(10rem);
-    .ul {
+    .zy {
+      height: px2rem(250rem);
       overflow: hidden;
-      .li {
-        width: px2rem(240rem);
-        height: px2rem(61rem);
-        background: rgba(3, 14, 48, 1);
-        border-radius: 7px;
-        margin-top: px2rem(10rem);
-        float: left;
-        box-sizing: border-box;
-        padding-left: px2rem(15rem);
-        position: relative;
-        &:nth-child(even) {
-          margin-left: px2rem(6rem);
-        }
-        .span {
-          line-height: px2rem(61rem);
-          position: absolute;
-        }
-        .span-name {
-          font-size: px2rem(20rem);
-          color: rgba(0, 246, 255, 1);
-          &::after {
-            content: '';
+      .ul {
+        overflow: hidden;
+        .li {
+          width: px2rem(240rem);
+          height: px2rem(61rem);
+          background: rgba(3, 14, 48, 1);
+          border-radius: 7px;
+          margin-top: px2rem(10rem);
+          float: left;
+          box-sizing: border-box;
+          padding-left: px2rem(15rem);
+          position: relative;
+          &:nth-child(even) {
+            margin-left: px2rem(6rem);
+          }
+          .span {
+            line-height: px2rem(61rem);
             position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            left: px2rem(80rem);
-            width: 1px;
-            height: px2rem(34rem);
-            background: rgba(0, 246, 255, 0.3);
+          }
+          .span-name {
+            font-size: px2rem(20rem);
+            color: rgba(0, 246, 255, 1);
+            &::after {
+              content: '';
+              position: absolute;
+              top: 50%;
+              transform: translateY(-50%);
+              left: px2rem(80rem);
+              width: 1px;
+              height: px2rem(34rem);
+              background: rgba(0, 246, 255, 0.3);
+            }
+          }
+          .span-number {
+            left: px2rem(110rem);
+            color: #fff;
+            font-size: px2rem(18rem);
           }
         }
-        .span-number {
-          left: px2rem(110rem);
-          color: #fff;
-          font-size: px2rem(18rem);
+      }
+    }
+    .huodong {
+      height: px2rem(250rem);
+      .ul {
+        overflow: hidden;
+        margin-top: px2erm(10rem);
+        .li {
+          position: relative;
+          height: px2rem(60rem);
+          line-height: px2rem(60rem);
+          background: rgba(3, 14, 48, 1);
+          border-radius: 5px;
+          cursor: pointer;
+          .span {
+            position: absolute;
+            font-size: px2rem(20rem);
+          }
+          .span-title {
+            left: px2rem(20rem);
+            color: rgba(0, 246, 255, 1);
+            width: px2rem(150rem);
+          }
+          .span-message {
+            color: #fff;
+            left: px2rem(190rem);
+            width: px2rem(250rem);
+          }
         }
       }
     }
@@ -432,12 +419,12 @@ export default {
   left: 0;
   right: 0;
   background: rgba(0, 0, 0, 0.1);
-  z-index: 1999;
+  z-index: 1060;
   .pop-box {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: px2rem(516rem);
+    width: px2rem(560rem);
     height: px2rem(392rem);
     transform: translate(-50%, -50%);
     z-index: 2000;
@@ -490,43 +477,55 @@ export default {
       padding: 0 px2rem(23rem) 0 px2rem(13rem);
       .pop-content {
         .top {
-          display: flex;
+          // display: flex;
           margin-top: px2rem(10rem);
           overflow: hidden;
+          position: relative;
+          height: px2rem(40rem);
           > div {
-            float: left;
+            position: absolute;
           }
           .img {
             width: px2rem(22rem);
             height: px2rem(25rem);
             background: url('~@/assets/popbox/duiwu.png');
             background-size: 100% 100%;
-            margin-left: px2rem(10rem);
+            left: px2rem(10rem);
           }
           .name {
             font-size: px2rem(24rem);
             font-weight: bold;
             color: #fff;
             margin-left: px2rem(13rem);
+            left: px2rem(30rem);
+            width: px2rem(150rem);
           }
           .cishu {
             color: #fff;
+            width: px2rem(100rem);
           }
-          .blue {
+          .huodong {
+            left: px2rem(200rem);
+          }
+          .fuwu {
+            left: px2rem(330rem);
+          }
+          .huodongblue {
             color: rgba(0, 246, 255, 1);
             font-size: px2rem(30rem);
             font-weight: bold;
-            margin-left: px2rem(10rem);
+            left: px2rem(270rem);
           }
-          .huodong {
-            margin-left: px2rem(60rem);
-          }
-          .fuwu {
-            margin-left: px2rem(30rem);
+          .fuwublue {
+            color: rgba(0, 246, 255, 1);
+            font-size: px2rem(30rem);
+            font-weight: bold;
+            left: px2rem(400rem);
+            width: px2rem(80rem);
           }
         }
         .div-center {
-          width: px2rem(465rem);
+          // width: px2rem(465rem);
           height: px2rem(106rem);
           background: rgba(7, 14, 38, 1);
           border-radius: 8px;
@@ -539,13 +538,14 @@ export default {
             font-weight: bold;
           }
           .name {
-            margin-top: px2rem(19rem);
+            margin-top: px2rem(5rem);
+            line-height: px2rem(20rem);
             color: #fff;
           }
         }
         .div-bottom {
           margin-top: px2rem(10rem);
-          width: px2rem(465rem);
+          // width: px2rem(465rem);
           height: px2rem(142rem);
           background: rgba(7, 14, 38, 1);
           border-radius: 8px;
@@ -555,6 +555,33 @@ export default {
             color: rgba(27, 93, 182, 1);
             font-size: px2rem(16rem);
             font-weight: bold;
+          }
+          .ul {
+            box-sizing: border-box;
+            padding-top: px2rem(10rem);
+            .li {
+              color: #fff;
+              position: relative;
+              overflow: hidden;
+              height: px2rem(30rem);
+              .span {
+                position: absolute;
+                color: #fff;
+                line-height: px2rem(30rem);
+              }
+              .span-title {
+                width: px2rem(200rem);
+              }
+              .span-sheng {
+                color: #333;
+                left: px2rem(220rem);
+              }
+              .span-desc {
+                cursor: pointer;
+                left: px2rem(390rem);
+                color: rgba(0, 246, 255, 1);
+              }
+            }
           }
         }
       }

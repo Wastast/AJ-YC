@@ -9,7 +9,10 @@
           <div class="list-box">
             <div class="div" v-for="(item, index) of valueList" :key="index">
               <p class="p-title">{{ item.name }}</p>
-              <p class="p-value">{{ item.value }} {{ item.unit }}</p>
+              <p class="p-value">
+                <countTo :startVal="parseInt(0)" :endVal="item.value" :duration="3000"></countTo>
+                {{ item.unit }}
+              </p>
             </div>
           </div>
           <div class="bottom">
@@ -44,6 +47,8 @@ import PartyBox from '@/components/party-box';
 import shijianPie from './echarts/shijian_pie';
 import renqunPie from '../analysis/echarts/renqun_pie';
 import { TipsPop } from '@/utils/el_ui';
+import { getService } from '@/api/incorruptible';
+import countTo from 'vue-count-to';
 export default {
   name: 'practice',
   data() {
@@ -51,18 +56,21 @@ export default {
       valueList: [
         {
           name: '年服务对象人次',
-          value: '82356',
-          unit: '人'
+          value: 0,
+          unit: '人',
+          type: 'num'
         },
         {
           name: '年参与服务人次',
-          value: '2861',
-          unit: '人'
+          value: 0,
+          unit: '人',
+          type: 'inNum'
         },
         {
           name: '年志愿活动次数',
-          value: '187',
-          unit: '次'
+          value: 0,
+          unit: '次',
+          type: 'times'
         }
       ],
       typeList: [
@@ -94,11 +102,26 @@ export default {
   },
   mounted() {
     this.type = 'sex';
+    getService().then(data => {
+      if (data.code === 200) {
+        let value = data.data;
+        // inNum 参与人数
+        // num 服务对象人次
+        // times 年活动次数
+        this.valueList.forEach((item, index) => {
+          let type = item.type;
+          if (value[type]) {
+            this.valueList[index].value = value[type];
+          }
+        });
+      }
+    });
   },
   components: {
     PartyBox,
     shijianPie,
-    renqunPie
+    renqunPie,
+    countTo
   }
 };
 </script>
