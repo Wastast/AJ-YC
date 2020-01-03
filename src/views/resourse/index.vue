@@ -1,14 +1,14 @@
 <template>
-  <div class="home">
+  <div class="home" v-monitor-screen>
     <r-header title="生态美村 发展强村"></r-header>
     <r-trash></r-trash>
     <r-travel></r-travel>
     <r-atmosphere></r-atmosphere>
-    <r-bayonet></r-bayonet>
     <r-level></r-level>
     <r-park></r-park>
     <r-fire></r-fire>
     <r-hourse></r-hourse>
+    <r-bayonet></r-bayonet>
   </div>
 </template>
 
@@ -17,12 +17,11 @@ import RHeader from '@/components/Header';
 import RTrash from './Trash';
 import RTravel from './Travel';
 import RAtmosphere from './atmosphere';
-import RBayonet from './bayonet';
 import RLevel from './level';
 import RPark from './park';
 import RFire from './fire';
 import RHourse from './hourse';
-import { resize } from '@/mixin';
+import RBayonet from './bayonet';
 export default {
   name: 'home',
   data() {
@@ -37,13 +36,12 @@ export default {
     RTrash,
     RTravel,
     RAtmosphere,
-    RBayonet,
     RLevel,
     RPark,
     RFire,
-    RHourse
-  },
-  mixins: [resize]
+    RHourse,
+    RBayonet
+  }
 };
 </script>
 

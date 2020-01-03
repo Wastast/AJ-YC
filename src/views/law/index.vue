@@ -1,11 +1,10 @@
 <template>
-  <div class="home">
+  <div class="home" v-monitor-screen>
     <r-header title="依法治村 平安护村"></r-header>
     <l-home></l-home>
     <l-apprun></l-apprun>
     <l-event></l-event>
     <l-sightseeing></l-sightseeing>
-    <!-- <l-smoke></l-smoke> -->
     <p-map></p-map>
   </div>
 </template>
@@ -16,9 +15,7 @@ import LHome from './Home';
 import LApprun from './apprun';
 import LEvent from './event';
 import LSightseeing from './sightseeing';
-// import LSmoke from './smoke';
 import PMap from './map';
-import { resize } from '@/mixin';
 export default {
   name: 'home',
   data() {
@@ -34,10 +31,8 @@ export default {
     LApprun,
     LEvent,
     LSightseeing,
-    // LSmoke,
     PMap
-  },
-  mixins: [resize]
+  }
 };
 </script>
 

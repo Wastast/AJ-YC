@@ -91,7 +91,7 @@ export default {
 
     // 初始化2D
     init2D() {
-      TMapAPI.map.SetCenter(new SLonLat(1500, 1010), 1);
+      TMapAPI.InitCenter();
       if (!TMapAPI.map) {
         return;
       }
@@ -104,7 +104,6 @@ export default {
           TMapAPI.map.HideLabels();
         }
       });
-      TMapAPI.map.SetCenter(new SLonLat(1500, 1010), 1);
     },
 
     // 初始化2.5D

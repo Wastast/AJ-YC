@@ -32,3 +32,6 @@ export const getMember = data => get('/dwdTourHotelDataInfo/allData', data);
 
 // 获取停车场数据
 export const getPark = data => get('/dwdTourParkMonitorRt', data);
+
+// 获取扫码量数据
+export const getSaoma = data => get('/dwdTourVentureCodeInfo/findByType', data);

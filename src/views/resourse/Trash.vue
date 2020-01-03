@@ -1,31 +1,39 @@
 <template>
-  <div class="Trash">
-    <div class="div-btn" @click="jump()">
-      垃圾分类 >>>
+  <div>
+    <div class="Trash">
+      <div class="div-btn" @click="jump(true)">
+        垃圾分类 >>>
+      </div>
+      <party-box title="果壳箱监测" width="592" height="200">
+        <template slot="content">
+          <ul class="ul">
+            <li class="li" v-for="(item, index) of list" :key="index">
+              <dl>
+                <dt>
+                  监测位置: <span>{{ item.type }}</span>
+                </dt>
+                <dd>
+                  <div class="left">
+                    <p class="p-type">
+                      容量监测
+                    </p>
+                    <p class="p-value">
+                      {{ item.rongliang }}
+                    </p>
+                  </div>
+                </dd>
+              </dl>
+            </li>
+          </ul>
+        </template>
+      </party-box>
     </div>
-    <party-box title="果壳箱监测" width="592" height="200">
-      <template slot="content">
-        <ul class="ul">
-          <li class="li" v-for="(item, index) of list" :key="index">
-            <dl>
-              <dt>
-                监测位置: <span>{{ item.type }}</span>
-              </dt>
-              <dd>
-                <div class="left">
-                  <p class="p-type">
-                    容量监测
-                  </p>
-                  <p class="p-value">
-                    {{ item.rongliang }}
-                  </p>
-                </div>
-              </dd>
-            </dl>
-          </li>
-        </ul>
-      </template>
-    </party-box>
+    <div class="iframe" v-if="isPop">
+      <div class="close" @click="jump(false)" title="'关闭当前页'">
+        ×
+      </div>
+      <iframe src="http://app.hanziyi.cn/login.html?id=51" scrolling="no" frameborder="0"></iframe>
+    </div>
   </div>
 </template>
 
@@ -51,14 +59,16 @@ export default {
           rongliang: '未满',
           shidu: '20'
         }
-      ]
+      ],
+      isPop: false
     };
   },
   computed: {},
   watch: {},
   methods: {
-    jump() {
-      window.location.href = 'http://app.hanziyi.cn/login.html?id=51';
+    jump(bolen) {
+      this.isPop = bolen;
+      // window.location.href = 'http://app.hanziyi.cn/login.html?id=51';
     }
   },
   mounted() {},
@@ -151,6 +161,27 @@ export default {
         }
       }
     }
+  }
+}
+.iframe {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 19999;
+  .close {
+    position: absolute;
+    top: px2rem(10rem);
+    right: px2rem(10rem);
+    font-size: px2rem(50rem);
+    font-weight: bold;
+    cursor: pointer;
+    color: #fff;
+  }
+  iframe {
+    width: 100%;
+    height: 100%;
   }
 }
 </style>

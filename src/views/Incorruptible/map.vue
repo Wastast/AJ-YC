@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { getShouye, getYuRagne } from '@/api/mapapi';
+import { getShouye, getYuRagne, getHouse } from '@/api/mapapi';
 import TDmap from '@/utils/TDmap';
 import Mapbtn from '@/components/Mapbtn';
 export default {
@@ -114,7 +114,7 @@ export default {
     },
     // 初始化2D
     init2D() {
-      TMapAPI.map.SetCenter(new SLonLat(1500, 1010), 1);
+      TMapAPI.InitCenter();
       if (!TMapAPI.map) {
         return;
       }

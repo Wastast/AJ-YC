@@ -14,7 +14,7 @@
       <span class="span-week">{{ tmp }}℃</span>
       <span v-if="alarmText" class="span-alerm" style="color: red">{{ alarmText }}</span>
     </div>
-    <div v-if="router !== '/'" class="div-home" @click="jumpHome()"></div>
+    <div v-if="router !== '/'" class="div-home" @click="jumpHome()" :title="'返回首页'"></div>
   </div>
 </template>
 
@@ -140,6 +140,7 @@ export default {
     // top: px2rem(-6rem);
     top: 0;
     right: 0;
+    cursor: pointer;
   }
   .div-wether {
     position: absolute;

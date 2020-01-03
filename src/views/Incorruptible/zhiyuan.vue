@@ -16,8 +16,18 @@
               </li>
             </ul>
           </div>
-          <div class="center" @click="checkTyep()">
-            {{ type === 'huodong' ? '今日志愿活动' : '今日志愿者' }}
+          <div class="center">
+            <ul class="ul">
+              <li
+                class="li"
+                v-for="(item, index) in typeList"
+                :key="index"
+                :class="type === item.type ? 'checked' : ''"
+                @click="checkTyep(item.type)"
+              >
+                {{ item.name }}
+              </li>
+            </ul>
           </div>
           <div class="bottom">
             <div class="zy" v-if="type === 'zhiyuan'">
@@ -129,7 +139,17 @@ export default {
       },
       timer: null,
       isPop: false,
-      nowPeople: []
+      nowPeople: [],
+      typeList: [
+        {
+          name: '今日志愿者',
+          type: 'zhiyuan'
+        },
+        {
+          name: '今日志愿活动',
+          type: 'huodong'
+        }
+      ]
     };
   },
   computed: {},
@@ -157,8 +177,15 @@ export default {
     getDesc(item) {
       EventBus.$emit('popActivity', { item: item });
     },
-    checkTyep() {
-      this.type = this.type === 'huodong' ? 'zhiyuan' : 'huodong';
+    checkTyep(type) {
+      if (type) {
+        if (this.type === type) {
+          return;
+        }
+        this.type = type;
+      } else {
+        this.type = this.type === 'huodong' ? 'zhiyuan' : 'huodong';
+      }
       this.clearTime();
     },
     // 获取队伍
@@ -188,7 +215,6 @@ export default {
   mounted() {
     this.type = 'zhiyuan';
     this.clearTime();
-
     getTeam().then(data => {
       if (data.code === 0) {
         this.peopleList = data.data;
@@ -330,8 +356,34 @@ export default {
   .center {
     text-align: center;
     color: rgba(0, 246, 255, 1);
-    font-size: px2rem(22rem);
-    margin-top: px2rem(24rem);
+    font-size: px2rem(18rem);
+    margin-top: px2rem(15rem);
+    background: #051340;
+    border-radius: 50px;
+    display: flex;
+    box-sizing: border-box;
+    padding: px2rem(5rem) 0;
+    .ul {
+      overflow: hidden;
+      margin: auto;
+      .li {
+        height: px2rem(36rem);
+        padding: 0 px2rem(30rem);
+        border-radius: 50px;
+        float: left;
+        line-height: px2rem(36rem);
+        text-align: center;
+        color: #fff;
+        cursor: pointer;
+        transition: 0.3s;
+        &:hover {
+          background: #03357e;
+        }
+      }
+      .checked {
+        background: #03357e;
+      }
+    }
   }
   .bottom {
     overflow: hidden;

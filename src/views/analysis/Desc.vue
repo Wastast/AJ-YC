@@ -56,7 +56,8 @@
     <pop-box :isPop.sync="renjun" :title="'人均收入分析'" :width="526" :height="430">
       <template slot="content">
         <div class="pop-content">
-          <img class="img" src="@/assets/analysis/renjun.png" alt="" />
+          <average-bar></average-bar>
+          <!-- <img class="img" src="@/assets/analysis/renjun.png" alt="" /> -->
         </div>
       </template>
     </pop-box>
@@ -64,7 +65,8 @@
     <pop-box :isPop.sync="jiti" :title="'集体经济分析'" :width="526" :height="430">
       <template slot="content">
         <div class="pop-content">
-          <img class="img" src="@/assets/analysis/jiti.png" alt="" />
+          <collective-bar></collective-bar>
+          <!-- <img class="img" src="@/assets/analysis/jiti.png" alt="" /> -->
         </div>
       </template>
     </pop-box>
@@ -78,6 +80,10 @@ import countTo from 'vue-count-to';
 import PopBox from '@/components/PopBox';
 import { TipsPop } from '@/utils/el_ui';
 import RenqunPie from './echarts/renqun_pie';
+
+import collectiveBar from '../party/echarts/collective_bar';
+import averageBar from '../party/echarts/average_bar';
+
 export default {
   name: 'event',
   data() {
@@ -228,7 +234,9 @@ export default {
     ModuleBox,
     countTo,
     PopBox,
-    RenqunPie
+    RenqunPie,
+    collectiveBar,
+    averageBar
   }
 };
 </script>
@@ -283,6 +291,7 @@ export default {
   }
 }
 .pop-content {
+  height: px2rem(350rem);
   .img {
     display: block;
     width: 95%;

@@ -86,6 +86,7 @@ export default {
   methods: {
     // 设置中心点
     getData(item) {
+      console.log(item);
       let { title, message, teamName, createTime } = item;
       this.event = {
         title,

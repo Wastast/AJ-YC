@@ -34,6 +34,13 @@
         </div>
       </div>
     </div>
+
+    <div class="iframe" v-if="isIframe">
+      <div class="close" @click="close(false)" title="'关闭当前页'">
+        ×
+      </div>
+      <iframe src="http://180.76.236.56:8118/MyMix.html" scrolling="no" frameborder="0"></iframe>
+    </div>
   </div>
 </template>
 
@@ -109,7 +116,8 @@ export default {
       ],
       titleName: '',
       type: '',
-      isPop: false
+      isPop: false,
+      isIframe: false
     };
   },
   computed: {},
@@ -131,7 +139,11 @@ export default {
       this.isPop = false;
     },
     jump() {
-      window.location.href = 'http://180.76.236.56:8118/MyMix.html';
+      this.isIframe = true;
+      // window.location.href = 'http://180.76.236.56:8118/MyMix.html';
+    },
+    close(bolean) {
+      this.isIframe = bolean;
     }
   },
   mounted() {
@@ -266,6 +278,27 @@ export default {
         height: px2rem(250rem);
       }
     }
+  }
+}
+.iframe {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 19999;
+  .close {
+    position: absolute;
+    top: px2rem(10rem);
+    right: px2rem(10rem);
+    font-size: px2rem(50rem);
+    font-weight: bold;
+    cursor: pointer;
+    color: #fff;
+  }
+  iframe {
+    width: 100%;
+    height: 100%;
   }
 }
 </style>

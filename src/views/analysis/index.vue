@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" v-monitor-screen>
     <a-header title="数字余村综合管理平台"></a-header>
     <a-natural></a-natural>
     <a-car></a-car>
@@ -15,9 +15,6 @@
     <div class="logo">
       <img src="@/assets/resouse/wenlan.png" alt="" />
     </div>
-    <!-- <div class="div-btn" @click="jump">
-      余村环境
-    </div> -->
   </div>
 </template>
 
@@ -32,7 +29,6 @@ import ARepair from './Repair';
 import ATravel from './Travel';
 import AMap from './Map';
 import AVideo from './video';
-import { resize } from '@/mixin';
 export default {
   name: 'home',
   data() {
@@ -40,26 +36,8 @@ export default {
   },
   computed: {},
   watch: {},
-  methods: {
-    jump() {
-      window.location.href = 'http://180.76.236.56:8118/MyMix.html';
-    }
-  },
-  mounted() {
-    // let websocket = new WebSocket('ws://192.168.8.107:8083/websocket/eventInfo')
-    // websocket.onopen = function(event) {
-    //   console.log('成功调用')
-    //   console.log(event)
-    // }
-    // // 连接发生错误的回调方法
-    // websocket.onerror = function() {
-    //   console.log('报错')
-    // }
-    // websocket.onmessage = function(event) {
-    //   console.log('接收信息------------------')
-    //   console.log(JSON.parse(event.data))
-    // }
-  },
+  methods: {},
+  mounted() {},
   components: {
     AHeader,
     ANatural,
@@ -71,8 +49,7 @@ export default {
     AMap,
     ASwiper,
     AVideo
-  },
-  mixins: [resize]
+  }
 };
 </script>
 

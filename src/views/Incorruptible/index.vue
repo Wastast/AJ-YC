@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" v-monitor-screen>
     <r-header title="道德润村 清廉正村"></r-header>
     <i-activity></i-activity>
     <i-finance></i-finance>
@@ -18,7 +18,6 @@ import IMediate from './mediate';
 import IPractice from './practice';
 import IZhiyuan from './zhiyuan';
 import IMap from './map';
-import { resize } from '@/mixin';
 export default {
   name: 'home',
   data() {
@@ -36,8 +35,7 @@ export default {
     IPractice,
     IMap,
     IZhiyuan
-  },
-  mixins: [resize]
+  }
 };
 </script>
 

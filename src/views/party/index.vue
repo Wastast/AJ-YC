@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" v-monitor-screen>
     <p-header title="支部带村 民主管村"></p-header>
     <p-zhanshi></p-zhanshi>
     <p-open></p-open>
@@ -16,7 +16,6 @@ import POpen from './open';
 import PFramework from './Framework';
 import PHeart from './heart';
 import PMap from './map';
-import { resize } from '@/mixin';
 export default {
   name: 'home',
   data() {
@@ -33,8 +32,7 @@ export default {
     PFramework,
     PHeart,
     PMap
-  },
-  mixins: [resize]
+  }
 };
 </script>
 
