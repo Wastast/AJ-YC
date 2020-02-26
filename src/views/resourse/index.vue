@@ -8,20 +8,20 @@
     <r-park></r-park>
     <r-fire></r-fire>
     <r-hourse></r-hourse>
-    <r-bayonet></r-bayonet>
+    <r-venture></r-venture>
   </div>
 </template>
 
 <script>
 import RHeader from '@/components/Header';
 import RTrash from './Trash';
-import RTravel from './Travel';
+import RTravel from './Travelgai';
 import RAtmosphere from './atmosphere';
 import RLevel from './level';
 import RPark from './park';
 import RFire from './fire';
 import RHourse from './hourse';
-import RBayonet from './bayonet';
+import RVenture from './Venture';
 export default {
   name: 'home',
   data() {
@@ -40,7 +40,7 @@ export default {
     RPark,
     RFire,
     RHourse,
-    RBayonet
+    RVenture
   }
 };
 </script>

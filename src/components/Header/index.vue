@@ -1,26 +1,61 @@
 <template>
-  <div class="Header">
-    <div class="div-time">
-      <span class="span-area">余村</span>
-      <span class="span-date">{{ nowDate }}</span>
-      <span class="span-week">{{ nowWeek }}</span>
+  <div>
+    <div class="Header">
+      <div class="div-time">
+        <span class="span-area">余村</span>
+        <span class="span-date">{{ nowDate }}</span>
+        <span class="span-week">{{ nowWeek }}</span>
+      </div>
+      <div class="div-title">
+        {{ title }}
+      </div>
+      <div class="div-wether" @click="getFuture" title="点击查看近日天气">
+        <img :src="`http://172.26.16.29:8088/HeWeather/${cond_code}.png`" alt="" />
+        <span class="span-date">{{ cond_txt }}</span>
+        <span class="span-week">{{ tmp }}℃</span>
+        <span v-if="alarmText" class="span-alerm" style="color: red">{{ alarmText }}</span>
+      </div>
+      <div v-if="router !== '/'" class="div-home" @click="jumpHome()" :title="'返回首页'"></div>
     </div>
-    <div class="div-title">
-      {{ title }}
-    </div>
-    <div class="div-wether">
-      <img :src="`http://172.26.16.29:8088/HeWeather/${cond_code}.png`" alt="" />
-      <span class="span-date">{{ cond_txt }}</span>
-      <span class="span-week">{{ tmp }}℃</span>
-      <span v-if="alarmText" class="span-alerm" style="color: red">{{ alarmText }}</span>
-    </div>
-    <div v-if="router !== '/'" class="div-home" @click="jumpHome()" :title="'返回首页'"></div>
+    <pop-box :isPop.sync="isPop" :title="'近期天气预测'">
+      <template slot="content">
+        <div class="pop-content">
+          <ul class="ul">
+            <div class="title">
+              <span class="span span-time">时间</span>
+              <span class="span span-day">白天天气</span>
+              <span class="span span-night">夜晚天气</span>
+              <span class="span span-max">最高气温</span>
+              <span class="span span-min">最低气温</span>
+            </div>
+            <li class="li" v-for="(item, index) in FutureList" :key="index">
+              <span class="span span-time">
+                {{ item.date | fiterYMD }}
+              </span>
+              <span class="span span-day">
+                {{ item.cond_txt_d }}
+              </span>
+              <span class="span span-night">
+                {{ item.cond_txt_n }}
+              </span>
+              <span class="span span-max">
+                {{ item.tmp_max }}℃
+              </span>
+              <span class="span span-min">
+                {{ item.tmp_min }}℃
+              </span>
+            </li>
+          </ul>
+        </div>
+      </template>
+    </pop-box>
   </div>
 </template>
 
 <script>
 import { weather } from '@/api/login';
 import { getEnvironmental } from '@/api/analysis';
+import PopBox from '@/components/PopBox';
 export default {
   props: {
     title: {
@@ -36,7 +71,9 @@ export default {
       cond_txt: '',
       tmp: '',
       cond_code: '100',
-      alarmText: ''
+      alarmText: '',
+      isPop: false,
+      FutureList: []
     };
   },
   computed: {
@@ -46,6 +83,10 @@ export default {
   },
   watch: {},
   methods: {
+    // 未来几天天气
+    getFuture() {
+      this.isPop = true;
+    },
     // 跳转到首页
     jumpHome() {
       this.$router.push({ path: '/' });
@@ -78,6 +119,7 @@ export default {
         this.cond_txt = obj.cond_txt;
         this.tmp = obj.tmp;
         this.cond_code = obj.cond_code;
+        this.FutureList = data.HeWeather6[0].daily_forecast;
       });
     }
   },
@@ -93,6 +135,9 @@ export default {
         this.alarmText = obj.alarm;
       }
     });
+  },
+  components: {
+    PopBox
   }
 };
 </script>
@@ -148,6 +193,7 @@ export default {
     right: px2rem(140rem);
     color: #83b2ff;
     font-size: px2rem(18rem);
+    cursor: pointer;
     .span-week {
       margin-left: px2rem(15rem);
     }
@@ -158,6 +204,69 @@ export default {
       position: absolute;
       top: px2rem(-7rem);
       left: px2rem(-41rem);
+    }
+  }
+}
+.pop-content {
+  .ul {
+    overflow: hidden;
+    .title {
+      position: relative;
+      overflow: hidden;
+      height: px2rem(36rem);
+      line-height: px2rem(36rem);
+      font-size: px2rem(16rem);
+      background: #070d25;
+      .span {
+        position: absolute;
+        color: #fff;
+      }
+      .span-time {
+        left: px2rem(40rem);
+      }
+      .span-day {
+        left: px2rem(110rem);
+      }
+      .span-night {
+        left: px2rem(210rem);
+      }
+      .span-max {
+        left: px2rem(310rem);
+      }
+      .span-min {
+        left: px2rem(400rem);
+      }
+    }
+    .li {
+      color: #83b2ff;
+      overflow: hidden;
+      height: px2rem(36rem);
+      line-height: px2rem(36rem);
+      position: relative;
+      .span {
+        position: absolute;
+        text-align: center;
+        color: #fff;
+      }
+      .span-time {
+        left: px2rem(20rem);
+      }
+      .span-day {
+        left: px2rem(110rem);
+        width: px2rem(65rem);
+      }
+      .span-night {
+        left: px2rem(210rem);
+        width: px2rem(65rem);
+      }
+      .span-max {
+        left: px2rem(310rem);
+        width: px2rem(65rem);
+      }
+      .span-min {
+        left: px2rem(400rem);
+        width: px2rem(65rem);
+      }
     }
   }
 }

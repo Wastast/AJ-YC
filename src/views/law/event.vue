@@ -28,7 +28,7 @@
                   {{ item.content }}
                 </span>
                 <span class="span span-time">
-                  {{ item.createDate | fiterYMD }}
+                  {{ item.eventDate | fiterYMD }}
                 </span>
                 <img
                   v-if="item.picUrl[0]"
@@ -52,7 +52,7 @@
               {{ event.title }}
             </span>
             <span class="span span-time">
-              {{ event.createDate | fiterYMD }}
+              {{ event.eventDate | fiterYMD }}
             </span>
           </div>
           <div class="event-content">

@@ -56,6 +56,17 @@ export default {
     echarts_evnet(data) {
       // 混入方法
       let myChart = this.resizeEcharts();
+      let times, datas;
+      if (typeof data.times === 'undefined') {
+        times = [0];
+      } else {
+        times = data.times;
+      }
+      if (typeof data.datas === 'undefined') {
+        datas = [0];
+      } else {
+        datas = data.datas;
+      }
       let option = {
         tooltip: {
           trigger: 'axis',
@@ -74,7 +85,7 @@ export default {
           {
             type: 'category',
             // data: ['人社局', '医保局', '税务', '民政', '残联', '村自有事'],
-            data: data.times,
+            data: times,
             axisTick: {
               show: true
             },
@@ -158,7 +169,7 @@ export default {
             areaStyle: {
               normal: {}
             },
-            data: data.datas || []
+            data: datas
             // data: [6, 1, 2, 3, 4, 5]
           }
         ]

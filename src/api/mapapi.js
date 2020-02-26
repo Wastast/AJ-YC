@@ -23,3 +23,6 @@ export const getFire = data => get('/dimTourBasResource/findFamily', data);
 
 // 获取天地图的余村范围
 export const getYuRagne = data => get('/dimTourBasArea/findAll', data);
+
+// 获取今日志愿活动点位
+export const getDaypoint = data => get('/dwdTourVolunteerTdayResource/getTdayActivityInfo', data);

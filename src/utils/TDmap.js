@@ -1,11 +1,12 @@
 // 添加点位
 const addPoint = Icon => {
-  let iconPath = imgRep + '/upload/icon/' + Icon.img;
+  let iconPath = imgRep + '/upload/icon25D/' + Icon.img25d;
   let icon = new T.Icon({
     // 创建图片对象
     iconUrl: iconPath,
-    iconSize: new T.Point(Icon.width, Icon.height),
-    iconAnchor: new T.Point(-Icon.width / 2, -Icon.height - 15)
+    // iconSize: new T.Point(Icon.width, Icon.height),
+    iconSize: new T.Point(20, 20)
+    // iconAnchor: new T.Point(-30 / 2, -30)
   });
   let ptt = JZbConvert.GetGpsLonLatFromSw(new SPoint(Icon.lon, Icon.lat));
   let x = ptt.GetLon();

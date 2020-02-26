@@ -38,12 +38,11 @@ export default {
       let iconValue = item;
       let sLonLat = new SLonLat(iconValue.lon, iconValue.lat);
       let iconPath = imgRep + '/upload/icon/' + iconValue.img;
-      // let iconPath = 'http://api.tianditu.gov.cn/img/map/markerA.png';
       // 在地图内添加图标
       let sIcon = new SIcon(
         iconPath,
         new SSize(iconValue.width, iconValue.height),
-        new SPixel(-iconValue.width / 2, -iconValue.height - 15)
+        new SPixel(-iconValue.width / 2, -iconValue.height)
       );
       let sMarker = new SMarker(sLonLat, sIcon, iconValue.typeId);
       TMapAPI.markerLayer.AddMarker(sMarker);
@@ -178,7 +177,7 @@ export default {
           data.data.forEach(item => {
             if (item.typeId !== '001111') {
               TDmap.addPoint(item);
-              TDmap.addLable(item);
+              // TDmap.addLable(item);
             }
           });
         }
@@ -229,6 +228,8 @@ export default {
   left: px2rem(555rem);
   border: 1px solid #2fd2ef;
   position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
   .left {
     left: -10000px !important;
   }
@@ -238,7 +239,6 @@ export default {
     position: absolute !important;
     top: 0;
     left: 0;
-    overflow: hidden;
   }
   #mapDiv {
     width: 100%;
@@ -246,7 +246,7 @@ export default {
     position: absolute !important;
     top: 0;
     left: 0;
-    overflow: hidden;
+    // overflow: hidden;
   }
 }
 </style>

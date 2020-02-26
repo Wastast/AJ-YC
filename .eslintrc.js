@@ -7,7 +7,7 @@ module.exports = {
   //  0 | 1 | 2  取消 | 警告 | 报错
   rules: {
     'no-console': 0, //禁止使用console
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'off' : 'off',
     curly: [2, 'all'], //必须使用 if(){} 中的{}
     'space-before-function-paren': 0, // 函数名后面的括号可以不需要空格
     semi: ['error', 'always'],
@@ -19,7 +19,7 @@ module.exports = {
     'no-eval': 1, //禁止使用eval
     'no-floating-decimal': 2, //禁止省略浮点数中的0 .5 3.
     'no-inline-comments': 0, //禁止行内备注
-    'no-unused-vars': process.env.NODE_ENV === 'production' ? 'error' : 'off' // 在生产环境中 没有消除定义为使用的变量产生报错
+    'no-unused-vars': process.env.NODE_ENV === 'production' ? 'off' : 'off' // 在生产环境中 没有消除定义为使用的变量产生报错
   },
   parserOptions: {
     parser: 'babel-eslint'

@@ -25,7 +25,7 @@ export default {
         legend: {
           data: ['省内', '省外'],
           orient: 'vertical',
-          // top: 'center',
+          top: '8%',
           left: '10%',
           icon: 'roundRect',
           // right: '20%',

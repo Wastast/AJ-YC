@@ -21,7 +21,7 @@
                     {{ item.content }}
                   </span>
                   <span class="span span-time">
-                    {{ item.createDate | fiterYMD }}
+                    {{ item.eventDate | fiterYMD }}
                   </span>
                   <img
                     v-if="item.picUrl.length > 0"
@@ -49,7 +49,7 @@
               {{ textValue[event.userType] }}
             </span>
             <span class="span span-time">
-              {{ event.createDate | fiterYMD }}
+              {{ event.eventDate | fiterYMD }}
             </span>
           </div>
           <div class="event-content">
@@ -82,7 +82,7 @@
               {{ item.content }}
             </span>
             <span class="span span-time">
-              {{ item.createDate | fiterYMD }}
+              {{ item.eventDate | fiterYMD }}
             </span>
           </li>
         </ul>
@@ -109,7 +109,8 @@ export default {
         content: '',
         imgurl: '',
         title: '',
-        userType: 0
+        userType: 0,
+        eventDate: 0
       },
       isPop: false,
       textValue: {
@@ -134,9 +135,8 @@ export default {
   methods: {
     // 获取事件信息
     getData(obj) {
-      console.log(obj);
-      let { content, createDate, title, userType } = obj;
-      this.event = { content, createDate, title, imgurl: obj.picUrl[0], userType };
+      let { content, eventDate, title, userType } = obj;
+      this.event = { content, eventDate, title, imgurl: obj.picUrl[0], userType };
       this.isPop = true;
     },
     // 请求事件

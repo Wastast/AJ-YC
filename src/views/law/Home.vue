@@ -27,6 +27,11 @@
           </div>
         </template>
       </party-box>
+      <div class="conversation" @click="call">
+        <div class="btn">
+          实时通话
+        </div>
+      </div>
     </div>
     <div class="event-box" v-if="memberId">
       <div class="icon" @click="checkEvent"></div>
@@ -56,6 +61,9 @@ import PartyBox from '@/components/party-box';
 import { getHome, getHomeEvent } from '@/api/law';
 import { TipsPop } from '@/utils/el_ui';
 import vuescroll from 'vuescroll';
+import { EventBus } from '@/utils/event-bus';
+import { downTag } from '@/utils/currency';
+
 export default {
   name: 'Home',
   data() {
@@ -68,7 +76,8 @@ export default {
         bar: {
           background: 'rgba(0,0,0,0)'
         }
-      }
+      },
+      tilingList: []
     };
   },
   computed: {},
@@ -131,12 +140,37 @@ export default {
     // 切换历史事件列表
     checkEvent() {
       this.isEvent = !this.isEvent;
+    },
+    // 平铺数据
+    filterList(list) {
+      let arr = [];
+      list.forEach(item => {
+        if (typeof item.node !== 'undefined' && item.node.length > 0) {
+          item.node.forEach(items => {
+            arr.push(items);
+          });
+        }
+      });
+      return arr;
+    },
+    // 拨打电话
+    call() {
+      this.$confirm(
+        '您是否下载了插件,如未下载载视频通话插件,点击确定进行下载,如已下载并运行插件请点击取消,将会进行视频通话'
+      )
+        .then(_ => {
+          downTag('./ycsocket.zip');
+        })
+        .catch(_ => {
+          window.open('http://localhost:8099');
+        });
     }
   },
   mounted() {
     getHome().then(data => {
       if (data.code === 200) {
         this.list = data.data;
+        this.tilingList = this.filterList(data.data);
       }
     });
   },
@@ -150,38 +184,6 @@ export default {
   top: px2rem(134rem);
   left: px2rem(41rem);
   z-index: 100;
-  // .div-box {
-  //   box-sizing: border-box;
-  //   padding-left: px2rem(10rem);
-  //   padding-top: px2rem(8rem);
-  //   float: left;
-  //   height: px2rem(180rem);
-  //   .title {
-  //     color: rgba(128, 165, 206, 1);
-  //     margin-bottom: px2rem(5rem);
-  //   }
-  //   .ul {
-  //     background: rgba(0, 0, 0, 0.3);
-  //     border-radius: 5px;
-  //     width: px2rem(136rem);
-  //     box-sizing: border-box;
-  //     padding: px2rem(5rem) px2rem(12rem) px2rem(10rem) px2rem(12rem);
-  //     .li {
-  //       dt {
-  //         font-size: px2rem(18rem);
-  //         color: rgba(13, 123, 225, 1);
-  //       }
-  //       dd {
-  //         margin-top: px2rem(5rem);
-  //         color: #fff;
-  //         font-size: px2rem(16rem);
-  //       }
-  //       &:nth-child(n + 2) {
-  //         margin-top: px2rem(14rem);
-  //       }
-  //     }
-  //   }
-  // }
   .div-box {
     width: px2rem(138rem);
     height: px2rem(184rem);
@@ -254,6 +256,21 @@ export default {
           top: 0;
           left: 0;
         }
+      }
+    }
+  }
+  .conversation {
+    .btn {
+      position: absolute;
+      top: px2rem(0rem);
+      left: px2rem(200rem);
+      line-height: px2rem(40rem);
+      color: #0d7be1;
+      font-size: px2rem(24rem);
+      padding: px2rem(10rem);
+      cursor: pointer;
+      &:hover {
+        filter: brightness(1.3);
       }
     }
   }

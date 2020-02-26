@@ -60,22 +60,22 @@ export default {
       ],
       imgList: [
         {
-          imgUrl: require('@/assets/img/83b22164837afe09b28d4fff760cced.jpg')
+          imgUrl: require('@/assets/shiji/20200224170957.jpg')
         },
         {
-          imgUrl: require('@/assets/img/CY0A609.jpg')
+          imgUrl: require('@/assets/shiji/20200224171215.jpg')
         },
         {
-          imgUrl: require('@/assets/img/CY0A6.jpg')
+          imgUrl: require('@/assets/shiji/20200224171225.jpg')
         },
         {
-          imgUrl: require('@/assets/img/CY0A61.jpg')
+          imgUrl: require('@/assets/shiji/20200224171232.jpg')
         },
         {
-          imgUrl: require('@/assets/img/CY6118.jpg')
+          imgUrl: require('@/assets/shiji/20200224171239.jpg')
         },
         {
-          imgUrl: require('@/assets/img/CY6185.jpg')
+          imgUrl: require('@/assets/shiji/20200224171245.jpg')
         }
       ],
       ops: {

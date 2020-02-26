@@ -2,14 +2,14 @@
   <div class="home" v-monitor-screen>
     <a-header title="数字余村综合管理平台"></a-header>
     <a-natural></a-natural>
-    <a-car></a-car>
     <a-desc></a-desc>
     <a-event></a-event>
-    <a-repair></a-repair>
     <a-travel></a-travel>
     <a-map></a-map>
     <a-swiper></a-swiper>
     <a-video></a-video>
+    <a-lvyoubox></a-lvyoubox>
+    <a-bayonetbox></a-bayonetbox>
     <div class="box div-left"></div>
     <div class="box div-right"></div>
     <div class="logo">
@@ -22,13 +22,13 @@
 import AHeader from '@/components/Header';
 import ASwiper from '@/components/Swiper';
 import ANatural from './Natural';
-import ACar from './Car';
+import ALvyoubox from './lvyoubox';
 import ADesc from './Desc';
 import AEvent from './Event';
-import ARepair from './Repair';
 import ATravel from './Travel';
 import AMap from './Map';
 import AVideo from './video';
+import ABayonetbox from './bayonetbox';
 export default {
   name: 'home',
   data() {
@@ -41,14 +41,14 @@ export default {
   components: {
     AHeader,
     ANatural,
-    ACar,
     ADesc,
     AEvent,
-    ARepair,
     ATravel,
     AMap,
     ASwiper,
-    AVideo
+    AVideo,
+    ALvyoubox,
+    ABayonetbox
   }
 };
 </script>

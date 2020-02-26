@@ -13,7 +13,7 @@
               <img :src="item.imgUrl" alt="" />
               <dl :style="{ color: item.color }">
                 <dt>
-                  {{ item.name }}
+                  {{ item.names }}
                 </dt>
                 <dd>
                   <countTo
@@ -80,7 +80,6 @@ import countTo from 'vue-count-to';
 import PopBox from '@/components/PopBox';
 import { TipsPop } from '@/utils/el_ui';
 import RenqunPie from './echarts/renqun_pie';
-
 import collectiveBar from '../party/echarts/collective_bar';
 import averageBar from '../party/echarts/average_bar';
 
@@ -92,6 +91,7 @@ export default {
         {
           imgUrl: require('@/assets/analysis/hushu@2x.png'),
           name: '总户数',
+          names: '总户数',
           value: '0',
           unit: '户',
           color: 'rgba(131,178,255,1)',
@@ -100,6 +100,7 @@ export default {
         {
           imgUrl: require('@/assets/analysis/hushu-2@2x.png'),
           name: '总人数',
+          names: '总人数',
           value: '0',
           unit: '人',
           color: 'rgba(250,174,27,1)',
@@ -108,6 +109,7 @@ export default {
         {
           imgUrl: require('@/assets/analysis/renjunshouru@2x.png'),
           name: '人均收入',
+          names: '人均收入',
           value: '0',
           unit: '元',
           color: 'rgba(24,186,197,1)',
@@ -116,6 +118,7 @@ export default {
         {
           imgUrl: require('@/assets/analysis/zichan@2x.png'),
           name: '集体经济收入',
+          names: '集体收入',
           value: '0',
           unit: '万元',
           color: 'rgba(168,83,233,1)',
@@ -124,6 +127,7 @@ export default {
         {
           imgUrl: require('@/assets/analysis/dangyuan@2x.png'),
           name: '党员人数',
+          names: '党员人数',
           value: '0',
           unit: '人',
           color: 'rgba(232,56,107,1)',
@@ -132,6 +136,7 @@ export default {
         {
           imgUrl: require('@/assets/analysis/wuxing@2x.png'),
           name: '5星之家',
+          names: '5星之家',
           value: '0',
           unit: '家',
           color: 'rgba(61,144,246,1)',

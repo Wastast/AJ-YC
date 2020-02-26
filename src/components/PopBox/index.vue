@@ -3,7 +3,7 @@
     <div
       class="pop-box"
       :style="{ width: Number(width) / 50 + 'rem', height: Number(height) / 50 + 'rem' }"
-      @click.stop="''"
+      @click.stop="() => {}"
     >
       <div class="pop-box-title">
         <h2 class="h2">

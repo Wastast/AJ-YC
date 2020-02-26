@@ -1,6 +1,6 @@
 <template>
   <div class="Venture">
-    <party-box title="创业码监测" width="592" height="323">
+    <party-box title="两山优品" width="592" height="323">
       <template slot="content">
         <div class="div div-left">
           <div class="div-top">
@@ -10,7 +10,13 @@
               </p>
               <div class="text">
                 <p class="name">可追溯商品数量</p>
-                <p class="value">2,286,708</p>
+                <p class="value">
+                  <countTo
+                    :startVal="parseInt(0)"
+                    :endVal="parseFloat(trace)"
+                    :duration="4000"
+                  ></countTo>
+                </p>
               </div>
             </div>
             <div class="li">
@@ -18,8 +24,14 @@
                 <img src="@/assets/resouse/erweimma.png" alt="" />
               </p>
               <div class="text">
-                <p class="name">可追溯商品数量</p>
-                <p class="value">2,286,708</p>
+                <p class="name">区块链上链数量</p>
+                <p class="value">
+                  <countTo
+                    :startVal="parseInt(0)"
+                    :endVal="parseFloat(chain)"
+                    :duration="4000"
+                  ></countTo>
+                </p>
               </div>
             </div>
           </div>
@@ -42,11 +54,15 @@
                   {{ item.name }}
                 </span>
                 <span class="span right">
-                  {{ item.value }}
+                  <countTo
+                    :startVal="parseInt(0)"
+                    :endVal="parseFloat(item.value)"
+                    :duration="4000"
+                  ></countTo>
                 </span>
               </div>
               <div class="bottom">
-                <span class="line" :style="{ width: '50%' }"></span>
+                <span class="line" :style="{ width: (item.value / allnum) * 100 + '%' }"></span>
               </div>
             </li>
           </ul>
@@ -60,13 +76,16 @@
 import PartyBox from '@/components/party-box';
 import saomaPre from './echarts/saoma_pre';
 import { getSaoma } from '@/api/resourse';
-// import countTo from 'vue-count-to';
+import countTo from 'vue-count-to';
 export default {
   name: 'Venture',
   data() {
     return {
       value: '',
-      list: []
+      list: [],
+      chain: 0,
+      trace: 0,
+      allnum: 0
     };
   },
   computed: {},
@@ -77,11 +96,27 @@ export default {
       type: 1
     }).then(data => {
       if (data.code === 200) {
+        this.allnum = data.data.allnum;
         this.list = data.data.value;
       }
     });
+    getSaoma({
+      type: 2
+    }).then(data => {
+      if (data.code === 200) {
+        let list = data.data;
+        list.forEach(item => {
+          if (item.name === '可追述商铺数量') {
+            this.trace = item.num;
+          }
+          if (item.name === '累计扫描量') {
+            this.chain = item.num;
+          }
+        });
+      }
+    });
   },
-  components: { PartyBox, saomaPre }
+  components: { PartyBox, saomaPre, countTo }
 };
 </script>
 
@@ -131,7 +166,7 @@ export default {
           float: left;
           margin-left: px2rem(10rem);
           .name {
-            color: rgba(255, 255, 255, 0.3);
+            color: #80a5ce;
             margin-top: px2rem(13rem);
             font-size: px2rem(12rem);
           }
@@ -223,13 +258,52 @@ export default {
             display: block;
             height: 100%;
             width: 0%;
-            background: rgba(143, 130, 188, 1);
             border-radius: 50px;
             transition: width 0.5s;
+            position: relative;
+            &::before {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: 0;
+              height: 100%;
+              width: 0;
+              z-index: 1;
+              background: linear-gradient(
+                90deg,
+                rgba(2, 114, 210, .5) 0%,
+                rgba(11, 222, 225, .5) 100%
+              );
+              filter: brightness(1.3);
+              border-radius: 50px;
+              animation: move 3s 4s linear infinite;
+            }
+            &:after {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 0;
+              height: 100%;
+              background: linear-gradient(
+                90deg,
+                rgba(2, 114, 210, 1) 0%,
+                rgba(11, 222, 225, 1) 100%
+              );
+              border-radius: 50px;
+              animation: move 3s linear forwards;
+            }
           }
         }
       }
     }
+  }
+}
+@keyframes move {
+  0% {
+  }
+  100% {
+    width: 100%;
   }
 }
 </style>

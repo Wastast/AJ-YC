@@ -32,7 +32,6 @@ export default {
           trigger: 'item',
           formatter: '{a} <br/>{b}: {c} ({d}%)'
         },
-        backgroundColor: 'rgba(0,0,0,.3)',
         series: [
           {
             name: '省内外车辆',

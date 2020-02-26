@@ -156,7 +156,7 @@ export default {
                 // 创建图片对象
                 iconUrl: iconPath,
                 iconSize: new T.Point(IconValue.width2, IconValue.height2),
-                iconAnchor: new T.Point(-IconValue.width2 / 2, -IconValue.height2 - 15)
+                iconAnchor: new T.Point(-IconValue.width2 / 2, -IconValue.height2)
               });
             }
             if (e.houseTip === 5) {
@@ -168,7 +168,7 @@ export default {
                 // 创建图片对象
                 iconUrl: iconPath,
                 iconSize: new T.Point(IconValue.width, IconValue.height),
-                iconAnchor: new T.Point(-IconValue.width / 2, -IconValue.height - 15)
+                iconAnchor: new T.Point(-IconValue.width / 2, -IconValue.height)
               });
             }
             if (!IconValue && !icon) {

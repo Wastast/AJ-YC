@@ -11,7 +11,6 @@
         <p class="p-title">
           {{ typeValue[moduleType] }}
         </p>
-
       </template>
     </module-box>
   </div>

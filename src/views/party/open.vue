@@ -23,7 +23,7 @@
               </span>
               <span class="span span-time">
                 <!-- {{ (item.release_time + '').slice(0, 10) }} -->
-                {{ item.release_time | fiterYMD}}
+                {{ item.release_time | fiterYMD }}
               </span>
             </li>
           </vuescroll>
@@ -90,32 +90,28 @@ export default {
     // 更换显示类型
     checkType(obj) {
       if (this.loading) {
-        TipsPop({
-          message: '正在请求数据,请勿再次点击',
-          type: 'error'
-        });
+        // TipsPop({
+        //   message: '正在请求数据,请勿再次点击',
+        //   type: 'error'
+        // });
         return;
       }
       this.type = obj.text;
     },
     // 展示详情数据
     showDesc(obj) {
-      console.log(obj);
       this.gongkai.title = obj.title;
       this.gongkai.content = obj.contents;
       this.dialogVisible = true;
     },
     // 请求并渲染数据
     async getData(obj) {
-      // let arr = []
       this.loading = true;
       this.eventList = [];
       for (let item of obj.node) {
         let b = await this.getValue(item.text, item.node_code);
         this.eventList.push(...b);
-        // arr.push(...b)
       }
-      // this.eventList = arr
       this.loading = false;
     },
     // 获取公开数据

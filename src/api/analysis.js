@@ -32,3 +32,6 @@ export const getSex = data => post('/dimTourBasResidentInfo/api/analysisSex', da
 
 // 获取视频url
 export const getVideoUrl = data => get('/dimTourDevcVideoSurveillance/findByResourceId', data);
+
+// 获取车辆类型数据
+export const getCarType = data => get('/tBayonetTypeReal/find', data);

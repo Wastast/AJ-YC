@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { getShouye, getYuRagne, getHouse } from '@/api/mapapi';
+import { getShouye, getYuRagne, getHouse, getDaypoint } from '@/api/mapapi';
 import TDmap from '@/utils/TDmap';
 import Mapbtn from '@/components/Mapbtn';
 export default {
@@ -77,7 +77,7 @@ export default {
       let sIcon = new SIcon(
         iconPath,
         new SSize(iconValue.width, iconValue.height),
-        new SPixel(-iconValue.width / 2, -iconValue.height - 15)
+        new SPixel(-iconValue.width / 2, -iconValue.height)
       );
       let sMarker = new SMarker(sLonLat, sIcon, iconValue.typeId);
       TMapAPI.markerLayer.AddMarker(sMarker);
@@ -118,19 +118,16 @@ export default {
       if (!TMapAPI.map) {
         return;
       }
-      getShouye().then(data => {
+      getDaypoint().then(data => {
         if (data.code === 200) {
-          data.data.forEach(item => {
-            if (item.typeId === '001111') {
-              this.addPoint(item);
-              if (item.typeId === '001003') {
-                TMapAPI.drawRangeLableMs(item);
-              } else {
-                TMapAPI.drawRangeLableDefault(item);
-              }
-            }
+          let list = data.data;
+          if (list.length === 0) {
+            return;
+          }
+          console.log(list);
+          list.forEach(item => {
+            this.addPoint(item);
           });
-          TMapAPI.map.HideLabels();
         }
       });
     },
@@ -140,12 +137,14 @@ export default {
       if (!mapWorld) {
         return;
       }
-      getShouye().then(data => {
+      getDaypoint().then(data => {
         if (data.code === 200) {
-          data.data.forEach(item => {
-            if (item.typeId === '001111') {
-              TDmap.addPoint(item);
-            }
+          let list = data.data;
+          if (list.length === 0) {
+            return;
+          }
+          list.forEach(item => {
+            this.addPoint(item);
           });
         }
       });
